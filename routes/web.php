@@ -6,8 +6,13 @@ use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DonationController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
@@ -40,16 +45,29 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showReq
 
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
+// Novas rotas para DIZIMO
 
+Route::resource('categories', CategoryController::class);
+Route::resource('payment-methods', PaymentMethodController::class);
+Route::resource('members', MemberController::class);
+Route::resource('donations', DonationController::class);
+Route::resource('expenses', ExpenseController::class);
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard.index');
+});
 
 //Grupo de rotas restritas
 // Necessita estar logado para acessar essas rotas
 Route::group(['middleware' => 'auth'], function () {
 
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('permission:dashboard');
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('permission:dashboard');
+
+    // Route::middleware(['auth'])->group(function () {
+    // Route::get('/dashboard', [DashboardController::class, 'index'])
+    //     ->name('dashboard.index');
 
     // Perfil do Usuario
 

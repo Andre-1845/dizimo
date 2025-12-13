@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-
-            $table->string('name');
-            $table->enum('type', ['income', 'expense']);
-
+            $table->string('name')->unique(); // Pix, Dinheiro, Cartão...
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('payment_methods');
     }
 };

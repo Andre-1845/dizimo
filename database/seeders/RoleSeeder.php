@@ -28,7 +28,7 @@ class RoleSeeder extends Seeder
             'dashboard',
             'show-profile',
             'edit-profile',
-            'edit-password-profile',
+            'edit-profile-password',
         ]);
 
         // Permissões do Professor
@@ -43,7 +43,7 @@ class RoleSeeder extends Seeder
             'dashboard',
             'show-profile',
             'edit-profile',
-            'edit-password-profile',
+            'edit-profile-password',
         ]);
 
         // Permissões do Tutor
@@ -54,7 +54,7 @@ class RoleSeeder extends Seeder
             'dashboard',
             'show-profile',
             'edit-profile',
-            'edit-password-profile',
+            'edit-profile-password',
 
         ]);
 
@@ -67,7 +67,7 @@ class RoleSeeder extends Seeder
             'dashboard',
             'show-profile',
             'edit-profile',
-            'edit-password-profile',
+            'edit-profile-password',
 
 
         ]);
