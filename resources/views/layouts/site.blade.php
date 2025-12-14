@@ -11,7 +11,7 @@
 <body>
     <a href="{{ route('login') }}">Login</a><br>
 
-    @yield('content')
+    @yield('body')
 
 </body>
 

@@ -1,22 +1,52 @@
+@import 'tailwindcss';
 
-
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
-
-/* fontes opcionais */
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-}
-@import "tailwindcss";
-
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
 /* HTML */
 @source "../**/*.html";
+@source "../views/**/*.blade.php";
 
-/* JS (se usar depois) */
-@source "../**/*.js";
 
-@layer components{
-    /* ===== LOGIN ===== */
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* =====================
+   BASE GLOBAL
+===================== */
+@layer base {
+    *, ::before, ::after {
+        @apply box-border;
+    }
+}
+
+@layer utilities {
+    ._tw-force {
+        @apply
+        bg-blue-900 bg-gray-100 bg-white
+        text-white text-gray-800
+        px-4 py-2 p-4
+        flex items-center justify-between
+        w-64 min-h-screen
+        shadow-md rounded-md
+        hidden block;
+    }
+}
+
+/* body {
+    @apply bg-gray-100 text-gray-800;
+} */
+
+body {
+    background: red !important;
+}
+
+
+/* ===== LOGIN ===== */
     /* Estilização do fundo */
     .bg-login{
         @apply bg-linear-to-r from-green-950 to-green-600 min-h-screen flex flex-col justify-center items-center;
@@ -28,12 +58,12 @@
 
     /* Container principal do formulário */
     .card-login {
-        @apply mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg;
+        @apply mt-4 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg;
     }
 
      /* Wrapper da logo */
     .logo-wrapper-login {
-        @apply flex justify-center mb-4;
+        @apply flex justify-center mb-3;
     }
 
      /* Estilização da logo */
@@ -70,6 +100,8 @@
     .link-login {
         @apply text-lg text-blue-600 hover:text-blue-900 hover:font-bold transition hover:no-underline;
     }
+
+    /* ===== LOGIN ===== */
 
 
     /****** Início Navbar ******/
@@ -118,9 +150,9 @@
     }
     /****** Fim Navbar ******/
 
-        /****** Início Sidebar ******/
+    /****** Início Sidebar ******/
     .sidebar {
-        @apply fixed inset-y-0 left-0 w-64 bg-white shadow-md transform -translate-x-full transition-transform duration-300 ease-in-out;
+        @apply fixed inset-y-0 left-0 w-64 bg-white shadow-md transform -translate-x-full sm:translate-x-0 transition-transform duration-300 ease-in-out;
     }
 
     .sidebar-open {
@@ -132,7 +164,7 @@
     }
 
     .sidebar-close-button {
-        @apply absolute top-4 right-4 text-gray-50 cursor-pointer;
+        @apply absolute top-4 right-4 sm:hidden text-gray-50 cursor-pointer;
     }
 
     .sidebar-header {
@@ -148,17 +180,16 @@
     }
 
     .sidebar-link {
-        @apply flex items-center space-x-4 px-4 py-2 text-sm text-gray-50 hover:bg-blue-900;
+        @apply flex items-center space-x-4 mx-2 px-4 py-2 text-sm text-gray-50 hover:bg-blue-900;
     }
     .sidebar-link.active {
-        @apply flex items-center space-x-4 px-4 py-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
+        @apply flex items-center space-x-4 mx-2 px-4 py-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
     }
     /****** Fim Sidebar ******/
 
-
     /****** Início Conteúdo Principal ******/
     .main-content {
-        @apply flex-1 p-4 ml-0 ;
+        @apply flex-1 p-4 ml-0 sm:ml-64;
     }
 
     .content-wrapper {
@@ -216,7 +247,7 @@
     }
 
     .table-header {
-        @apply px-6 py-3 text-left text-sm font-medium text-gray-800 tracking-wider border-b border-gray-200;
+        @apply px-2 py-3 text-left text-sm font-medium text-gray-800 tracking-wider border-b border-gray-200;
     }
 
     .table-header.center {
@@ -224,7 +255,7 @@
     }
 
     .table-body {
-        @apply px-6 py-2 text-sm text-gray-950 border-b border-gray-200;
+        @apply px-2 py-2 text-sm text-gray-950 border-b border-gray-200;
     }
 
     .table-row-body {
@@ -232,10 +263,27 @@
     }
 
     .table-actions {
-        @apply text-center space-x-0;
+        /* @apply flex justify-center items-center gap-2 text-center; */
+        @apply flex justify-end items-center gap-2;
+    }
+
+    /* Ocultar botao na tabela em dispositivos pequenos  */
+    .table-md-hidden {
+        @apply hidden md:flex items-center gap-1;
+    }
+    /* Ocultar celulas na tabela em dispositivos pequenos  */
+    .table-cell-lg-hidden {
+        @apply hidden lg:table-cell;
     }
 
     /****** Fim Tabela Listar Registros ******/
+
+    /******  Formulario PESQUISAR  ******/
+
+    .form-search {
+@apply pb-3 grid xl:grid-cols-5 md:grid-cols-2 gap-2 items-end;
+    }
+    /******  FIM - Formulario PESQUISAR  ******/
 
 
     /******* Formularios *******/
@@ -275,9 +323,9 @@
         @apply bg-blue-500 text-white text-base px-3 py-2 rounded hover:bg-blue-600 transition-colors cursor-pointer;
     }
 
-    /* Botão azul claro */
+    /* Botão cinza */
     .btn-info {
-        @apply bg-cyan-500 text-white text-sm px-3 py-1 rounded hover:bg-cyan-600 transition-colors cursor-pointer;
+        @apply bg-gray-600 text-white text-sm px-3 py-1 rounded hover:bg-gray-400 transition-colors cursor-pointer;
     }
 
     /* Botão verde */
@@ -297,7 +345,12 @@
 
     /* Alinha os botões em linha */
     .align-icon-btn {
-        @apply flex items-center space-x-1;
+        @apply flex items-center gap-1;
+    }
+
+    /* Oculta os nomes dos botoes em dispositivos pequenos  */
+    .hide-name-btn {
+        @apply hidden sm:inline-block;
     }
 
     /****** Fim Botões ******/
@@ -326,4 +379,3 @@
     /****** Fim Alertas ******/
 
 
-}
