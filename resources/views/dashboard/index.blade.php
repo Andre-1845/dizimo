@@ -6,6 +6,29 @@
 
     <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
 
+    <form method="GET" class="flex gap-2 mb-6">
+        <select name="month" class="border rounded p-2">
+            @foreach (range(1, 12) as $m)
+                <option value="{{ $m }}" @selected($m == $month)>
+                    {{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
+                </option>
+            @endforeach
+        </select>
+
+        <select name="year" class="border rounded p-2">
+            @foreach (range(now()->year - 3, now()->year) as $y)
+                <option value="{{ $y }}" @selected($y == $year)>
+                    {{ $y }}
+                </option>
+            @endforeach
+        </select>
+
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">
+            Filtrar
+        </button>
+    </form>
+
+
     {{-- CARDS --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 

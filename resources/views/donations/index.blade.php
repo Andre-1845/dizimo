@@ -38,7 +38,7 @@
                             R$ {{ number_format($donation->amount, 2, ',', '.') }}
                         </td>
                         <td class="py-2 text-right space-x-2">
-                            <a href="{{ route('donations.edit', $donation) }}" class="text-blue-600 hover:underline">
+                            <a href="{{ route('donations.edit', $donation) }}" class="btn-warning">
                                 Editar
                             </a>
 
@@ -46,7 +46,7 @@
                                 onsubmit="return confirm('Deseja excluir esta doação?')">
                                 @csrf
                                 @method('DELETE')
-                                <button class="text-red-600 hover:underline">
+                                <button class="btn-danger">
                                     Excluir
                                 </button>
                             </form>

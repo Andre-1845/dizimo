@@ -8,11 +8,13 @@ class Expense extends Model
 {
     //
     protected $fillable = [
+        'user_id',
         'category_id',
         'payment_method_id',
         'amount',
         'expense_date',
         'description',
+        'notes',
     ];
 
     protected $casts = [
@@ -27,5 +29,10 @@ class Expense extends Model
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

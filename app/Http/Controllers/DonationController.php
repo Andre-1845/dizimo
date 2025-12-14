@@ -7,7 +7,10 @@ use App\Models\Donation;
 use App\Models\Member;
 use App\Models\Category;
 use App\Models\PaymentMethod;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class DonationController extends Controller
 {
@@ -23,19 +26,20 @@ class DonationController extends Controller
         ]);
     }
 
+
     public function create()
     {
         return view('donations.create', [
             'menu' => 'donations',
             'members' => Member::orderBy('name')->get(),
-            'categories' => Category::where('type', 'donation')->orderBy('name')->get(),
+            'categories' => Category::where('type', 'income')->orderBy('name')->get(),
             'paymentMethods' => PaymentMethod::orderBy('name')->get(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'member_id' => 'required|exists:members,id',
             'category_id' => 'required|exists:categories,id',
             'payment_method_id' => 'required|exists:payment_methods,id',
@@ -44,7 +48,9 @@ class DonationController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        Donation::create($request->all());
+        $data['user_id'] = Auth::id();
+
+        Donation::create($data);
 
         return redirect()
             ->route('donations.index')
@@ -69,7 +75,7 @@ class DonationController extends Controller
             'menu' => 'donations',
             'donation' => $donation,
             'members' => Member::orderBy('name')->get(),
-            'categories' => Category::where('type', 'donation')->orderBy('name')->get(),
+            'categories' => Category::where('type', 'income')->orderBy('name')->get(),
             'paymentMethods' => PaymentMethod::orderBy('name')->get(),
         ]);
     }
