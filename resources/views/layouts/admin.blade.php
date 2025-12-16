@@ -54,33 +54,73 @@
                 @endauth
 
                 <nav class="sidebar-nav">
+                    @can('view-dashboard-admin')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'dashboard']) href="{{ route('dashboard.index') }}">
+                            Dashboard
+                        </a>
+                    @endcan
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'dashboard']) href="{{ route('dashboard.index') }}">
-                        Dashboard
+                    {{-- @can('view-dashboard-member')
+                        <a href="{{ route('members.dashboard') }}" class="sidebar-link">
+                            Meu Painel
+                        </a>
+                    @endcan --}}
+
+
+                    <a href="{{ route('members.dashboard') }}" class="sidebar-link">
+                        Meu Dizimo
                     </a>
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'members']) href="{{ route('members.index') }}">
-                        Membros
+
+                    @can('view-dashboard-admin')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'members']) href="{{ route('members.index') }}">
+                            Membros
+                        </a>
+                    @endcan
+
+                    @can('view-dashboard-admin')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'donations']) href="{{ route('donations.index') }}">
+                            Doações
+                        </a>
+                    @endcan
+
+                    @can('view-dashboard-admin')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'expenses']) href="{{ route('expenses.index') }}">
+                            Despesas
+                        </a>
+                    @endcan
+
+                    @can('view-dashboard-admin')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'categories']) href="{{ route('categories.index') }}">
+                            Categorias
+                        </a>
+                    @endcan
+                    -
+                    @can('view-dashboard-admin')
+                        <a @class([
+                            'sidebar-link',
+                            'active' => ($menu ?? '') === 'payment-methods',
+                        ]) href="{{ route('payment-methods.index') }}">
+                            Formas de Pagamento
+                        </a>
+                    @endcan
+
+                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'users']) href="{{ route('users.index') }}">
+                        Usuários
                     </a>
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'donations']) href="{{ route('donations.index') }}">
-                        Doações
+                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'profile']) href="{{ route('profile.show') }}">
+                        Perfil
                     </a>
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'expenses']) href="{{ route('expenses.index') }}">
-                        Despesas
+
+                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
+                        Papeis
                     </a>
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'categories']) href="{{ route('categories.index') }}">
-                        Categorias
-                    </a>
 
-                    <a @class([
-                        'sidebar-link',
-                        'active' => ($menu ?? '') === 'payment-methods',
-                    ]) href="{{ route('payment-methods.index') }}">
-                        Formas de Pagamento
-                    </a>
+
+
 
                 </nav>
 

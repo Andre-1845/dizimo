@@ -46,6 +46,9 @@ class PermissionSeeder extends Seeder
             'edit-profile-password',
 
             'dashboard',
+            'view-dashboard-admin',
+            'view-dashboard-member',
+
 
             'index-role-permission',
             'update-role-permission',

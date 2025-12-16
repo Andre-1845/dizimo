@@ -8,6 +8,7 @@
 
     <form method="GET" class="flex gap-2 mb-6">
         <select name="month" class="border rounded p-2">
+            <option value="">Todos os meses</option>
             @foreach (range(1, 12) as $m)
                 <option value="{{ $m }}" @selected($m == $month)>
                     {{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
@@ -23,7 +24,7 @@
             @endforeach
         </select>
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">
+        <button class="btn-primary">
             Filtrar
         </button>
     </form>
@@ -36,7 +37,7 @@
         <div class="bg-white rounded-xl shadow p-6">
             <p class="text-sm text-gray-500">Doações (mês)</p>
             <p class="text-2xl font-bold text-green-600">
-                R$ {{ number_format($totalDonationsMonth, 2, ',', '.') }}
+                R$ {{ number_format($totalDonations, 2, ',', '.') }}
             </p>
         </div>
 
@@ -44,16 +45,17 @@
         <div class="bg-white rounded-xl shadow p-6">
             <p class="text-sm text-gray-500">Despesas (mês)</p>
             <p class="text-2xl font-bold text-red-600">
-                R$ {{ number_format($totalExpensesMonth, 2, ',', '.') }}
+                R$ {{ number_format($totalExpenses, 2, ',', '.') }}
             </p>
         </div>
 
         {{-- Saldo --}}
         <div class="bg-white rounded-xl shadow p-6">
             <p class="text-sm text-gray-500">Saldo do mês</p>
-            <p class="text-2xl font-bold {{ $balanceMonth >= 0 ? 'text-blue-600' : 'text-red-600' }}">
-                R$ {{ number_format($balanceMonth, 2, ',', '.') }}
+            <p class="text-2xl font-bold {{ $balance >= 0 ? 'text-blue-600' : 'text-red-600' }}">
+                R$ {{ number_format($balance, 2, ',', '.') }}
             </p>
+
         </div>
 
         {{-- Membros --}}
@@ -138,5 +140,10 @@
         </div>
 
     </div>
+
+    <script>
+        const donationsData = @json($monthlyData);
+        const expensesData = @json($monthlyExpenses);
+    </script>
 
 @endsection

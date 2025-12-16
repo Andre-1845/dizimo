@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRegisterUserRequest;
 use App\Http\Requests\LoginRequest;
+use App\Models\Member;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
@@ -30,7 +33,7 @@ class AuthController extends Controller
             }
             Log::info('Login', ['action_user_id' => Auth::id()]);
 
-            return redirect()->route('dashboard.index')->with('success', 'Usuário ' .  $request->user()->name . ' LOGADO com sucesso!');
+            return redirect()->route('members.dashboard')->with('success', 'Usuário ' .  $request->user()->name . ' LOGADO com sucesso!');
         } catch (Exception $e) {
             Log::notice('Erro de login.', ['error' => $e->getMessage()]);
 
@@ -54,26 +57,49 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
-
     public function store(AuthRegisterUserRequest $request)
     {
+        DB::beginTransaction();
+
         try {
 
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
             ]);
-            // Verificar se existe o ROLE ALUNO antes de atribuir a um novo cadastro
-            if (Role::where('name', 'Aluno')->exists()) {
-                $user->assignRole('Aluno');
-            }
-            Log::info('Usuario cadastrado', ['user_id' => $user->id]);
 
-            return redirect()->route('login')->with('success', 'Usuário cadastrado com sucesso!');
-        } catch (Exception $e) {
-            // redireciona e envia mensagem de erro
-            return back()->withInput()->with('error', 'Usuário NÃO cadastrado !');
+            // Role padrão: MEMBRO
+            if (Role::where('name', 'Membro')->exists()) {
+                $user->assignRole('Membro');
+            }
+
+            // Criar MEMBER automaticamente
+            Member::create([
+                'user_id' => $user->id,
+                'name'    => $user->name,
+                'email'   => $user->email,
+                'active'  => true,
+            ]);
+
+            DB::commit();
+
+            Log::info('Usuário e membro cadastrados', ['user_id' => $user->id]);
+
+            return redirect()
+                ->route('login')
+                ->with('success', 'Cadastro realizado com sucesso!');
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            Log::error('Erro ao cadastrar usuário/membro', [
+                'error' => $e->getMessage()
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', 'Erro ao realizar cadastro.');
         }
     }
 }

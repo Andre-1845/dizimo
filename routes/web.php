@@ -11,7 +11,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Member\MemberDonationController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberDashboardController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -53,10 +55,35 @@ Route::resource('members', MemberController::class);
 Route::resource('donations', DonationController::class);
 Route::resource('expenses', ExpenseController::class);
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard.index');
+// DASHBOARD Rotas //
+
+// Route::middleware(['auth'])->group(function () {
+// get('/dashboard', [DashboardController::class, 'index'])
+//     ->name('dashboard.index');}
+
+Route::middleware(['auth', 'permission:view-dashboard-admin'])
+    ->get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard.index');
+
+Route::get('/meu-painel', [DashboardController::class, 'member'])
+    ->name('dashboard.member');
+
+Route::get('/dashboardMember', [MemberDashboardController::class, 'index'])
+    ->name('members.dashboard');
+
+Route::put('/dashboardMember', [MemberDashboardController::class, 'updateTithe'])
+    ->name('members.update_tithe');
+
+Route::middleware(['auth', 'role:Membro'])->group(function () {
+    Route::get('/meu-dizimo/doacoes/create', [MemberDonationController::class, 'create'])
+        ->name('member.create_donation');
+
+    Route::post('/meu-dizimo/doacoes', [MemberDonationController::class, 'store'])
+        ->name('member.store_donation');
 });
+
+
+
 
 //Grupo de rotas restritas
 // Necessita estar logado para acessar essas rotas
@@ -65,9 +92,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Dashboard
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('permission:dashboard');
 
-    // Route::middleware(['auth'])->group(function () {
-    // Route::get('/dashboard', [DashboardController::class, 'index'])
-    //     ->name('dashboard.index');
+
 
     // Perfil do Usuario
 
@@ -97,10 +122,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/create-status', [StatusController::class, 'create'])->name('statuses.create')->middleware('permission:create-status');
     Route::post('/store-status', [StatusController::class, 'store'])->name('statuses.store')->middleware('permission:create-status');
 
-    // Modulos
-    Route::get('/index-module', [ModuleController::class, 'index'])->name('modules.index');
-    Route::get('/create-module', [ModuleController::class, 'create'])->name('modules.create');
-    Route::post('/store-module', [ModuleController::class, 'store'])->name('modules.store');
 
     // User
     Route::prefix('users')->group(function () {

@@ -23,12 +23,16 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'status_id',
     ];
 
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function member()
+    {
+        return $this->hasOne(Member::class);
     }
 
     /**

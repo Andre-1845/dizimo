@@ -14,6 +14,7 @@ class RoleSeeder extends Seeder
         $teacher = Role::firstOrCreate(['name' => 'Professor']);
         $tutor = Role::firstOrCreate(['name' => 'Tutor']);
         $student = Role::firstOrCreate(['name' => 'Aluno']);
+        $member = Role::firstOrCreate(['name' => 'Membro']);
 
         // Permissões do Admin
         $admin->givePermissionTo([
@@ -26,6 +27,7 @@ class RoleSeeder extends Seeder
             'show-user',
             'create-user',
             'dashboard',
+            'view-dashboard-admin',
             'show-profile',
             'edit-profile',
             'edit-profile-password',
@@ -68,6 +70,22 @@ class RoleSeeder extends Seeder
             'show-profile',
             'edit-profile',
             'edit-profile-password',
+
+
+        ]);
+        // Permissoes do Membro
+        $member->syncPermissions([
+
+            'view-dashboard-member',
+            'show-profile',
+            'edit-profile',
+            'edit-profile-password',
+            // permissoes de Aluno
+            'index-course',
+            'show-course',
+            'index-user',
+            'show-user',
+            'dashboard',
 
 
         ]);

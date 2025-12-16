@@ -14,6 +14,7 @@ class Donation extends Model
         'amount',
         'donation_date',
         'notes',
+        'receipt_path',
     ];
 
     protected $casts = [
