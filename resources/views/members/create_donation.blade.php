@@ -4,6 +4,8 @@
 
 @section('content')
 
+    <x-alert />
+
     <h1 class="text-2xl font-bold mb-6">Nova Doação</h1><br>
     <p class="text-sm text-gray-500 mt-1">
         Esta doação será vinculada automaticamente ao seu perfil

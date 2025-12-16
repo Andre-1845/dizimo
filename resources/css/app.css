@@ -1,8 +1,8 @@
 
 @import "tailwindcss";
 
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
+/* @import "tailwindcss/preflight";
+@import "tailwindcss/utilities"; */
 
 /* fontes opcionais */
 /* @theme {

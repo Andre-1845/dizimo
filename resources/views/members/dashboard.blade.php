@@ -4,11 +4,15 @@
 
 @section('content')
 
-    <h1 class="text-2xl font-bold mb-6">Minhas Doações</h1>
+    <x-alert />
 
-    <a href="{{ route('member.create_donation') }}" class="btn-primary">
-        Nova Doação
-    </a>
+    <div class="content-header">
+        <h1 class="text-2xl font-bold mb-6">Minhas Doações</h1>
+
+        <a href="{{ route('member.create_donation') }}" class="btn-primary">
+            Nova Doação
+        </a>
+    </div>
 
 
     {{-- FILTRO --}}
@@ -61,35 +65,35 @@
     </div>
 
     {{-- LISTAGEM --}}
-    <div class="bg-white rounded shadow p-4">
+    <div class="table-container">
         <div>{{ $user->name }}</div>
-        <table class="w-full text-sm">
+        <table class="table">
             <thead>
-                <tr class="border-b">
-                    <th class="text-left py-2">Data</th>
-                    <th class="text-left py-2">Categoria</th>
-                    <th class="text-left py-2">Cadastrado por</th>
-                    <th class="text-right py-2">Valor</th>
-                    <th class="text-center py-2">Comprovante</th>
+                <tr class="table-row-header">
+                    <th class="table-header">Data</th>
+                    <th class="table-header">Categoria</th>
+                    <th class="table-header">Cadastrado por</th>
+                    <th class="table-header">Valor</th>
+                    <th class="table-header center">Comprovante</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($donations as $donation)
-                    <tr class="border-b last:border-0">
-                        <td class="py-2">
+                    <tr class="table-row-body">
+                        <td class="table-body">
                             {{ $donation->donation_date->format('d/m/Y') }}
                         </td>
-                        <td class="py-2">
+                        <td class="table-body">
                             {{ $donation->category->name }}
                         </td>
-                        <td class="py-2">
+                        <td class="table-body">
                             {{ $donation->user->name }}
                         </td>
-                        <td class="py-2 text-right text-green-600 font-semibold">
+                        <td class="table-body text-right text-green-600 font-semibold">
                             R$ {{ number_format($donation->amount, 2, ',', '.') }}
                         </td>
                         {{-- Link do Recibo --}}
-                        <td class="py-2 text-center">
+                        <td class="table-body table-actions">
                             @if ($donation->receipt_path)
                                 <a href="{{ asset('storage/' . $donation->receipt_path) }}" target="_blank"
                                     class="text-blue-600 hover:underline">

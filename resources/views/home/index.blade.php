@@ -1,6 +1,6 @@
 @extends('layouts.site')
 
-@section('content')
+@section('body')
     <h3>Site Inicial</h3>
     <br>
 
