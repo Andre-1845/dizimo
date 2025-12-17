@@ -11,81 +11,83 @@ class RoleSeeder extends Seeder
     {
         $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
         $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $teacher = Role::firstOrCreate(['name' => 'Professor']);
-        $tutor = Role::firstOrCreate(['name' => 'Tutor']);
-        $student = Role::firstOrCreate(['name' => 'Aluno']);
+        $tesoureiro = Role::firstOrCreate(['name' => 'Tesoureiro']);
+        $secretario = Role::firstOrCreate(['name' => 'Secretario']);
+        $auxiliar = Role::firstOrCreate(['name' => 'Auxiliar']);
         $member = Role::firstOrCreate(['name' => 'Membro']);
 
         // Permissões do Admin
         $admin->givePermissionTo([
-            'index-course',
-            'show-course',
-            'create-course',
-            'edit-course',
-            'destroy-course',
+
             'index-user',
             'show-user',
             'create-user',
-            'dashboard',
-            'view-dashboard-admin',
+            'destroy-user',
+            'edit-roles-user',
+            'index-user-status',
+            'show-user-status',
+            'create-user-status',
+            'edit-user-status',
+            'destroy-user-status',
+            'index-role-permission',
             'show-profile',
             'edit-profile',
             'edit-profile-password',
+            'dashboard',
+            'view-dashboard-admin',
+            'view-dashboard-member',
         ]);
 
         // Permissões do Professor
-        $teacher->givePermissionTo([
-            'index-course',
-            'show-course',
-            'create-course',
-            'edit-course',
-            'destroy-course',
+        $tesoureiro->givePermissionTo([
+
             'index-user',
             'show-user',
-            'dashboard',
             'show-profile',
             'edit-profile',
             'edit-profile-password',
+            'dashboard',
+            'view-dashboard-admin',
+            'view-dashboard-member',
         ]);
 
         // Permissões do Tutor
-        $tutor->givePermissionTo([
-            'index-course',
-            'show-course',
-            'edit-course',
-            'dashboard',
+        $secretario->givePermissionTo([
+
+            'index-user',
+            'show-user',
+            'create-user',
             'show-profile',
             'edit-profile',
             'edit-profile-password',
+            'dashboard',
+            'view-dashboard-admin',
+            'view-dashboard-member',
 
         ]);
 
         // Permissoes do Aluno
-        $student->syncPermissions([
-            'index-course',
-            'show-course',
+        $auxiliar->syncPermissions([
+
             'index-user',
             'show-user',
-            'dashboard',
             'show-profile',
             'edit-profile',
             'edit-profile-password',
+            'dashboard',
+            'view-dashboard-member',
 
 
         ]);
         // Permissoes do Membro
         $member->syncPermissions([
 
-            'view-dashboard-member',
             'show-profile',
             'edit-profile',
             'edit-profile-password',
-            // permissoes de Aluno
-            'index-course',
-            'show-course',
             'index-user',
             'show-user',
-            'dashboard',
+            'view-dashboard-member',
 
 
         ]);

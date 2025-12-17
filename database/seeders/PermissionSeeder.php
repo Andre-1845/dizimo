@@ -15,11 +15,6 @@ class PermissionSeeder extends Seeder
     {
         //
         $permissions = [
-            'index-course',
-            'show-course',
-            'create-course',
-            'edit-course',
-            'destroy-course',
 
             'index-role',
             'show-role',
@@ -48,7 +43,6 @@ class PermissionSeeder extends Seeder
             'dashboard',
             'view-dashboard-admin',
             'view-dashboard-member',
-
 
             'index-role-permission',
             'update-role-permission',

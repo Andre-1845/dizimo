@@ -37,39 +37,39 @@ class UserSeeder extends Seeder
 
 
             // TUTOR
-            $tutor = User::firstOrCreate(
-                ['email' => 'tutor@celke.com'],
+            $tesoureiro = User::firstOrCreate(
+                ['email' => 'tesoureiro@celke.com'],
                 [
-                    'name' => 'Tutor',
+                    'name' => 'Tesoureiro',
                     'password' => bcrypt('123456A#'),
                 ]
             );
 
-            $tutor->assignRole('Tutor');
+            $tesoureiro->assignRole('Tesoureiro');
 
 
             // STUDENT
-            $student = User::firstOrCreate(
-                ['email' => 'student@celke.com'],
+            $secretario = User::firstOrCreate(
+                ['email' => 'secretario@celke.com'],
                 [
-                    'name' => 'Student',
+                    'name' => 'Secretario',
                     'password' => bcrypt('123456A#'),
                 ]
             );
 
-            $student->assignRole('Aluno');
+            $secretario->assignRole('Secretario');
 
 
             // TEACHER
-            $teacher = User::firstOrCreate(
-                ['email' => 'teacher@celke.com'],
+            $auxiliar = User::firstOrCreate(
+                ['email' => 'auxiliar@celke.com'],
                 [
-                    'name' => 'Professor',
+                    'name' => 'Auxiliar',
                     'password' => bcrypt('123456A#'),
                 ]
             );
 
-            $teacher->assignRole('Professor');
+            $auxiliar->assignRole('Auxiliar');
         } catch (Exception $e) {
             Log::notice('Usuario nao cadastrado na SEED', ['error' => $e->getMessage()]);
         }
