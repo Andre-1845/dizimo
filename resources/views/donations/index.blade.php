@@ -12,32 +12,35 @@
         </a>
     </div>
 
-    <div class="bg-white rounded-xl shadow p-6">
-        <table class="w-full text-sm">
+    <div class="table-container">
+        <table class="table">
             <thead>
-                <tr class="border-b text-left">
-                    <th class="pb-2">Membro</th>
-                    <th class="pb-2">Categoria</th>
-                    <th class="pb-2">Forma</th>
-                    <th class="pb-2">Data</th>
-                    <th class="pb-2 text-right">Valor</th>
-                    <th class="pb-2 text-right">Ações</th>
+                <tr class="table-row-header">
+                    <th class="table-header">Membro</th>
+                    <th class="table-header">Categoria</th>
+                    <th class="table-header table-cell-lg-hidden">Forma</th>
+                    <th class="table-header">Data</th>
+                    <th class="table-header table-cell-lg-hidden">Cadastrado por</th>
+                    <th class="table-header center">Valor</th>
+                    <th class="table-header center">Ações</th>
 
                 </tr>
             </thead>
             <tbody>
                 @forelse ($donations as $donation)
-                    <tr class="border-b last:border-0">
-                        <td class="py-2">{{ $donation->member->name ?? '—' }}</td>
-                        <td class="py-2">{{ $donation->category->name ?? '—' }}</td>
-                        <td class="py-2">{{ $donation->paymentMethod->name ?? '—' }}</td>
-                        <td class="py-2">
+                    <tr class="table-row-body">
+                        <td class="table-body">{{ $donation->member->name ?? '—' }}</td>
+                        <td class="table-body">{{ $donation->category->name ?? '—' }}</td>
+                        <td class="table-body table-cell-lg-hidden">{{ $donation->paymentMethod->name ?? '—' }}</td>
+                        <td class="table-body">
                             {{ \Carbon\Carbon::parse($donation->donation_date)->format('d/m/Y') }}
                         </td>
-                        <td class="py-2 text-right text-green-600 font-semibold">
+                        <td class="table-body table-cell-lg-hidden">{{ $donation->user->name ?? '—' }}</td>
+                        </td>
+                        <td class="table-body text-right text-green-600 font-semibold">
                             R$ {{ number_format($donation->amount, 2, ',', '.') }}
                         </td>
-                        <td class="py-2 text-right space-x-2">
+                        <td class="table-body table-actions">
                             <a href="{{ route('donations.edit', $donation) }}" class="btn-warning">
                                 Editar
                             </a>
@@ -54,7 +57,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="py-4 text-center text-gray-500">
+                        <td colspan="5" class="py-4 text-center text-gray-600">
                             Nenhuma doação registrada.
                         </td>
                     </tr>

@@ -4,39 +4,97 @@
 
 @section('content')
 
-    <h1 class="text-2xl font-bold mb-6">Editar Membro</h1>
+    <div class="content-box"> <!-- Content-Box  -->
+        <div class="content-box-header">
+            <h3 class="content-box-title">Editar Membro</h3>
 
-    <form action="{{ route('members.update', $member) }}" method="POST" class="content-box space-y-4">
-        @csrf
-        @method('PUT')
+            <!-- Botoes (com icones)  -->
+            <div class="content-box-btn">
 
-        <div>
-            <label class="form-label">Nome *</label>
-            <input type="text" name="name" class="form-input" required>
+                <!-- Botao LISTAR (com icone)  -->
+                <a href="{{ route('members.index') }}" class="btn-primary align-icon-btn" title="Listar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+
+                    <span class="hide-name-btn">Listar</span>
+                </a>
+                <!-- Fim - Botao LISTAR  -->
+
+
+                <!-- Botao EDITAR SENHA(com icone)  -->
+                <a href="{{ route('users.edit_password', ['user' => $member->user->id]) }}" class="btn-info align-icon-btn"
+                    title="Senha">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                    </svg>
+
+                    <span class="hide-name-btn">Senha</span>
+                </a>
+                <!-- Fim - Botao EDITAR SENHA -->
+
+                <!-- Botao APAGAR(com icone)  -->
+
+                <form action="{{ route('users.destroy', ['user' => $member->user->id]) }}" method="post">
+                    @csrf
+                    @method('delete')
+
+                    <button class="btn-danger align-icon-btn" title="Apagar" type="submit"
+                        onclick="return confirm('Tem certeza que deseja excluir o usuário {{ $member->user->name }} ?')">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+
+                        <span class="hide-name-btn">Apagar</span>
+                    </button>
+                </form>
+
+                <!-- Fim - Botao APAGAR -->
+            </div>
+            <!-- Botoes (com icones)  -->
         </div>
 
-        <div>
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-input">
-        </div>
 
-        <div>
-            <label class="form-label">Telefone</label>
-            <input type="text" name="phone" class="form-input">
-        </div>
+        <x-alert />
 
-        <div>
-            <label>
-                <input type="checkbox" name="active" value="1" checked>
-                Ativo
-            </label>
-        </div>
 
-        <div class="flex justify-end">
-            <button class="btn-primary-md">
-                Salvar
-            </button>
-        </div>
-    </form>
+        <form action="{{ route('members.update', $member) }}" method="POST" class="content-box space-y-4">
+            @csrf
+            @method('PUT')
 
+            <div>
+                <label class="form-label">Nome *</label>
+                <input type="text" name="name" class="form-input" value="{{ $member->name }}"required>
+            </div>
+
+            <div>
+                <label class="form-label">Usuário </label>
+                <input type="text" name="load_user" class="form-input" value="{{ $member->user->name }}" readonly>
+            </div>
+
+            <div>
+                <label class="form-label">Telefone</label>
+                <input type="text" name="phone" class="form-input" value="{{ $member->phone }}">
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="active" {{ $member->active ? 'checked' : '' }}>
+                    Ativo
+                </label>
+            </div>
+
+            <div class="flex justify-end">
+                <button class="btn-primary-md">
+                    Salvar
+                </button>
+            </div>
+        </form>
+    </div>
 @endsection

@@ -91,6 +91,8 @@ class ExpenseController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        $data['user_id'] = Auth::id();
+
         $expense->update($data);
 
         return redirect()

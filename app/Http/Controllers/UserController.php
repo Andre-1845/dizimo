@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Member;
 use App\Models\Status;
 use App\Models\User;
 use FFI\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
 use Spatie\Permission\Models\Role;
@@ -21,11 +24,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // $users = User::orderBy('name', 'asc')->paginate(10);
-        $users = User::when(
-            $request->filled('name'),
-            fn($query) =>
-            $query->whereLike('name', '%' . $request->name . '%')
-        )
+        $users = User::with('member')
+            ->when(
+                $request->filled('name'),
+                fn($query) =>
+                $query->whereLike('name', '%' . $request->name . '%')
+            )
             ->when(
                 $request->filled('email'),
                 fn($query) =>
@@ -87,11 +91,28 @@ class UserController extends Controller
     {
         try {
 
+            DB::beginTransaction();
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
             ]);
+
+            // Role padrão: MEMBRO
+            if (Role::where('name', 'Membro')->exists()) {
+                $user->assignRole('Membro');
+            }
+
+            // Criar MEMBER automaticamente
+            Member::create([
+                'user_id' => $user->id,
+                'name'    => $user->name,
+                'active'  => true,
+            ]);
+
+            DB::commit();
+
 
             //Verificar se veio algum papael selecionado
             if ($request->filled('roles')) {
@@ -99,7 +120,7 @@ class UserController extends Controller
                 $user->syncRoles($validRoles); // ou assignRole() se for um papel só
             }
 
-            Log::info('Usuario cadastrado', ['user_id' => $user->id]);
+            Log::info('Usuário e membro cadastrados', ['user_id' => $user->id]);
 
             return redirect()->route('users.show', ['menu' => 'users', 'user' => $user->id])->with('success', 'Usuário cadastrado com sucesso!');
         } catch (Exception $e) {

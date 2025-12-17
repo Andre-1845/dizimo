@@ -12,77 +12,107 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+
     public function index(Request $request)
     {
         $year  = $request->get('year', now()->year);
         $month = $request->filled('month') ? $request->month : null;
 
-        // Doacoes
+        /* =====================
+     |  TOTAIS (CARDS)
+     ===================== */
 
-        $totalDonationsQuery = Donation::whereYear('donation_date', $year);
+        $donationsQuery = Donation::whereYear('donation_date', $year);
+        $expensesQuery  = Expense::whereYear('expense_date', $year);
 
         if ($month) {
-            $totalDonationsQuery->whereMonth('donation_date', $month);
-        }
-
-        $totalDonations = $totalDonationsQuery->sum('amount');
-
-        // Despesas
-        $expensesQuery = Expense::whereYear('expense_date', $year);
-        if ($month) {
+            $donationsQuery->whereMonth('donation_date', $month);
             $expensesQuery->whereMonth('expense_date', $month);
         }
-        $totalExpenses = $expensesQuery->sum('amount');
 
-        // TOTAL do PERIODO
+        $totalDonations = $donationsQuery->sum('amount');
+        $totalExpenses  = $expensesQuery->sum('amount');
+        $balance        = $totalDonations - $totalExpenses;
 
-        $balance = $totalDonations - $totalExpenses;
+        /* =====================
+     |  CONTADORES
+     ===================== */
 
-        // Quantidade de membros
         $membersCount = Member::count();
 
-        // Últimas doações
+        /* =====================
+     |  ÚLTIMOS REGISTROS
+     ===================== */
+
         $lastDonations = Donation::with('member')
             ->orderByDesc('donation_date')
             ->limit(10)
             ->get();
 
-        // Últimas despesas
         $lastExpenses = Expense::with('category')
             ->orderByDesc('expense_date')
             ->limit(10)
             ->get();
 
-        // Gráfico: entradas x saídas (12 meses)
-        $monthlyData = Donation::select(
-            DB::raw('MONTH(donation_date) as month'),
-            DB::raw('SUM(amount) as total')
-        )
+        /* =====================
+     |  GRÁFICO LINHA
+     |  Doações x Despesas
+     ===================== */
+
+        $donationsByMonth = Donation::selectRaw('MONTH(donation_date) as month, SUM(amount) as total')
             ->whereYear('donation_date', $year)
             ->groupBy('month')
             ->pluck('total', 'month');
 
-        $monthlyExpenses = Expense::select(
-            DB::raw('MONTH(expense_date) as month'),
-            DB::raw('SUM(amount) as total')
-        )
+        $expensesByMonth = Expense::selectRaw('MONTH(expense_date) as month, SUM(amount) as total')
             ->whereYear('expense_date', $year)
             ->groupBy('month')
             ->pluck('total', 'month');
 
-        return view('dashboard.index', compact(
-            'totalDonations',
-            'totalExpenses',
-            'membersCount',
-            'lastDonations',
-            'balance',
-            'lastExpenses',
-            'monthlyData',
-            'monthlyExpenses',
-            'year',
-            'month'
-        ));
+        /* =====================
+     |  GRÁFICO BARRAS
+     |  Doações por categoria
+     ===================== */
+
+        $donationsByCategory = Donation::join('categories', 'categories.id', '=', 'donations.category_id')
+            ->selectRaw('categories.name as category, SUM(donations.amount) as total')
+            ->groupBy('categories.name')
+            ->pluck('total', 'category');
+
+        $expensesByCategory = Expense::join('categories', 'categories.id', '=', 'expenses.category_id')
+            ->selectRaw('categories.name as category, SUM(expenses.amount) as total')
+            ->groupBy('categories.name')
+            ->pluck('total', 'category');
+
+
+        /* =====================
+     |  RETURN
+     ===================== */
+
+        return view('dashboard.index', [
+            'year' => $year,
+            'month' => $month,
+
+            // Cards
+            'totalDonations' => $totalDonations,
+            'totalExpenses'  => $totalExpenses,
+            'balance'        => $balance,
+            'membersCount'   => $membersCount,
+
+            // Listas
+            'lastDonations' => $lastDonations,
+            'lastExpenses'  => $lastExpenses,
+
+            // Gráficos
+            'donationsByMonth'    => $donationsByMonth,
+            'expensesByMonth'     => $expensesByMonth,
+            'donationsByCategory' => $donationsByCategory,
+            'expensesByCategory' => $expensesByCategory,
+
+        ]);
     }
+
+    // **************    MEMBER DASHBOARD   ****************
 
     public function member(Request $request)
     {

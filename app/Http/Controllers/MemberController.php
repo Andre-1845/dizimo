@@ -60,6 +60,8 @@ class MemberController extends Controller
     //
     public function show(Member $member)
     {
+        $member->load('user');
+
         return view('members.show', [
             'member' => $member,
             'menu' => 'members',
@@ -73,6 +75,7 @@ class MemberController extends Controller
 
     public function edit(Member $member)
     {
+        $member->load('user');
         return view('members.edit', [
             'member' => $member,
             'menu' => 'members',
@@ -89,7 +92,7 @@ class MemberController extends Controller
 
         $validated = validator($data, [
             'name'   => 'required|string|max:255',
-            'email'  => 'nullable|email',
+            // 'email'  => 'nullable|email',
             'phone'  => 'nullable|string|max:20',
             'active' => 'boolean',
         ])->validate();

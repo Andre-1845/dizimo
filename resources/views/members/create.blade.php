@@ -15,11 +15,6 @@
         </div>
 
         <div>
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-input">
-        </div>
-
-        <div>
             <label class="form-label">Telefone</label>
             <input type="text" name="phone" class="form-input">
         </div>

@@ -14,7 +14,10 @@ class MemberDonationController extends Controller
 {
     public function create()
     {
+        $user = Auth::User();
+
         return view('members.create_donation', [
+            'user' => $user,
             'categories' => Category::where('type', 'income')->orderBy('name')->get(),
             'paymentMethods' => PaymentMethod::orderBy('name')->get(),
         ]);

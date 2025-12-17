@@ -78,6 +78,7 @@
                 <thead>
                     <tr class="table-row-header"r>
                         <th class="table-header">ID</th>
+                        <th class="table-header">Usuario</th>
                         <th class="table-header">Nome</th>
                         <th class="table-header table-cell-lg-hidden">E-mail</th>
                         <th class="table-header table-cell-lg-hidden">Status</th>
@@ -91,6 +92,7 @@
                         <tr class="table-row-body">
                             <td class="table-body">{{ $user->id }}</td>
                             <td class="table-body">{{ $user->name }}</td>
+                            <td class="table-body">{{ $user->member?->name }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $user->email }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $user->status->name }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $user->getRoleNames()->implode(', ') ?: '-' }}

@@ -19,8 +19,8 @@
 
         <div>
             <label class="block font-semibold">Membro</label>
-            <input name="member_id" class="w-full border rounded p-2" readonly>
-            {{ auth()->user()->name }}</input>
+            <input name="member_name" class="w-full border rounded p-2" value="{{ $user->member->name }}" readonly>
+
         </div>
 
         <div>

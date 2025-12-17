@@ -82,12 +82,12 @@
             @csrf
             @method('PUT')
 
-            <div class="mb-4">
+            <div class="form-label mb-4">
                 <span>ID: </span>
                 <span class="font-bold ml-2">{{ $user->id }}</span>
             </div>
 
-            <div class="mb-4">
+            <div class="form-label mb-4">
                 <span>Nome: </span>
                 <span class="font-bold ml-2">{{ $user->name }}</span>
             </div>
@@ -99,9 +99,9 @@
             </div>
 
             <div class="mb-4">
-                <label for="password_confirmation" class="form-label">Senha - confirmação</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" class="form-input"
-                    placeholder="Repita a senha">
+                <label class="form-label" for="password_confirmation" class="form-label">Senha - confirmação</label>
+                <input class="form-input" type="password" name="password_confirmation" id="password_confirmation"
+                    class="form-input" placeholder="Repita a senha">
             </div>
 
             <button class="btn-success" type="submit">Salvar</button>

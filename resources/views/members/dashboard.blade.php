@@ -66,7 +66,7 @@
 
     {{-- LISTAGEM --}}
     <div class="table-container">
-        <div>{{ $user->name }}</div>
+        <div>{{ $user->member?->name }}</div>
         <table class="table">
             <thead>
                 <tr class="table-row-header">

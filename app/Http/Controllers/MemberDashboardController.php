@@ -17,8 +17,16 @@ class MemberDashboardController extends Controller
         $year  = $request->get('year');
         $month = $request->get('month');
 
+        // $member = Auth::user()->member;
+
+        // if (!$member) {
+        //     abort(403, 'Usuário não possui perfil de membro.');
+        // Essa e uma solucao ao member null
+
+
+
         $query = Donation::with(['category', 'user'])
-            ->where('member_id', $member->id);
+            ->where('member_id', $member?->id);
 
         if ($year) {
             $query->whereYear('donation_date', $year);
@@ -40,7 +48,7 @@ class MemberDashboardController extends Controller
             'menu' => 'my-donations',
             'donations' => $donations,
             'totalDonated' => $totalDonated,
-            'monthlyTithe' => $member->monthly_tithe,
+            'monthlyTithe' => $member?->monthly_tithe,
             'year' => $year,
             'month' => $month,
             'user' => Auth::user(),

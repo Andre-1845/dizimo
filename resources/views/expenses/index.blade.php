@@ -20,6 +20,8 @@
                     <th>Forma</th>
                     <th>Data</th>
                     <th>Descrição</th>
+                    <th>Cadastrado por</th>
+                    <th>Editado em</th>
                     <th class="text-right">Valor</th>
                     <th class="text-right">Ações</th>
                 </tr>
@@ -31,6 +33,8 @@
                         <td class="py-2">{{ $expense->paymentMethod->name ?? '—' }}</td>
                         <td class="py-2">{{ $expense->expense_date->format('d/m/Y') }}</td>
                         <td class="py-2">{{ $expense->description ?? '—' }}</td>
+                        <td class="py-2">{{ $expense->user->name ?? '—' }}</td>
+                        <td class="py-2">{{ $expense->updated_at->format('d/m/Y') }}</td>
                         <td class="py-2 text-right text-red-600 font-semibold">
                             R$ {{ number_format($expense->amount, 2, ',', '.') }}
                         </td>
@@ -65,4 +69,3 @@
     </div>
 
 @endsection
-s

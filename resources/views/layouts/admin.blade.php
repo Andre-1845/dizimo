@@ -60,6 +60,15 @@
                         </a>
                     @endcan
 
+                    @can('view-dashboard-admin')
+                        <a @class([
+                            'sidebar-link',
+                            'active' => ($menu ?? '') === 'dashboard-dizimo',
+                        ]) href="{{ route('dashboard.dizimo_index') }}">
+                            Dizimo Painel
+                        </a>
+                    @endcan
+
                     {{-- @can('view-dashboard-member')
                         <a href="{{ route('members.dashboard') }}" class="sidebar-link">
                             Meu Painel
@@ -109,14 +118,15 @@
                         Usuários
                     </a>
 
+                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
+                        Papeis
+                    </a>
+
                     <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'profile']) href="{{ route('profile.show') }}">
                         Perfil
                     </a>
 
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
-                        Papeis
-                    </a>
 
 
 

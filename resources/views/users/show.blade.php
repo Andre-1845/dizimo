@@ -96,8 +96,12 @@
                 <span class="detail-content">{{ $user->id }}</span>
             </div>
             <div class="mb-1">
-                <span class="title-detail-content">Nome: </span>
+                <span class="title-detail-content">Usuário: </span>
                 <span class="detail-content">{{ $user->name }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Nome: </span>
+                <span class="detail-content">{{ $user->member?->name }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">E-mail: </span>

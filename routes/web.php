@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DizimoDashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ForgotPasswordController;
@@ -67,6 +68,9 @@ Route::middleware(['auth', 'permission:view-dashboard-admin'])
 
 Route::get('/meu-painel', [DashboardController::class, 'member'])
     ->name('dashboard.member');
+
+Route::get('/dashboard-dizimo', [DizimoDashboardController::class, 'index'])
+    ->name('dashboard.dizimo_index');
 
 Route::get('/dashboardMember', [MemberDashboardController::class, 'index'])
     ->name('members.dashboard');

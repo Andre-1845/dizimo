@@ -25,17 +25,19 @@
                     <th class="table-header">Nome</th>
                     <th class="table-header">Email</th>
                     <th class="table-header">Status</th>
-                    <th class="table-header text-right">Ações</th>
+                    <th class="table-header text-center">Dizimo prev</th>
+                    <th class="table-header text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($members as $member)
                     <tr class="table-row-body">
                         <td class="table-body">{{ $member->name }}</td>
-                        <td class="table-body">{{ $member->email ?? '—' }}</td>
-                        <td class="table-body">
-                            {{ $member->active ? 'Ativo' : 'Inativo' }}
+                        <td class="table-body">{{ $member->user->email ?? '—' }}</td>
+                        <td class="table-body"><span class="{{ $member->active ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $member->active ? 'Ativo' : 'Inativo' }}
                         </td>
+                        <td class="table-body text-right">{{ $member->monthly_tithe ?? '—' }}</td>
                         <td class="table-body text-right space-x-2">
                             <a href="{{ route('members.edit', $member) }}" class="text-blue-600">
                                 Editar
