@@ -14,6 +14,13 @@ class DizimoDashboardController extends Controller
 
     public function index(Request $request)
     {
+        // *****  Paginacao  ********
+        $perPage = (int) $request->get('per_page', 10);
+
+        $allowedPerPage = [10, 20, 50, 100];
+        if (!in_array($perPage, $allowedPerPage)) {
+            $perPage = 10;
+        }
         // ===============================
         // 1. Filtros
         // ===============================
@@ -34,12 +41,26 @@ class DizimoDashboardController extends Controller
             ->sum('monthly_tithe');
 
         // ===============================
-        // 4. Total ARRECADADO no mês
+        // 4. Total ARRECADADO (mes ou ano)
         // ===============================
         $totalCollected = Donation::where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
             ->whereMonth('donation_date', $month)
             ->sum('amount');
+
+        $totalCollectedYear = Donation::where('category_id', $dizimoCategory->id)
+            ->whereYear('donation_date', $year)
+            ->sum('amount');
+
+        // $query = Donation::where('category_id', $dizimoCategory->id)
+        //     ->whereYear('donation_date', $year);
+
+        // if ($month) {
+        //     $query->whereMonth('donation_date', $month);
+        // }
+
+        // $totalCollected = $query->sum('amount');
+
 
         // ===============================
         // 5. Total EM FALTA
@@ -69,7 +90,8 @@ class DizimoDashboardController extends Controller
                     ->whereYear('donation_date', $year)
                     ->whereMonth('donation_date', $month);
             }])
-            ->get();
+            ->paginate($perPage, ['*'], 'paid_page')
+            ->withQueryString();
 
         // ===============================
         // 8. Membros que NÃO PAGARAM
@@ -80,7 +102,8 @@ class DizimoDashboardController extends Controller
                     ->whereYear('donation_date', $year)
                     ->whereMonth('donation_date', $month);
             })
-            ->get();
+            ->paginate($perPage, ['*'], 'unpaid_page')
+            ->withQueryString();
 
         // ===============================
         // 9. Dados para gráfico mensal (ano)
@@ -101,6 +124,7 @@ class DizimoDashboardController extends Controller
             'totalExpected'         => $totalExpected,
             'totalCollected'        => $totalCollected,
             'totalMissing'          => $totalMissing,
+            'totalCollectedYear'    => $totalCollectedYear,
 
             'percentageCollected'   => $percentageCollected,
             'percentageMissing'     => $percentageMissing,

@@ -60,7 +60,7 @@
                         </a>
                     @endcan
 
-                    @can('view-dashboard-admin')
+                    @can('view-dashboard-dizimo')
                         <a @class([
                             'sidebar-link',
                             'active' => ($menu ?? '') === 'dashboard-dizimo',
@@ -69,31 +69,23 @@
                         </a>
                     @endcan
 
-                    {{-- @can('view-dashboard-member')
-                        <a href="{{ route('members.dashboard') }}" class="sidebar-link">
-                            Meu Painel
-                        </a>
-                    @endcan --}}
-
-
                     <a href="{{ route('members.dashboard') }}" class="sidebar-link">
                         Meu Dizimo
                     </a>
 
-
-                    @can('view-dashboard-admin')
+                    @can('view-members')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'members']) href="{{ route('members.index') }}">
                             Membros
                         </a>
                     @endcan
 
-                    @can('view-dashboard-admin')
+                    @can('index-donations')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'donations']) href="{{ route('donations.index') }}">
                             Doações
                         </a>
                     @endcan
 
-                    @can('view-dashboard-admin')
+                    @can('index-expenses')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'expenses']) href="{{ route('expenses.index') }}">
                             Despesas
                         </a>
@@ -104,7 +96,7 @@
                             Categorias
                         </a>
                     @endcan
-                    -
+
                     @can('view-dashboard-admin')
                         <a @class([
                             'sidebar-link',
@@ -114,13 +106,17 @@
                         </a>
                     @endcan
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'users']) href="{{ route('users.index') }}">
-                        Usuários
-                    </a>
+                    @can('index-user')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'users']) href="{{ route('users.index') }}">
+                            Usuários
+                        </a>
+                    @endcan
 
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
-                        Papeis
-                    </a>
+                    @can('index-role')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
+                            Papeis
+                        </a>
+                    @endcan
 
                     <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'profile']) href="{{ route('profile.show') }}">
                         Perfil

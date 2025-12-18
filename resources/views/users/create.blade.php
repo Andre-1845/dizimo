@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('body')
+@section('content')
     <!-- Titulo e trilha de navegacao -->
 
     <div class="content-wrapper">

@@ -41,18 +41,20 @@
                             R$ {{ number_format($categories>amount, 2, ',', '.') }}
                         </td> --}}
                         <td class="table-body table-actions">
-                            <a class="btn-warning" href="{{ route('categories.index', $category->id) }}">
-                                Editar
-                            </a>
+                            <div class="flex items-center justify-end gap-2">
+                                <a class="btn-warning" href="{{ route('categories.index', $category->id) }}">
+                                    Editar
+                                </a>
 
-                            <form action="{{ route('categories.index', $category->id) }}" method="POST" class="inline"
-                                onsubmit="return confirm('Deseja excluir esta doação?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn-danger">
-                                    Excluir
-                                </button>
-                            </form>
+                                <form action="{{ route('categories.index', $category->id) }}" method="POST" class="inline"
+                                    onsubmit="return confirm('Deseja excluir esta doação?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn-danger py-2">
+                                        Excluir
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty

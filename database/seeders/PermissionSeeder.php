@@ -43,6 +43,24 @@ class PermissionSeeder extends Seeder
             'dashboard',
             'view-dashboard-admin',
             'view-dashboard-member',
+            'view-dashboard-dizimo',
+
+            'index-member',
+            'update-tithe',
+
+            'index-category',
+
+            'index-donation',
+            'show-donation',
+            'create-donation',
+            'edit-donation',
+            'destroy-donation',
+
+            'index-expense',
+            'show-expense',
+            'create-expense',
+            'edit-expense',
+            'destroy-expense',
 
             'index-role-permission',
             'update-role-permission',

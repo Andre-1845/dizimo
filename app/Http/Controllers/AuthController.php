@@ -77,8 +77,7 @@ class AuthController extends Controller
             // Criar MEMBER automaticamente
             Member::create([
                 'user_id' => $user->id,
-                'name'    => $user->name,
-                'email'   => $user->email,
+                'name'    => $request->name,
                 'active'  => true,
             ]);
 

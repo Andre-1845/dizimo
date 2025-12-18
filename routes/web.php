@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\CourseController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
@@ -70,13 +68,16 @@ Route::get('/meu-painel', [DashboardController::class, 'member'])
     ->name('dashboard.member');
 
 Route::get('/dashboard-dizimo', [DizimoDashboardController::class, 'index'])
-    ->name('dashboard.dizimo_index');
+    ->name('dashboard.dizimo_index')
+    ->middleware('permission:view-dashboard-dizimo');
 
 Route::get('/dashboardMember', [MemberDashboardController::class, 'index'])
-    ->name('members.dashboard');
+    ->name('members.dashboard')
+    ->middleware('permission:view-dashboard-member');
 
 Route::put('/dashboardMember', [MemberDashboardController::class, 'updateTithe'])
-    ->name('members.update_tithe');
+    ->name('members.update_tithe')
+    ->middleware('permission:update-tithe');
 
 Route::middleware(['auth', 'role:Membro'])->group(function () {
     Route::get('/meu-dizimo/doacoes/create', [MemberDonationController::class, 'create'])
@@ -107,19 +108,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/edit_password', [ProfileController::class, 'editPassword'])->name('profile.edit_password')->middleware('permission:edit-profile-password');
         Route::put('/update_password', [ProfileController::class, 'updatePassword'])->name('profile.update_password')->middleware('permission:edit-profile-password');
     });
-    // Cursos
-    // A utilizacao do PREFIX facilita na criacao das rotas
-    Route::prefix('courses')->group(function () {
-        Route::get('/', [CourseController::class, 'index'])->name('courses.index')->middleware('permission:index-course');
-        Route::get('/create', [CourseController::class, 'create'])->name('courses.create')->middleware('permission:create-course');
-        Route::post('/', [CourseController::class, 'store'])->name('courses.store')->middleware('permission:create-course');
-        Route::get('/{course}', [CourseController::class, 'show'])->name('courses.show')->middleware('permission:show-course');
-        Route::get('/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit')->middleware('permission:edit-course');
-        Route::put('/{course}', [CourseController::class, 'update'])->name('courses.update')->middleware('permission:edit-course');
-        Route::delete('/{course}', [CourseController::class, 'destroy'])->name('courses.destroy')->middleware('permission:destroy-course');
-    });
-    // Route::get('/create-course', [CourseController::class, 'create'])->name('courses.create');
-
 
     // Status
     Route::get('/index-status', [StatusController::class, 'index'])->name('statuses.index')->middleware('permission:index-status');

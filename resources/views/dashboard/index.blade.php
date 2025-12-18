@@ -35,7 +35,7 @@
 
         {{-- Doações --}}
         <div class="bg-gray-100 border rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Doações (mês)</p>
+            <p class="text-sm text-gray-500">Doações</p>
             <p class="text-2xl font-bold text-green-600">
                 R$ {{ number_format($totalDonations, 2, ',', '.') }}
             </p>
@@ -43,7 +43,7 @@
 
         {{-- Despesas --}}
         <div class="bg-gray-100 border rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Despesas (mês)</p>
+            <p class="text-sm text-gray-500">Despesas</p>
             <p class="text-2xl font-bold text-red-600">
                 R$ {{ number_format($totalExpenses, 2, ',', '.') }}
             </p>
@@ -51,7 +51,7 @@
 
         {{-- Saldo --}}
         <div class="bg-gray-100 border rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Saldo do mês</p>
+            <p class="text-sm text-gray-500">Saldo</p>
             <p class="text-2xl font-bold {{ $balance >= 0 ? 'text-blue-600' : 'text-red-600' }}">
                 R$ {{ number_format($balance, 2, ',', '.') }}
             </p>

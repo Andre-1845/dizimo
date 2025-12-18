@@ -4,16 +4,55 @@
 
 @section('content')
 
-    <h1 class="text-2xl font-bold mb-6">Nova Despesa</h1>
+    <!-- Titulo e trilha de navegacao -->
 
-    <form method="POST" action="{{ route('expenses.store') }}" class="bg-white rounded-xl shadow p-6 space-y-4">
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Despesas</h2>
+            <nav class="breadcrumb">
+                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <span>/</span>
+                <a href="{{ route('expenses.index') }}" class="breadcrumb-link">Despesas</a>
+                <span>/</span>
+                <span>Cadastrar</span>
+            </nav>
+        </div>
+    </div>
 
-        @csrf
-        @method('POST')
+    <!-- Titulo e trilha de navegacao -->
 
-        {{-- <div>
-            <label class="block font-semibold">Membro</label>
-            <select name="member_id" class="w-full border rounded p-2">
+    <div class="content-box"> <!-- Content-Box  -->
+        <div class="content-box-header">
+            <h3 class="content-box-title">Nova Despesa</h3>
+            <!-- Botoes (com icones)  -->
+            <div class="content-box-btn">
+
+                <!-- Botao LISTAR (com icone)  -->
+                @can('index-expense')
+                    <a href="{{ route('expenses.index') }}" class="btn-primary align-icon-btn" title="Listar">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+
+                        <span class="hide-name-btn">Listar</span>
+                    </a>
+                @endcan
+                <!-- Fim - Botao LISTAR  -->
+
+            </div>
+            <!-- Botoes (com icones)  -->
+        </div>
+
+        <form method="POST" action="{{ route('expenses.store') }}" class="bg-white rounded-xl shadow p-6 space-y-4">
+
+            @csrf
+            @method('POST')
+
+            {{-- <div>
+            <label class="form-label">Membro</label>
+            <select name="member_id" class="form-input">
                 <option value="">Selecione</option>
                 @foreach ($members as $member)
                     <option value="{{ $member->id }}">
@@ -21,55 +60,56 @@
                     </option>
                 @endforeach
             </select>
-        </div> --}}
+            </div> --}}
 
-        <div>
-            <label class="block font-semibold">Categoria</label>
-            <select name="category_id" class="w-full border rounded p-2">
-                <option value="">Selecione</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+            <div>
+                <label for="category_id" class="form-label">Categoria</label>
+                <select name="category_id" class="form-input">
+                    <option value="">Selecione</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-        <div>
-            <label class="block font-semibold">Forma de Pagamento</label>
-            <select name="payment_method_id" class="w-full border rounded p-2">
-                <option value="">Selecione</option>
-                @foreach ($paymentMethods as $method)
-                    <option value="{{ $method->id }}">
-                        {{ $method->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+            <div>
+                <label class="form-label">Forma de Pagamento</label>
+                <select name="payment_method_id" class="form-input">
+                    <option value="">Selecione</option>
+                    @foreach ($paymentMethods as $method)
+                        <option value="{{ $method->id }}">
+                            {{ $method->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-        <div>
-            <label class="block font-semibold">Data</label>
-            <input type="date" name="expense_date" class="w-full border rounded p-2" value="{{ now()->toDateString() }}">
-        </div>
+            <div>
+                <label for="expense_date" class="form-label">Data</label>
+                <input type="date" name="expense_date" class="form-input" value="{{ now()->toDateString() }}">
+            </div>
 
-        <div>
-            <label class="block font-semibold">Valor</label>
-            <input type="number" step="0.01" name="amount" class="w-full border rounded p-2">
-        </div>
+            <div>
+                <label class="form-label">Valor</label>
+                <input type="number" step="0.01" name="amount" class="form-input">
+            </div>
 
-        <div>
-            <label class="block font-semibold">Descrição</label>
-            <input type="text" name="description" class="w-full border rounded p-2"></input>
-        </div>
+            <div>
+                <label class="form-label">Descrição</label>
+                <input type="text" name="description" class="form-input"></input>
+            </div>
 
-        <div>
-            <label class="block font-semibold">Observações</label>
-            <textarea name="notes" class="w-full border rounded p-2"></textarea>
-        </div>
+            <div>
+                <label class="form-label">Observações</label>
+                <textarea name="notes" class="form-input"></textarea>
+            </div>
 
-        <button class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">
-            Salvar Despesa
-        </button>
-    </form>
+            <button class="btn-primary-md">
+                Salvar Despesa
+            </button>
+        </form>
 
+    </div> <!-- FIM Content-Box  -->
 @endsection

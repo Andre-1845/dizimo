@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -41,6 +42,7 @@ class MemberController extends Controller
             'name'   => 'required|string|max:255',
             'email'  => 'nullable|email',
             'phone'  => 'nullable|string|max:20',
+            'monthly_tithe' => 'required|numeric|min:0',
             'active' => 'boolean',
         ])->validate();
 
@@ -85,24 +87,65 @@ class MemberController extends Controller
      * Update the specified resource in storage.
      */
 
+
+
     public function update(Request $request, Member $member)
     {
         $data = $request->all();
         $data['active'] = $request->has('active');
 
         $validated = validator($data, [
-            'name'   => 'required|string|max:255',
-            // 'email'  => 'nullable|email',
-            'phone'  => 'nullable|string|max:20',
-            'active' => 'boolean',
+            'name'          => 'required|string|max:255',
+            'phone'         => 'nullable|string|max:20',
+            'monthly_tithe' => 'required|numeric|min:0',
+            'user_name'     => 'nullable|string|max:255',
+            'active'        => 'boolean',
         ])->validate();
 
-        $member->update($data);
+        DB::transaction(function () use ($member, $validated) {
+
+            // Atualiza MEMBER
+            $member->update([
+                'name'          => $validated['name'],
+                'phone'         => $validated['phone'] ?? null,
+                'monthly_tithe' => $validated['monthly_tithe'],
+                'active'        => $validated['active'] ?? false,
+            ]);
+
+            // Atualiza USER relacionado
+            if ($member->user) {
+                $member->user->update([
+                    'name' => $validated['user_name'],
+                ]);
+            }
+        });
 
         return redirect()
             ->route('members.index')
             ->with('success', 'Membro atualizado com sucesso.');
     }
+
+
+    // public function update(Request $request, Member $member)
+    // {
+    //     $data = $request->all();
+    //     $data['active'] = $request->has('active');
+
+    //     $validated = validator($data, [
+    //         'name'   => 'required|string|max:255',
+    //         // 'email'  => 'nullable|email',
+    //         'phone'  => 'nullable|string|max:20',
+    //         'monthly_tithe' => 'required|numeric|min:0',
+    //         'user_name' => 'required|string|max:255',
+    //         'active' => 'boolean',
+    //     ])->validate();
+
+    //     $member->update($data);
+
+    //     return redirect()
+    //         ->route('members.index')
+    //         ->with('success', 'Membro atualizado com sucesso.');
+    // }
 
     public function destroy(Member $member)
     {

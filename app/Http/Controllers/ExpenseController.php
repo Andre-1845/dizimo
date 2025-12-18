@@ -88,6 +88,7 @@ class ExpenseController extends Controller
             'payment_method_id' => 'required|exists:payment_methods,id',
             'expense_date' => 'required|date',
             'amount' => 'required|numeric|min:0.01',
+            'description' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
 
@@ -116,8 +117,9 @@ class ExpenseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Expense $expense)
     {
         //
+        return view('expenses.show', ['expense' => $expense, 'menu' => 'expenses']);
     }
 }

@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'name',
-        'email',
         'phone',
         'active',
         'monthly_tithe', // valor previsto
