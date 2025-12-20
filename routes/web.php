@@ -1,151 +1,190 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\StatusController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DizimoDashboardController;
-use App\Http\Controllers\DonationController;
-use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\Member\MemberDonationController;
-use App\Http\Controllers\MemberController;
-use App\Http\Controllers\MemberDashboardController;
-use App\Http\Controllers\PaymentMethodController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\RolePermissionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\{
+    HomeController,
+    AuthController,
+    ForgotPasswordController,
+    DashboardController,
+    DizimoDashboardController,
+    MemberDashboardController,
+    ProfileController,
+    StatusController,
+    UserController,
+    RoleController,
+    RolePermissionController,
+    CategoryController,
+    PaymentMethodController,
+    MemberController,
+    DonationController,
+    ExpenseController
+};
+use App\Http\Controllers\Member\MemberDonationController;
 
-// Pagina inicial do site
+/*
+|--------------------------------------------------------------------------
+| Rotas Públicas
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Pagina de LOGIN
+/*
+|--------------------------------------------------------------------------
+| Autenticação
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [AuthController::class, 'index'])->name('login');
-
-// Processamento de LOGIN
 Route::post('/login', [AuthController::class, 'loginProcess'])->name('login.process');
-
-// LOGOUT
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-//Formulario cadastrar novo usuario
 Route::get('/register', [AuthController::class, 'create'])->name('register');
-
-// Receber os dados do formulario e cadastrar novo usuario
 Route::post('/register', [AuthController::class, 'store'])->name('register.store');
 
-// Recuperar senha
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+/*
+|--------------------------------------------------------------------------
+| Recuperação de Senha
+|--------------------------------------------------------------------------
+*/
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
 
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
 
-Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showRequestForm'])->name('password.reset');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showRequestForm'])
+    ->name('password.reset');
 
-Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])
+    ->name('password.update');
 
-// Novas rotas para DIZIMO
+/*
+|--------------------------------------------------------------------------
+| Área Autenticada
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
 
-Route::resource('categories', CategoryController::class);
-Route::resource('payment-methods', PaymentMethodController::class);
-Route::resource('members', MemberController::class);
-Route::resource('donations', DonationController::class);
-Route::resource('expenses', ExpenseController::class);
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboards
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard.index')
+        ->middleware('permission:view-dashboard-admin');
 
-// DASHBOARD Rotas //
+    Route::get('/dashboard-dizimo', [DizimoDashboardController::class, 'index'])
+        ->name('dashboard.dizimo')
+        ->middleware('permission:view-dashboard-dizimo');
 
-// Route::middleware(['auth'])->group(function () {
-// get('/dashboard', [DashboardController::class, 'index'])
-//     ->name('dashboard.index');}
+    Route::get('/meu-painel', [MemberDashboardController::class, 'index'])
+        ->name('dashboard.member')
+        ->middleware('permission:view-dashboard-member');
 
-Route::middleware(['auth', 'permission:view-dashboard-admin'])
-    ->get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard.index');
+    Route::put('/meu-painel/dizimo', [MemberDashboardController::class, 'updateTithe'])
+        ->name('dashboard.member.update-tithe')
+        ->middleware('permission:edit-member');
 
-Route::get('/meu-painel', [DashboardController::class, 'member'])
-    ->name('dashboard.member');
+    /*
+    |--------------------------------------------------------------------------
+    | Perfil
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])
+            ->name('profile.show')
+            ->middleware('permission:show-profile');
 
-Route::get('/dashboard-dizimo', [DizimoDashboardController::class, 'index'])
-    ->name('dashboard.dizimo_index')
-    ->middleware('permission:view-dashboard-dizimo');
+        Route::get('/edit', [ProfileController::class, 'edit'])
+            ->name('profile.edit')
+            ->middleware('permission:edit-profile');
 
-Route::get('/dashboardMember', [MemberDashboardController::class, 'index'])
-    ->name('members.dashboard')
-    ->middleware('permission:view-dashboard-member');
+        Route::put('/', [ProfileController::class, 'update'])
+            ->name('profile.update')
+            ->middleware('permission:edit-profile');
 
-Route::put('/dashboardMember', [MemberDashboardController::class, 'updateTithe'])
-    ->name('members.update_tithe')
-    ->middleware('permission:update-tithe');
+        Route::get('/password', [ProfileController::class, 'editPassword'])
+            ->name('profile.password.edit')
+            ->middleware('permission:edit-profile-password');
 
-Route::middleware(['auth', 'role:Membro'])->group(function () {
-    Route::get('/meu-dizimo/doacoes/create', [MemberDonationController::class, 'create'])
-        ->name('member.create_donation');
+        Route::put('/password', [ProfileController::class, 'updatePassword'])
+            ->name('profile.password.update')
+            ->middleware('permission:edit-profile-password');
+    });
 
-    Route::post('/meu-dizimo/doacoes', [MemberDonationController::class, 'store'])
-        ->name('member.store_donation');
+    /*
+    |--------------------------------------------------------------------------
+    | Administração de Usuários e Permissões
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('users', UserController::class)
+        ->middleware('permission:index-user');
+    Route::get('/users/{user}/password', [UserController::class, 'editPassword'])
+        ->name('users.password.edit')
+        ->middleware('permission:edit-password-user');
+
+    Route::put('/users/{user}/password', [UserController::class, 'updatePassword'])
+        ->name('users.password.update')
+        ->middleware('permission:edit-password-user');
+
+
+    Route::resource('roles', RoleController::class)
+        ->middleware('permission:index-role');
+
+    Route::prefix('role-permissions')->group(function () {
+        Route::get('/{role}', [RolePermissionController::class, 'index'])
+            ->name('role-permissions.index')
+            ->middleware('permission:index-role-permission');
+
+        Route::put('/{role}/{permission}', [RolePermissionController::class, 'update'])
+            ->name('role-permissions.update')
+            ->middleware('permission:update-role-permission');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cadastros Gerais
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('statuses', StatusController::class)
+        ->middleware('permission:index-user-status');
+
+    Route::resource('categories', CategoryController::class)
+        ->middleware('permission:index-category');
+
+    Route::resource('payment-methods', PaymentMethodController::class);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Membros
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('members', MemberController::class)
+        ->middleware('permission:index-member');
 });
 
+/*
+    |--------------------------------------------------------------------------
+    | Financeiro
+    |--------------------------------------------------------------------------
+    */
+Route::resource('donations', DonationController::class)
+    ->middleware('permission:index-donation');
 
+Route::resource('expenses', ExpenseController::class)
+    ->middleware('permission:index-expense');
 
+/*
+    |--------------------------------------------------------------------------
+    | Área do Membro (doações próprias)
+    |--------------------------------------------------------------------------
+    */
+Route::prefix('meu-dizimo')->middleware('permission:view-dashboard-member')->group(function () {
 
-//Grupo de rotas restritas
-// Necessita estar logado para acessar essas rotas
-Route::group(['middleware' => 'auth'], function () {
+    Route::get('/doacoes/create', [MemberDonationController::class, 'create'])
+        ->name('member.donation.create');
 
-    // Dashboard
-    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('permission:dashboard');
-
-
-
-    // Perfil do Usuario
-
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'show'])->name('profile.show')->middleware('permission:show-profile');
-        Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit')->middleware('permission:edit-profile');
-        Route::put('/', [ProfileController::class, 'update'])->name('profile.update')->middleware('permission:edit-profile');
-        Route::get('/edit_password', [ProfileController::class, 'editPassword'])->name('profile.edit_password')->middleware('permission:edit-profile-password');
-        Route::put('/update_password', [ProfileController::class, 'updatePassword'])->name('profile.update_password')->middleware('permission:edit-profile-password');
-    });
-
-    // Status
-    Route::get('/index-status', [StatusController::class, 'index'])->name('statuses.index')->middleware('permission:index-status');
-    Route::get('/create-status', [StatusController::class, 'create'])->name('statuses.create')->middleware('permission:create-status');
-    Route::post('/store-status', [StatusController::class, 'store'])->name('statuses.store')->middleware('permission:create-status');
-
-
-    // User
-    Route::prefix('users')->group(function () {
-
-        Route::get('/', [UserController::class, 'index'])->name('users.index')->middleware('permission:index-user');
-        Route::get('/list/{status}', [UserController::class, 'list'])->name('users.list')->middleware('permission:show-user');
-        Route::get('/create', [UserController::class, 'create'])->name('users.create')->middleware('permission:create-user');
-        Route::post('/', [UserController::class, 'store'])->name('users.store')->middleware('permission:create-user');
-        Route::get('/{user}', [UserController::class, 'show'])->name('users.show')->middleware('permission:show-user');
-        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit')->middleware('permission:edit-user');
-        Route::put('/{user}', [UserController::class, 'update'])->name('users.update')->middleware('permission:edit-user');
-        Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy')->middleware('permission:destroy-user');
-        Route::get('/{user}/edit-password', [UserController::class, 'editPassword'])->name('users.edit_password')->middleware('permission:edit-user');
-        Route::put('/{user}/update-password', [UserController::class, 'updatePassword'])->name('users.update_password')->middleware('permission:edit-user');
-    });
-
-    Route::prefix('roles')->group(function () {
-        Route::get('/', [RoleController::class, 'index'])->name('roles.index')->middleware('permission:index-role');
-        Route::get('/create', [RoleController::class, 'create'])->name('roles.create')->middleware('permission:create-role');
-        Route::post('/', [RoleController::class, 'store'])->name('roles.store')->middleware('permission:create-role');
-        Route::get('/{role}', [RoleController::class, 'show'])->name('roles.show')->middleware('permission:show-role');
-        Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit')->middleware('permission:edit-role');
-        Route::put('/{role}', [RoleController::class, 'update'])->name('roles.update')->middleware('permission:edit-role');
-        Route::delete('/{role}', [RoleController::class, 'destroy'])->name('roles.destroy')->middleware('permission:destroy-role');
-    });
-
-    // Permissao do papel
-
-    // A utilizacao do PREFIX facilita na criacao das rotas
-    Route::prefix('role-permissions')->group(function () {
-        Route::get('/{role}', [RolePermissionController::class, 'index'])->name('role-permissions.index')->middleware('permission:index-role-permission');
-
-        Route::get('/{role}/{permission}', [RolePermissionController::class, 'update'])->name('role-permissions.update')->middleware('permission:update-role-permission');
-    });
+    Route::post('/doacoes', [MemberDonationController::class, 'store'])
+        ->name('member.donation.store');
 });

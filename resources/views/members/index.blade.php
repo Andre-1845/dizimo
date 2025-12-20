@@ -38,20 +38,8 @@
                                 {{ $member->active ? 'Ativo' : 'Inativo' }}
                         </td>
                         <td class="table-body text-right">{{ $member->monthly_tithe ?? '—' }}</td>
-                        <td class="table-body text-right space-x-2">
-                            <a href="{{ route('members.edit', $member) }}" class="text-blue-600">
-                                Editar
-                            </a>
-
-                            <form action="{{ route('members.destroy', $member) }}" method="POST" class="inline"
-                                onsubmit="return confirm('Deseja excluir este membro?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-red-600">
-                                    Excluir
-                                </button>
-                            </form>
-                        </td>
+                        <x-table-actions-icons :show="route('members.show', $member)" :edit="route('members.edit', $member)" :delete="route('members.destroy', $member)"
+                            confirm="Deseja excluir {{ $member->name }}?" />
                     </tr>
                 @empty
                     <tr>

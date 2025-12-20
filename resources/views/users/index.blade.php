@@ -97,23 +97,8 @@
                             <td class="table-body table-cell-lg-hidden">{{ $user->status->name }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $user->getRoleNames()->implode(', ') ?: '-' }}
                             </td>
-                            <td class="table-body table-actions">
-
-                                <a href="{{ route('users.show', ['user' => $user->id]) }}"
-                                    class="btn-primary">Visualizar</a>
-
-                                <a href="{{ route('users.edit', ['user' => $user->id]) }}"
-                                    class="btn-warning table-md-hidden">Editar</a>
-
-                                <form id="delete-form-{{ $user->id }}"
-                                    action="{{ route('users.destroy', ['user' => $user->id]) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-
-                                    <button class="btn-danger table-md-hidden" type="button"
-                                        onclick="confirmDelete({{ $user->id }}, '{{ $user->name }}')">Apagar</button>
-                                </form>
-                            </td>
+                            <x-table-actions-icons :show="route('users.show', $user)" :edit="route('users.edit', $user)" :delete="route('users.destroy', $user)"
+                                confirm="Deseja excluir {{ $user->name }}?" />
                         </tr>
                     @empty
                         <span class="alert-warning">Não existem usuários cadastrados.</span>

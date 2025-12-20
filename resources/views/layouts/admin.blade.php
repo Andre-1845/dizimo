@@ -37,101 +37,143 @@
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-container">
 
-                <button id="closeSidebar" class="sidebar-close-button">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-
+                <!-- Header -->
                 <div class="sidebar-header">
                     <span class="sidebar-title">Dízimo</span>
                 </div>
 
+                <!-- Usuário -->
                 @auth
-                    <div class="text-cyan-300 font-semibold mb-4">
+                    <div class="sidebar-user">
                         {{ Auth::user()->name }}
                     </div>
                 @endauth
 
                 <nav class="sidebar-nav">
-                    @can('view-dashboard-admin')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'dashboard']) href="{{ route('dashboard.index') }}">
-                            Dashboard
+
+                    {{-- ===================== --}}
+                    {{-- DASHBOARDS --}}
+                    {{-- ===================== --}}
+                    @canany(['view-dashboard-admin', 'view-dashboard-dizimo', 'view-dashboard-member'])
+                        <div class="sidebar-group">
+                            <span class="sidebar-group-title">Painéis</span>
+
+                            @can('view-dashboard-admin')
+                                <a href="{{ route('dashboard.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'dashboard' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">📊</span>
+                                    <span class="sidebar-text">Dashboard Admin</span>
+                                </a>
+                            @endcan
+
+                            @can('view-dashboard-dizimo')
+                                <a href="{{ route('dashboard.dizimo') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'dashboard-dizimo' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">💰</span>
+                                    <span class="sidebar-text">Painel do Dízimo</span>
+                                </a>
+                            @endcan
+
+                            @can('view-dashboard-member')
+                                <a href="{{ route('dashboard.member') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'my-dashboard' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">🙋</span>
+                                    <span class="sidebar-text">Meu Painel</span>
+                                </a>
+                            @endcan
+                        </div>
+                    @endcanany
+
+                    {{-- ===================== --}}
+                    {{-- PESSOAS --}}
+                    {{-- ===================== --}}
+                    @canany(['index-user', 'index-member'])
+                        <div class="sidebar-group">
+                            <span class="sidebar-group-title">Pessoas</span>
+
+                            @can('index-member')
+                                <a href="{{ route('members.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'members' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">👥</span>
+                                    <span class="sidebar-text">Membros</span>
+                                </a>
+                            @endcan
+
+                            @can('index-user')
+                                <a href="{{ route('users.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'users' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">🧑‍💼</span>
+                                    <span class="sidebar-text">Usuários</span>
+                                </a>
+                            @endcan
+                        </div>
+                    @endcanany
+
+                    {{-- ===================== --}}
+                    {{-- FINANCEIRO --}}
+                    {{-- ===================== --}}
+                    @canany(['index-donation', 'index-expense'])
+                        <div class="sidebar-group">
+                            <span class="sidebar-group-title">Financeiro</span>
+
+                            @can('index-donation')
+                                <a href="{{ route('donations.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'donations' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">➕</span>
+                                    <span class="sidebar-text">Doações</span>
+                                </a>
+                            @endcan
+
+                            @can('index-expense')
+                                <a href="{{ route('expenses.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'expenses' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">➖</span>
+                                    <span class="sidebar-text">Despesas</span>
+                                </a>
+                            @endcan
+                        </div>
+                    @endcanany
+
+                    {{-- ===================== --}}
+                    {{-- CONFIGURAÇÕES --}}
+                    {{-- ===================== --}}
+                    @canany(['index-category', 'index-role'])
+                        <div class="sidebar-group">
+                            <span class="sidebar-group-title">Configurações</span>
+
+                            @can('index-category')
+                                <a href="{{ route('categories.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'categories' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">🏷️</span>
+                                    <span class="sidebar-text">Categorias</span>
+                                </a>
+                            @endcan
+
+                            @can('index-role')
+                                <a href="{{ route('roles.index') }}"
+                                    class="sidebar-link {{ ($menu ?? '') === 'roles' ? 'active' : '' }}">
+                                    <span class="sidebar-icon">🔐</span>
+                                    <span class="sidebar-text">Papéis</span>
+                                </a>
+                            @endcan
+                        </div>
+                    @endcanany
+
+                    {{-- ===================== --}}
+                    {{-- PERFIL --}}
+                    {{-- ===================== --}}
+                    <div class="sidebar-group">
+                        <a href="{{ route('profile.show') }}"
+                            class="sidebar-link {{ ($menu ?? '') === 'profile' ? 'active' : '' }}">
+                            <span class="sidebar-icon">⚙️</span>
+                            <span class="sidebar-text">Meu Perfil</span>
                         </a>
-                    @endcan
-
-                    @can('view-dashboard-dizimo')
-                        <a @class([
-                            'sidebar-link',
-                            'active' => ($menu ?? '') === 'dashboard-dizimo',
-                        ]) href="{{ route('dashboard.dizimo_index') }}">
-                            Dizimo Painel
-                        </a>
-                    @endcan
-
-                    <a href="{{ route('members.dashboard') }}" class="sidebar-link">
-                        Meu Dizimo
-                    </a>
-
-                    @can('view-members')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'members']) href="{{ route('members.index') }}">
-                            Membros
-                        </a>
-                    @endcan
-
-                    @can('index-donations')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'donations']) href="{{ route('donations.index') }}">
-                            Doações
-                        </a>
-                    @endcan
-
-                    @can('index-expenses')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'expenses']) href="{{ route('expenses.index') }}">
-                            Despesas
-                        </a>
-                    @endcan
-
-                    @can('view-dashboard-admin')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'categories']) href="{{ route('categories.index') }}">
-                            Categorias
-                        </a>
-                    @endcan
-
-                    @can('view-dashboard-admin')
-                        <a @class([
-                            'sidebar-link',
-                            'active' => ($menu ?? '') === 'payment-methods',
-                        ]) href="{{ route('payment-methods.index') }}">
-                            Formas de Pagamento
-                        </a>
-                    @endcan
-
-                    @can('index-user')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'users']) href="{{ route('users.index') }}">
-                            Usuários
-                        </a>
-                    @endcan
-
-                    @can('index-role')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
-                            Papeis
-                        </a>
-                    @endcan
-
-                    <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'profile']) href="{{ route('profile.show') }}">
-                        Perfil
-                    </a>
-
-
-
-
-
-
+                    </div>
 
                 </nav>
-
             </div>
         </aside>
+
 
         <!-- Conteúdo -->
         <main class="main-content">

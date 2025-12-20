@@ -11,7 +11,7 @@
         Esta doação será vinculada automaticamente ao seu perfil
     </p>
 
-    <form method="POST" enctype="multipart/form-data" action="{{ route('member.store_donation') }}"
+    <form method="POST" enctype="multipart/form-data" action="{{ route('member.donation.store') }}"
         class="bg-white rounded-xl shadow p-6 space-y-4">
 
         @csrf

@@ -22,24 +22,48 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    // public function processlogin(LoginRequest $request)
+    // {
+    //     try {
+    //         $auhenticated = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
+    //         if (!$auhenticated) {
+    //             Log::notice('Erro de login.', ['email' => $request->email]);
+
+    //             return back()->withInput()->with('error', 'Usuário ou senha incorretos');
+    //         }
+    //         Log::info('Login', ['action_user_id' => Auth::id()]);
+
+    //         $user = Auth::user();
+
+    //         if ($user->hasRole('Membro')) {
+    //             return redirect()
+    //                 ->route('dashboard.member')
+    //                 ->with('success', 'Bem-vindo(a), ' . $user->name . '!');
+    //         }
+
+    //         // Admin, SuperAdmin, Tesoureiro etc
+    //         return redirect()
+    //             ->route('dashboard')
+    //             ->with('success', 'Bem-vindo(a), ' . $user->name . '!');
+    //     } catch (Exception $e) {
+    //         Log::notice('Erro de login.', ['error' => $e->getMessage()]);
+
+    //         return back()->withInput()->with('error', 'Usuário ou senha incorretos');
+    //     }
+    //     // return view('login.index');
+    // }
+
     public function loginProcess(LoginRequest $request)
     {
-        try {
-            $auhenticated = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
-            if (!$auhenticated) {
-                Log::notice('Erro de login.', ['email' => $request->email]);
-
-                return back()->withInput()->with('error', 'Usuário ou senha incorretos');
-            }
-            Log::info('Login', ['action_user_id' => Auth::id()]);
-
-            return redirect()->route('members.dashboard')->with('success', 'Usuário ' .  $request->user()->name . ' LOGADO com sucesso!');
-        } catch (Exception $e) {
-            Log::notice('Erro de login.', ['error' => $e->getMessage()]);
-
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            Log::notice('Erro de login.', ['email' => $request->email]);
             return back()->withInput()->with('error', 'Usuário ou senha incorretos');
         }
-        // return view('login.index');
+
+        Log::info('Login', ['action_user_id' => Auth::id()]);
+
+        // NÃO decida dashboard aqui
+        return redirect()->intended('/');
     }
 
     // LOGOUT

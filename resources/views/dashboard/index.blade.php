@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+    <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
 
     <form method="GET" class="flex gap-2 mb-6">
         <select name="month" class="border rounded p-2">

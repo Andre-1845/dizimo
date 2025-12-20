@@ -119,9 +119,9 @@
     /****** Fim Navbar ******/
 
         /****** Início Sidebar ******/
-    .sidebar {
+    /* .sidebar {
         @apply fixed inset-y-0 left-0 w-64 bg-white shadow-md transform -translate-x-full transition-transform duration-300 ease-in-out;
-    }
+    } */
 
     .sidebar-open {
         @apply translate-x-0;
@@ -270,46 +270,138 @@
 
     /****** Início Botões ******/
     /* Botão azul */
-    .btn-primary {
+    /* .btn-primary {
         @apply bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600 transition-colors cursor-pointer;
-    }
+    } */
 
     /* Botão azul médio */
-    .btn-primary-md {
+    /* .btn-primary-md {
         @apply bg-blue-500 text-white text-base px-3 py-2 rounded hover:bg-blue-600 transition-colors cursor-pointer;
-    }
+    } */
 
     /* Botão azul claro */
-    .btn-info {
+    /* .btn-info {
         @apply bg-cyan-500 text-white text-sm px-3 py-1 rounded hover:bg-cyan-600 transition-colors cursor-pointer;
-    }
+    } */
 
     /* Botão verde */
-    .btn-success {
+    /* .btn-success {
         @apply bg-green-500 text-white text-sm px-3 py-1 rounded hover:bg-green-600 transition-colors cursor-pointer;
-    }
+    } */
 
     /* Botão amarelo */
-    .btn-warning {
+    /* .btn-warning {
         @apply bg-yellow-500 text-white text-sm px-3 py-2 rounded hover:bg-yellow-600 transition-colors cursor-pointer;
-    }
-    .btn-warning-md {
+    } */
+    /* .btn-warning-md {
         @apply bg-yellow-500 text-white text-base px-3 py-1 rounded hover:bg-yellow-600 transition-colors cursor-pointer;
-    }
+    } */
 
     /* Botão vermelho */
-    .btn-danger {
+    /* .btn-danger {
         @apply bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 transition-colors cursor-pointer;
+    } */
+
+    /* .btn-danger-md {
+        @apply bg-red-500 text-white text-base px-3 py-2 rounded hover:bg-red-600 transition-colors cursor-pointer;
+    } */
+
+  /* Alinha ícone + texto */
+/* .align-icon-btn {
+    @apply inline-flex items-center gap-1;
+} */
+
+/* Botão pequeno */
+.btn-sm {
+    @apply px-3 py-1.5 text-sm leading-tight;
+}
+
+/* Botão apenas ícone */
+.btn-icon {
+    @apply inline-flex items-center justify-center
+           w-9 h-9 p-0 rounded-md;
+}
+
+
+
+/* *****  Novo layout
+
+/* 🔑 BOTÃO DE AÇÃO PADRÃO (conceitual, NÃO reutilizado via @apply) */
+.btn-action {
+    @apply inline-flex items-center justify-center
+           gap-1 px-3 h-10 leading-none align-middle;
+}
+
+.btn-md-div {
+    @apply flex justify-end mt-4;
+}
+
+ /* Botão verde */
+    .btn-success {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-10 leading-none align-middle
+           bg-green-500 text-white text-sm rounded
+           hover:bg-green-600 transition-colors cursor-pointer;
+    }
+
+    .btn-success-md {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-12 leading-none align-middle
+           bg-green-500 text-white text-base rounded
+           hover:bg-green-600 transition-colors cursor-pointer;
+    }
+
+    /* Botão azul */
+    .btn-primary {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-10 leading-none align-middle
+           bg-blue-500 text-white text-sm rounded
+           hover:bg-blue-600 transition-colors cursor-pointer;
+    }
+
+    .btn-primary-md {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-12 leading-none align-middle
+           bg-blue-500 text-white text-base rounded
+           hover:bg-blue-600 transition-colors cursor-pointer;
+    }
+
+
+    /* Botão info */
+    .btn-info {
+        @apply inline-flex items-center justify-center
+            gap-1 px-3 h-10 leading-none align-middle
+            bg-cyan-500 text-white text-sm rounded
+            hover:bg-cyan-600 transition-colors cursor-pointer;
+    }
+
+    /* Botão warning */
+    .btn-warning {
+        @apply inline-flex items-center justify-center
+            gap-1 px-3 h-10 leading-none align-middle
+            bg-yellow-500 text-white text-sm rounded
+            hover:bg-yellow-600 transition-colors cursor-pointer;
+    }
+
+    /* Botão danger */
+    .btn-danger {
+        @apply inline-flex items-center justify-center
+            gap-1 px-3 h-10 leading-none align-middle
+            bg-red-500 text-white text-sm rounded
+            hover:bg-red-600 transition-colors cursor-pointer;
     }
 
     .btn-danger-md {
-        @apply bg-red-500 text-white text-base px-3 py-2 rounded hover:bg-red-600 transition-colors cursor-pointer;
+            @apply inline-flex items-center justify-center
+            gap-1 px-3 h-12 leading-none align-middle
+            bg-red-500 text-white text-base rounded
+            hover:bg-red-600 transition-colors cursor-pointer;
     }
 
-    /* Alinha os botões em linha */
-    .align-icon-btn {
-        @apply flex items-center space-x-1;
-    }
+
+
+
+
 
     /****** Fim Botões ******/
 
@@ -335,6 +427,64 @@
     }
 
     /****** Fim Alertas ******/
+
+    /*******   NOVOS AJUSTES  *******/
+
+    /* Sidebar base */
+.sidebar {
+    width: 64px;
+    transition: width .25s ease;
+    overflow-x: hidden;
+}
+
+/* Expande no hover (desktop) */
+@media (min-width: 1024px) {
+    .sidebar:hover {
+        width: 240px;
+    }
+
+    .sidebar:hover .sidebar-text,
+    .sidebar:hover .sidebar-group-title {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Texto escondido */
+.sidebar-text,
+.sidebar-group-title {
+    opacity: 0;
+    visibility: hidden;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+/* Ícones */
+.sidebar-icon {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Links */
+.sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2 text-sm text-gray-50 hover:bg-blue-900;
+}
+
+/* Grupo */
+.sidebar-group {
+    @apply mb-4;
+}
+
+/* Título do grupo */
+.sidebar-group-title {
+    @apply text-xs uppercase text-gray-400 px-3 mb-2 block;
+}
+
+/* Usuário */
+.sidebar-user {
+    @apply text-cyan-300 font-semibold px-3 mb-4;
+}
 
 
 }

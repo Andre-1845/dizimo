@@ -9,7 +9,7 @@
     <div class="content-header">
         <h1 class="text-2xl font-bold mb-6">Minhas Doações</h1>
 
-        <a href="{{ route('member.create_donation') }}" class="btn-primary">
+        <a href="{{ route('member.donation.create') }}" class="btn-primary">
             Nova Doação
         </a>
     </div>
@@ -123,7 +123,7 @@
     <div class="bg-white rounded shadow p-4 mb-6">
         <h2 class="font-semibold mb-3">Meu dízimo mensal previsto</h2>
 
-        <form method="POST" action="{{ route('members.update_tithe') }}" class="flex gap-4 items-end">
+        <form method="POST" action="{{ route('dashboard.member.update-tithe') }}" class="flex gap-4 items-end">
             @csrf
             @method('PUT')
 

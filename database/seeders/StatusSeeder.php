@@ -13,9 +13,8 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $pendente = Status::firstOrCreate(['name' => 'Pendente']);
-        $ativo = Status::firstOrCreate(['name' => 'Ativo']);
-        $suspenso = Status::firstOrCreate(['name' => 'Suspenso']);
+        Status::updateOrCreate(['id' => 1], ['name' => 'Pendente']);
+        Status::updateOrCreate(['id' => 2], ['name' => 'Ativo']);
+        Status::updateOrCreate(['id' => 3], ['name' => 'Inativo']);
     }
 }

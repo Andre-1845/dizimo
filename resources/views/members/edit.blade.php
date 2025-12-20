@@ -76,8 +76,9 @@
                 </label>
             </div>
 
-            <div class="flex justify-end">
-                <button class="btn-primary-md">
+            <div class="btn-md-div">
+                <button class="btn-success-md">
+                    @include('components.icons.save')
                     Salvar
                 </button>
             </div>

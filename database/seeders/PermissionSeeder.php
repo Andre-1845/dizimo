@@ -46,6 +46,10 @@ class PermissionSeeder extends Seeder
             'view-dashboard-dizimo',
 
             'index-member',
+            'show-member',
+            'create-member',
+            'edit-member',
+            'destroy-member',
             'update-tithe',
 
             'index-category',

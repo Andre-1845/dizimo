@@ -11,7 +11,7 @@
                 <span>/</span>
                 <a href="{{ route('users.index') }}" class="breadcrumb-link">Usuários</a>
                 <span>/</span>
-                <span>Editar</span>
+                <span>Visualizar</span>
             </nav>
         </div>
     </div>
@@ -21,7 +21,7 @@
 
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h3 class="content-box-title">Editar Senha</h3>
+            <h3 class="content-box-title">Detalhes</h3>
 
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
@@ -38,9 +38,21 @@
                 </a>
                 <!-- Fim - Botao LISTAR  -->
 
+                <!-- Botao EDITAR (com icone)  -->
+                <a href="{{ route('users.edit', ['user' => $user->id]) }}" class="btn-warning align-icon-btn"
+                    title="Editar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                    </svg>
+
+                    <span class="hide-name-btn">Editar</span>
+                </a>
+                <!-- Fim - Botao EDITAR -->
 
                 <!-- Botao EDITAR SENHA(com icone)  -->
-                <a href="{{ route('users.password.edit', ['user' => $user->id]) }}" class="btn-info align-icon-btn"
+                <a href="{{ route('users.edit_password', ['user' => $user->id]) }}" class="btn-info align-icon-btn"
                     title="Senha">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-5">
@@ -77,35 +89,45 @@
 
         <x-alert />
 
-        <form action="{{ route('users.password.update', ['user' => $user->id]) }}" method="post">
-            {{-- O CSRF impede o envio de dados de outras fontes. So aceita do próprio app --}}
-            @csrf
-            @method('PUT')
 
-            <div class="form-label mb-4">
-                <span>ID: </span>
-                <span class="font-bold ml-2">{{ $user->id }}</span>
+        <div class="detail-box">
+            <div class="mb-1">
+                <span class="title-detail-content">ID: </span>
+                <span class="detail-content">{{ $user->id }}</span>
             </div>
-
-            <div class="form-label mb-4">
-                <span>Nome: </span>
-                <span class="font-bold ml-2">{{ $user->name }}</span>
+            <div class="mb-1">
+                <span class="title-detail-content">Usuário: </span>
+                <span class="detail-content">{{ $user->name }}</span>
             </div>
-
-            <div class="mb-4">
-                <label for="password" class="form-label">Senha</label>
-                <input type="password" name="password" id="password" class="form-input"
-                    placeholder="Senha (mínimmo 6 caracteres)">
+            <div class="mb-1">
+                <span class="title-detail-content">Nome: </span>
+                <span class="detail-content">{{ $user->member?->name }}</span>
             </div>
-
-            <div class="mb-4">
-                <label class="form-label" for="password_confirmation" class="form-label">Senha - confirmação</label>
-                <input class="form-input" type="password" name="password_confirmation" id="password_confirmation"
-                    class="form-input" placeholder="Repita a senha">
+            <div class="mb-1">
+                <span class="title-detail-content">E-mail: </span>
+                <span class="detail-content">{{ $user->email }}</span>
             </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Status: </span>
+                <span class="detail-content">{{ $user->status->name }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Papel: </span>
+                <span class="detail-content">{{ $user->getRoleNames()->implode(', ') ?: '-' }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Criado em:</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y H:i:s') }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Modificado em: </span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($user->updated_at)->format('d/m/Y H:i:s') }}</span>
+            </div>
+        </div>
 
-            <button class="btn-success" type="submit">Salvar</button>
-        </form>
+    </div>
 
-    </div> <!--  FIM  Content-Box  -->
+    {{-- <a href="{{ route('users.edit', ['user' => $user->id]) }}">Editar</a><br>
+    <a href="{{ route('users.edit_password', ['user' => $user->id]) }}">Editar Senha</a><br>
+    <a href="{{ route('home') }}">Inicio</a><br><br> --}}
 @endsection

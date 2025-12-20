@@ -40,7 +40,6 @@ class MemberController extends Controller
 
         $validated = validator($data, [
             'name'   => 'required|string|max:255',
-            'email'  => 'nullable|email',
             'phone'  => 'nullable|string|max:20',
             'monthly_tithe' => 'required|numeric|min:0',
             'active' => 'boolean',

@@ -51,11 +51,11 @@ class MemberDonationController extends Controller
             ]);
 
             return redirect()
-                ->route('members.dashboard')
+                ->route('dashboard.member')
                 ->with('success', 'Doação registrada com sucesso.');
         } catch (Exception $e) {
             return redirect()
-                ->route('members.dashboard')
+                ->route('dashboard.member')
                 ->with('error', 'Doação não registrada. Tente novamente.');
         }
     }

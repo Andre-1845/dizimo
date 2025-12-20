@@ -1,43 +1,73 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="content-box">
+    <!-- Titulo e trilha de navegacao -->
+
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Perfil</h2>
+            <nav class="breadcrumb">
+                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <span>/</span>
+                <a href="{{ route('profile.show') }}" class="breadcrumb-link">Perfil</a>
+                <span>/</span>
+                <span>Detalhes</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Titulo e trilha de navegacao -->
+
+
+    <x-alert />
+
+
+    <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
             <h3 class="content-box-title">Perfil</h3>
 
+            <!-- Botoes (com icones)  -->
+            <x-action-buttons :edit="route('profile.edit', $user)" :password="route('profile.password.edit', $user)" :delete="route('users.destroy', $user)" can-edit="edit-profile"
+                can-password="edit-profile-password" can-delete="destroy-user"
+                delete-confirm="Deseja excluir o usuário {{ $user->name }}?" />
+            <!-- Botoes (com icones)  -->
+
         </div>
 
-
-        <x-alert />
-
-        <br>
-        <a href="{{ route('profile.edit') }}">Editar</a><br>
-        <a href="{{ route('profile.edit_password') }}">Editar Senha</a><br>
-        <a href="{{ route('home') }}">Inicio</a><br><br>
-
         {{-- Listar registro --}}
-
-
-        ID: {{ $user->id }}<br>
-        Usuario: {{ $user->name }} <br>
-        Nome: {{ $user->member?->name }}<br>
-        Email: {{ $user->email }} <br>
-        Status: {{ $user->status->name }} <br>
-        Papel:
-        {{-- @forelse ($user->getRoleNames() as $index => $role)
-            @if (!$loop->last)
-                {{ $role . ',' }}
-            @else()
-                {{ $role . '.' }}<br>
-            @endif
-
-        @empty
-        -
-        @endforelse --}}
-        {{ $user->getRoleNames()->implode(', ') ?: '-' }}<br>
-
-        {{-- Carbon é uma biblioteca Laravel usada para o format --}}
-        Criado: {{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y H:i:s') }} <br>
-        Alterado: {{ \Carbon\Carbon::parse($user->updated_at)->format('d/m/Y H:i:s') }} <br>
+        <div class="detail-box">
+            <div class="mb-1">
+                <span class="title-detail-content">ID: </span>
+                <span class="detail-content">{{ $user->id }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Usuário: </span>
+                <span class="detail-content">{{ $user->name }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Nome: </span>
+                <span class="detail-content">{{ $user->member?->name }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">E-mail: </span>
+                <span class="detail-content">{{ $user->email }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Status: </span>
+                <span class="detail-content">{{ $user->status->name }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Papel: </span>
+                <span class="detail-content">{{ $user->getRoleNames()->implode(', ') ?: '-' }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Criado em:</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y H:i:s') }}</span>
+            </div>
+            <div class="mb-1">
+                <span class="title-detail-content">Modificado em: </span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($user->updated_at)->format('d/m/Y H:i:s') }}</span>
+            </div>
+        </div>
     </div>
 @endsection
