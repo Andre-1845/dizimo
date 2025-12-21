@@ -18,14 +18,14 @@
         @method('POST')
 
         <div>
-            <label class="block font-semibold">Membro</label>
-            <input name="member_name" class="w-full border rounded p-2" value="{{ $user->member->name }}" readonly>
+            <label class="form-label">Membro</label>
+            <input name="member_name" class="form-input" value="{{ $user->member->name }}" readonly>
 
         </div>
 
         <div>
-            <label class="block font-semibold">Categoria</label>
-            <select name="category_id" class="w-full border rounded p-2">
+            <label class="form-label">Categoria</label>
+            <select name="category_id" class="form-input">
                 <option value="">Selecione</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">
@@ -33,11 +33,14 @@
                     </option>
                 @endforeach
             </select>
+            @error('category_id')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
-            <label class="block font-semibold">Forma de Pagamento</label>
-            <select name="payment_method_id" class="w-full border rounded p-2">
+            <label class="form-label">Forma de Pagamento</label>
+            <select name="payment_method_id" class="form-input">
                 <option value="">Selecione</option>
                 @foreach ($paymentMethods as $method)
                     <option value="{{ $method->id }}">
@@ -45,26 +48,34 @@
                     </option>
                 @endforeach
             </select>
+            @error('payment_method_id')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
-            <label class="block font-semibold">Data</label>
-            <input type="date" name="donation_date" class="w-full border rounded p-2"
-                value="{{ now()->toDateString() }}">
+            <label class="form-label">Data</label>
+            <input type="date" name="donation_date" class="form-input" value="{{ now()->toDateString() }}">
+            @error('donation_date')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
-            <label class="block font-semibold">Valor</label>
-            <input type="number" step="0.01" name="amount" class="w-full border rounded p-2">
+            <label class="form-label">Valor</label>
+            <input type="number" step="0.01" name="amount" class="form-input">
+            @error('amount')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div>
-            <label class="block font-semibold">Observações</label>
-            <textarea name="notes" class="w-full border rounded p-2"></textarea>
+            <label class="form-label">Observações</label>
+            <textarea name="notes" class="form-input"></textarea>
         </div>
 
         <div>
-            <label class="block font-semibold">Comprovante</label>
+            <label class="form-label">Comprovante</label>
             <input type="file" name="receipt" accept=".pdf,.jpg,.jpeg,.png"
                 class="block w-full text-sm text-gray-600
                       file:mr-4 file:py-2 file:px-4
@@ -81,10 +92,12 @@
         </div>
 
 
-
-        <button class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-            Salvar Doação
-        </button>
+        <div class="btn-md-div">
+            <button class="btn-success-md ">
+                @include('components.icons.save')
+                Salvar Doação
+            </button>
+        </div>
     </form>
 
 @endsection

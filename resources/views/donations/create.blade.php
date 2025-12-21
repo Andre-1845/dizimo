@@ -87,6 +87,9 @@
                     @endforeach
                 </select>
             </div>
+            @error('payment_method_id')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
 
             <div>
                 <label class="form-label">Data</label>

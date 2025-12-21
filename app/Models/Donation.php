@@ -31,7 +31,7 @@ class Donation extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->withTrashed();
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -40,7 +40,7 @@ class Donation extends Model
      */
     public function member()
     {
-        return $this->belongsTo(Member::class)->withTrashed();
+        return $this->belongsTo(Member::class);
     }
 
     /**

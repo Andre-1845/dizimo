@@ -9,6 +9,7 @@
     <div class="content-header">
         <h1 class="text-2xl font-bold mb-6">Minhas Doações</h1>
 
+
         <a href="{{ route('member.donation.create') }}" class="btn-primary">
             Nova Doação
         </a>

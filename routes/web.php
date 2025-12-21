@@ -19,7 +19,7 @@ use App\Http\Controllers\{
     DonationController,
     ExpenseController
 };
-use App\Http\Controllers\Member\MemberDonationController;
+use App\Http\Controllers\MemberDonationController;
 
 /*
 |--------------------------------------------------------------------------
