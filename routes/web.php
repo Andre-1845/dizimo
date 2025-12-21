@@ -137,10 +137,16 @@ Route::middleware('auth')->group(function () {
             ->name('role-permissions.index')
             ->middleware('permission:index-role-permission');
 
-        Route::put('/{role}/{permission}', [RolePermissionController::class, 'update'])
-            ->name('role-permissions.update')
-            ->middleware('permission:update-role-permission');
+        // Route::put('/{role}/{permission}', [RolePermissionController::class, 'update'])
+        //     ->name('role-permissions.update')
+        //     ->middleware('permission:update-role-permission');
+        Route::put(
+            '/{role}/{permission}',
+            [RolePermissionController::class, 'toggle']
+        )->name('role-permissions.toggle');
     });
+
+
 
     /*
     |--------------------------------------------------------------------------

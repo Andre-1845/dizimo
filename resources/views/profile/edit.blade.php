@@ -18,8 +18,6 @@
 
     <!-- Titulo e trilha de navegacao -->
 
-    <x-alert />
-
     <div class="content-box"><!-- Content-Box  -->
         <div class="content-box-header">
             <h3 class="content-box-title">Editar Perfil</h3>

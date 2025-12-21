@@ -28,7 +28,7 @@ class MemberDonationController extends Controller
     public function store(DonationRequest $request)
     {
 
-        $data = $request->validate();
+        $data = $request->validated();
 
         $user = Auth::user();
         $data['donor_name'] = $user->member->name;

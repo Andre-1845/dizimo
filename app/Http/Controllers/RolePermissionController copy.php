@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class RolePermissionController extends Controller
 {
-    use AuthorizesRequests;
     // Carrega a view
     public function index(Role $role)
     {
@@ -71,20 +69,5 @@ class RolePermissionController extends Controller
             // Redirecionar o usuario e enviar a mensagem de ERRO
             return back()->withInput()->with('error', 'Permissão NÃO alterada!');
         }
-    }
-
-
-
-    public function toggle(Role $role, Permission $permission)
-    {
-        $this->authorize('managePermissions', $role);
-
-        if ($role->hasPermissionTo($permission)) {
-            $role->revokePermissionTo($permission);
-        } else {
-            $role->givePermissionTo($permission);
-        }
-
-        return back()->with('success', 'Permissão atualizada com sucesso.');
     }
 }

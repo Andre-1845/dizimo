@@ -1,40 +1,42 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h2>Permissoes de {{ $role->name }}</h2>
+    <h2 class="text-xl font-semibold mb-4">
+        Permissões do papel: {{ $role->name }}
+    </h2>
 
-    <x-alert /><br>
+    <x-alert />
 
-    <a href="{{ route('home') }}">Inicio</a><br>
-    <a href="{{ route('roles.index') }}">Listar papeis</a><br>
+    <div class="mb-4 space-x-3">
+        <a href="{{ route('home') }}">Início</a>
+        <a href="{{ route('roles.index') }}">Listar papéis</a>
+    </div>
+
+    <hr class="my-4">
 
     @forelse ($permissions as $permission)
-        ID: {{ $permission->id }}<br>
-        Permissao: <strong>{{ $permission->name }}</strong><br>
+        <div class="flex items-center justify-between border-b py-2">
 
-        @if (in_array($permission->id, $rolePermissions ?? []))
-            <a href="{{ route('role-permissions.update', ['role' => $role->id, 'permission' => $permission->id]) }}">
-                <span style="color:#086">Liberado</span>
-            </a>
-        @else
-            <a href="{{ route('role-permissions.update', ['role' => $role->id, 'permission' => $permission->id]) }}">
-                <span style="color:#f00">Bloqueado</span>
-            </a>
-        @endif
-        {{-- <a href="{{ route('roles.show', ['role' => $role->id]) }}">Visualizar</a><br>
-        <a href="{{ route('role-permissions.index', ['role' => $role->id]) }}">Permissoes</a><br>
-        <a href="{{ route('roles.edit', ['role' => $role->id]) }}">Editar</a><br>
+            <div>
+                <span class="text-sm text-gray-500">ID {{ $permission->id }}</span><br>
+                <strong>{{ $permission->name }}</strong>
+            </div>
 
-        <form action="{{ route('roles.destroy', ['role' => $role->id]) }}" method="post">
-            @csrf
-            @method('delete')
+            @can('managePermissions', $role)
+                <form method="POST" action="{{ route('role-permissions.toggle', [$role, $permission]) }}">
+                    @csrf
+                    @method('PUT')
 
-            <button type="submit"
-                onclick="return confirm('Tem certeza que deseja excluir o papel {{ $role->name }} ?')">Apagar</button>
-        </form> --}}
-        <hr>
+                    <button type="submit"
+                        class="btn-sm {{ $role->hasPermissionTo($permission) ? 'btn-danger' : 'btn-success' }}">
+                        {{ $role->hasPermissionTo($permission) ? 'Remover' : 'Adicionar' }}
+                    </button>
+                </form>
+            @endcan
+
+        </div>
+
     @empty
-        Nenhum papel cadastrado.
+        <p class="text-gray-500">Nenhuma permissão cadastrada.</p>
     @endforelse
-    {{-- {{ $permissions->links() }} --}}
 @endsection
