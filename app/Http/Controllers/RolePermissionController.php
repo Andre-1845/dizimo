@@ -33,7 +33,10 @@ class RolePermissionController extends Controller
             ->all();
 
         // Recuperar TODAS as permissoes existentes no BD
-        $permissions = Permission::orderBy('name')->get();
+        $permissions = Permission::orderBy('group')
+            ->orderBy('order')
+            ->get()
+            ->groupBy('group');
 
         // Salvar LOG
         Log::info('Listar permissoes do papel.', ['role_id' => $role->id, 'action_user_id' => Auth::id()]);
@@ -46,45 +49,23 @@ class RolePermissionController extends Controller
         ]);
     }
 
-    public function update(Role $role, Permission $permission)
-    {
-        //Capturar possiveis excecoes durante a execucao
-        try {
-            //Definir acao (bloquear ou liberar)
-            $action = $role->permissions->contains($permission) ? 'bloquear' : 'liberar';
-
-            // Liberar ou bloquear a permissao
-            $role->{$action === 'bloquear' ? 'revokePermissionTo' : 'givePermissionTo'}($permission);
-            //Salvar LOG
-            Log::info(ucfirst($action) . ' permissao para o papel.', [
-                'role_id' => $role->id,
-                'permission_id' => $permission->id,
-                'action_user_id' => Auth::id()
-            ]);
-
-            // Redirecionar o usuario e enviar a mensagem de SUCESSO
-            return redirect()->route('role-permissions.index', ['menu' => 'roles', 'role' => $role->id])->with('success', 'Permissão ' . ($action === 'bloquear' ? 'BLOQUEADA' : 'LIBERADA') . ' !');
-        } catch (Exception $e) {
-            //Salvar LOG
-            Log::notice('Permissao para o papel nao editada.', ['error' => $e->getMessage(), 'action_user_id' => Auth::id()]);
-
-            // Redirecionar o usuario e enviar a mensagem de ERRO
-            return back()->withInput()->with('error', 'Permissão NÃO alterada!');
-        }
-    }
-
-
-
     public function toggle(Role $role, Permission $permission)
     {
         $this->authorize('managePermissions', $role);
 
         if ($role->hasPermissionTo($permission)) {
             $role->revokePermissionTo($permission);
+            $action = "Bloqueada";
         } else {
             $role->givePermissionTo($permission);
+            $action = "Liberada";
         }
-
+        //Salvar LOG
+        Log::info($action . ' permissao para o papel.', [
+            'role_id' => $role->id,
+            'permission_id' => $permission->id,
+            'action_user_id' => Auth::id()
+        ]);
         return back()->with('success', 'Permissão atualizada com sucesso.');
     }
 }

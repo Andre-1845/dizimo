@@ -35,7 +35,7 @@
 
         {{-- Doações --}}
         <div class="bg-gray-100 border rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Doações</p>
+            <p class="text-sm text-gray-500">Receitas</p>
             <p class="text-2xl font-bold text-green-600">
                 R$ {{ number_format($totalDonations, 2, ',', '.') }}
             </p>

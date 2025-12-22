@@ -61,13 +61,11 @@
                         <option value="{{ $category->id }}" @selected($expense->category_id == $category->id)>
                             {{ $category->name }}
                         </option>
+                        @error('category_id')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     @endforeach
                 </select>
-            </div>
-
-            <div>
-                <label class="form-label">Descrição</label>
-                <input type="text" name="description" value="{{ $expense->description }}" class="form-input">
             </div>
 
             <div>
@@ -77,6 +75,9 @@
                         <option value="{{ $method->id }}" @selected($expense->payment_method_id == $method->id)>
                             {{ $method->name }}
                         </option>
+                        @error('payment_method_id')
+                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     @endforeach
                 </select>
             </div>
@@ -85,20 +86,48 @@
                 <label class="form-label">Data</label>
                 <input type="date" name="expense_date" value="{{ $expense->expense_date->format('Y-m-d') }}"
                     class="form-input">
+                @error('expense_date')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
                 <label class="form-label">Valor</label>
                 <input type="number" step="0.01" name="amount" value="{{ $expense->amount }}" class="form-input">
+                @error('amount')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="form-label">Descrição</label>
+                <input type="text" name="description" value="{{ $expense->description }}" class="form-input">
             </div>
 
             <div>
                 <label class="form-label">Observações</label>
                 <textarea name="notes" class="form-input">{{ $expense->notes }}</textarea>
             </div>
+            <div>
+                <label class="form-label">Comprovante</label>
+                <input type="file" name="receipt" value={{ $expense->receipt }} accept=".pdf,.jpg,.jpeg,.png"
+                    class="block w-full text-sm text-gray-600
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-blue-50 file:text-blue-700
+                      hover:file:bg-blue-100">
+                <p class="text-xs text-gray-400 mt-1">
+                    Tamanho máximo: 2MB
+                </p>
+                @error('receipt')
+                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-            <div class="flex gap-4">
-                <button type="submit" class="btn-primary-md">
+            <div class="btn-md-div">
+                <button type="submit" class="btn-success-md">
+                    @include('components.icons.save')
                     Atualizar
                 </button>
 

@@ -1,19 +1,48 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h2>Cadastrar Papel</h2>
+    <!-- Titulo e trilha de navegacao -->
 
-    <x-alert /><br>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Papéis</h2>
+            <nav class="breadcrumb">
+                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <span>/</span>
+                <a href="{{ route('roles.index') }}" class="breadcrumb-link">Papéis</a>
+                <span>/</span>
+                <span>Cadastrar</span>
+            </nav>
+        </div>
+    </div>
 
-    <form action="{{ route('roles.store') }}" method="post">
-        @csrf
-        @method('POST')
+    <!-- Titulo e trilha de navegacao -->
 
-        <label for="">Papel:</label>
-        <input type="text" name="name" id="name" placeholder="Digite o papel"><br>
 
-        <input type="hidden" name="guard_name" id="guard_name" value="web" readonly>
+    <div class="content-box"> <!-- Content-Box  -->
+        <div class="content-box-header">
+            <h3 class="content-box-title">Cadastrar</h3>
 
-        <button type="submit">Cadastrar</button>
-    </form>
-@endsection
+        </div>
+
+        <x-alert />
+
+        <div class="form-div">
+
+            <form action="{{ route('roles.store') }}" method="post">
+                @csrf
+                @method('POST')
+
+                <label for="" class="form-label">Papel</label>
+                <input type="text" class="form-input" name="name" id="name" placeholder="Digite o papel"><br>
+
+                <input type="hidden" name="guard_name" id="guard_name" value="web" readonly>
+
+                <div class="btn-md-div">
+                    <button class="btn-success-md" type="submit">
+                        @include('components.icons.save')
+                        Salvar</button>
+                </div>
+            </form>
+        </div>
+    @endsection

@@ -6,7 +6,7 @@
 
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h2 class="content-title">Nova Doação</h2>
+            <h2 class="content-title">Nova Membro</h2>
 
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
@@ -50,8 +50,9 @@
                 </label>
             </div>
 
-            <div class="flex justify-end">
-                <button class="btn-primary-md">
+            <div class="btn-md-div">
+                <button class="btn-success-md ">
+                    @include('components.icons.save')
                     Salvar
                 </button>
             </div>

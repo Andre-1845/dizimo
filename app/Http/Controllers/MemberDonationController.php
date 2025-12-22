@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DonationRequest;
+use App\Http\Requests\MemberDonationRequest;
 use App\Models\Category;
 use App\Models\Donation;
 use App\Models\PaymentMethod;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +24,7 @@ class MemberDonationController extends Controller
         ]);
     }
 
-    public function store(DonationRequest $request)
+    public function store(MemberDonationRequest $request)
     {
 
         $data = $request->validated();

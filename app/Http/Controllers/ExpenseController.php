@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExpenseRequest;
 use App\Models\Expense;
 use App\Models\Category;
 use App\Models\PaymentMethod;
@@ -44,18 +45,17 @@ class ExpenseController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store(Request $request)
+    public function store(ExpenseRequest $request)
     {
-        $data = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'payment_method_id' => 'required|exists:payment_methods,id',
-            'expense_date' => 'required|date',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'nullable|string',
-            'notes' => 'nullable|string',
-        ]);
+        $data = $request->validated();
 
         $data['user_id'] = Auth::id();
+
+        // Upload do comprovante
+        if ($request->hasFile('receipt')) {
+            $data['receipt_path'] = $request->file('receipt')
+                ->store('receipts/expenses', 'public');
+        }
 
         Expense::create($data);
 
@@ -79,20 +79,19 @@ class ExpenseController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage.s
      */
-    public function update(Request $request, Expense $expense)
+    public function update(ExpenseRequest $request, Expense $expense)
     {
-        $data = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'payment_method_id' => 'required|exists:payment_methods,id',
-            'expense_date' => 'required|date',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'nullable|string',
-            'notes' => 'nullable|string',
-        ]);
+        $data = $request->validated();
 
         $data['user_id'] = Auth::id();
+
+        // Upload do comprovante
+        if ($request->hasFile('receipt')) {
+            $data['receipt_path'] = $request->file('receipt')
+                ->store('receipts/expenses', 'public');
+        }
 
         $expense->update($data);
 

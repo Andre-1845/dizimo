@@ -203,6 +203,10 @@
     /****** Fim Conteúdo Principal ******/
 
      /****** Inicio Tabela Listar Registros ******/
+.table-title {
+    @apply mt-3 mb-2 font-semibold text-lg text-blue-600;
+}
+
     .table-container {
         @apply overflow-hidden bg-white shadow-sm;
     }
@@ -237,6 +241,10 @@
 
     .table-actions {
         @apply flex align-middle py-4 text-center space-x-1;
+
+    }
+    .table-link {
+        @apply font-bold cursor-pointer text-blue-700 underline;
     }
 
     /****** Fim Tabela Listar Registros ******/
@@ -245,6 +253,10 @@
     /******* Formularios *******/
 
     /*---- LABEL ----*/
+.form-div {
+    @apply  mb-4;
+}
+
 .form-label{
     @apply block text-sm font-semibold;
 }

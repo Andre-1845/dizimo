@@ -1,38 +1,76 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h2>Listar Papeis</h2>
+    <!-- Titulo e trilha de navegacao -->
 
-    <x-alert /><br>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Papéis</h2>
+            <nav class="breadcrumb">
+                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <span>/</span>
+                <span>Papéis</span>
+            </nav>
+        </div>
+    </div>
 
-    <a href="{{ route('home') }}">Inicio</a><br>
-    <a href="{{ route('roles.create') }}">Cadastrar</a><br>
+    <!-- Titulo e trilha de navegacao -->
 
-    @forelse ($roles as $role)
-        ID: {{ $role->id }}<br>
-        Papel: <strong>{{ $role->name }}</strong><br>
-        Guard_name: {{ $role->guard_name }}<br>
-        <a href="{{ route('roles.show', ['role' => $role->id]) }}">Visualizar</a><br>
-        @can('index-role-permission')
-            <a href="{{ route('role-permissions.index', ['role' => $role->id]) }}">Permissoes</a><br>
-        @endcan
-        @can('edit-role')
-            <a href="{{ route('roles.edit', ['role' => $role->id]) }}">Editar</a><br>
-        @endcan
 
-        @can('destroy-role')
-            <form action="{{ route('roles.destroy', ['role' => $role->id]) }}" method="post">
-                @csrf
-                @method('delete')
+    <div class="content-box"> <!-- Content-Box  -->
+        <div class="content-box-header">
+            <h3 class="content-box-title">Listar</h3>
+            <!-- Botao CADASTRAR (com icone)  -->
+            <div class="content-box-btn">
+                <a href="{{ route('roles.create') }}" class="btn-success flex items-center space-x-1">
+                    @include('components.icons.plus')
+                    <span>Cadastrar</span>
+                </a>
+            </div>
+            <!--FIM  Botao CADASTRAR (com icone)  -->
+        </div>
 
-                <button type="submit"
-                    onclick="return confirm('Tem certeza que deseja excluir o papel {{ $role->name }} ?')">Apagar</button>
-            </form>
-        @endcan
+        <x-alert />
 
-        <hr>
-    @empty
-        Nenhum papel cadastrado.
-    @endforelse
-    {{ $roles->links() }}
-@endsection
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr class="table-row-header">
+                        <th class="table-header">ID</th>
+                        <th class="table-header">Papel</th>
+                        <th class="table-header center">Guard-name</th>
+                        <th class="table-header text-center">Permissões</th>
+                        <th class="table-header table-cell-lg-hidden">Criado em</th>
+                        <th class="table-header table-cell-lg-hidden">Editado em</th>
+                        <th class="table-header center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($roles as $role)
+                        <tr class="table-row-body">
+                            <td class="table-body">{{ $role->id }}</td>
+                            <td class="table-body">{{ $role->name ?? '—' }}</td>
+                            <td class="table-body">{{ $role->guard_name }}</td>
+                            <td class="table-body table-link text-center"> <a
+                                    href="{{ route('role-permissions.index', ['role' => $role->id]) }}">Permissoes</a></td>
+                            <td class="table-body">{{ $role->created_at->format('d/m/Y') }}</td>
+                            <td class="table-body">{{ $role->updated_at->format('d/m/Y') }}</td>
+
+                            <x-table-actions-icons :show="route('roles.show', $role)" :edit="route('roles.edit', $role)" :delete="route('roles.destroy', $role)"
+                                confirm="Deseja excluir este papel?" />
+
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-500">
+                                Nenhuma papel registrado.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            {{ $roles->links() }}
+
+        </div>
+    @endsection

@@ -19,18 +19,35 @@ return new class extends Migration
                 ->constrained()
                 ->restrictOnDelete();
 
+            // Metodo de pagamento
+            $table->foreignId('payment_method_id')
+                ->after('category_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
             // usuário que lançou a despesa
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
 
+            /**
+             * Dados financeiros
+             */
             $table->decimal('amount', 10, 2);
             $table->date('expense_date');
-
             $table->string('description');
-            $table->text('notes')->nullable();
 
+            /**
+             * Auditoria / anexos
+             */
+            $table->text('notes')->nullable();
+            $table->string('receipt_path')->nullable();
+
+            /**
+             * Controle
+             */
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
