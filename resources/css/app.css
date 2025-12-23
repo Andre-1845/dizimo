@@ -119,13 +119,6 @@
     /****** Fim Navbar ******/
 
         /****** Início Sidebar ******/
-    /* .sidebar {
-        @apply fixed inset-y-0 left-0 w-64 bg-white shadow-md transform -translate-x-full transition-transform duration-300 ease-in-out;
-    } */
-
-    .sidebar-open {
-        @apply translate-x-0;
-    }
 
     .sidebar-container {
         @apply bg-blue-950 relative h-full;
@@ -148,22 +141,27 @@
     }
 
     .sidebar-link {
-        @apply flex items-center space-x-4 px-4 py-2 text-sm text-gray-50 hover:bg-blue-900;
+        @apply flex items-center space-x-3 px-2 py-2 text-sm text-gray-50 hover:bg-blue-900;
     }
     .sidebar-link.active {
-        @apply flex items-center space-x-4 px-4 py-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
+        @apply flex items-center space-x-3 px-2 py-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
     }
     /****** Fim Sidebar ******/
 
 
     /****** Início Conteúdo Principal ******/
     .main-content {
-        @apply flex-1 p-4 ml-0 ;
+        @apply flex-1 p-4 min-w-0 ;
     }
 
     .content-wrapper {
-        @apply max-w-7xl mx-auto px-1 sm:px-0 lg:px-0 mb-2;
+        @apply max-w-full mx-auto px-1 sm:px-0 lg:px-0 mb-2;
     }
+
+    .content-wrapper-full {
+    @apply max-w-full px-1 sm:px-2 lg:px-4;
+}
+
 
     .content-header{
         @apply flex justify-between items-center;
@@ -281,47 +279,7 @@
 
 
     /****** Início Botões ******/
-    /* Botão azul */
-    /* .btn-primary {
-        @apply bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600 transition-colors cursor-pointer;
-    } */
 
-    /* Botão azul médio */
-    /* .btn-primary-md {
-        @apply bg-blue-500 text-white text-base px-3 py-2 rounded hover:bg-blue-600 transition-colors cursor-pointer;
-    } */
-
-    /* Botão azul claro */
-    /* .btn-info {
-        @apply bg-cyan-500 text-white text-sm px-3 py-1 rounded hover:bg-cyan-600 transition-colors cursor-pointer;
-    } */
-
-    /* Botão verde */
-    /* .btn-success {
-        @apply bg-green-500 text-white text-sm px-3 py-1 rounded hover:bg-green-600 transition-colors cursor-pointer;
-    } */
-
-    /* Botão amarelo */
-    /* .btn-warning {
-        @apply bg-yellow-500 text-white text-sm px-3 py-2 rounded hover:bg-yellow-600 transition-colors cursor-pointer;
-    } */
-    /* .btn-warning-md {
-        @apply bg-yellow-500 text-white text-base px-3 py-1 rounded hover:bg-yellow-600 transition-colors cursor-pointer;
-    } */
-
-    /* Botão vermelho */
-    /* .btn-danger {
-        @apply bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600 transition-colors cursor-pointer;
-    } */
-
-    /* .btn-danger-md {
-        @apply bg-red-500 text-white text-base px-3 py-2 rounded hover:bg-red-600 transition-colors cursor-pointer;
-    } */
-
-  /* Alinha ícone + texto */
-/* .align-icon-btn {
-    @apply inline-flex items-center gap-1;
-} */
 
 /* Botão pequeno */
 .btn-sm {
@@ -410,11 +368,6 @@
             hover:bg-red-600 transition-colors cursor-pointer;
     }
 
-
-
-
-
-
     /****** Fim Botões ******/
 
      /****** Início Alertas ******/
@@ -490,13 +443,23 @@
 
 /* Título do grupo */
 .sidebar-group-title {
-    @apply text-xs uppercase text-gray-400 px-3 mb-2 block;
+    @apply text-xs uppercase text-white px-3 mb-2 block;
 }
 
 /* Usuário */
 .sidebar-user {
-    @apply text-cyan-300 font-semibold px-3 mb-4;
+    @apply text-white font-semibold px-3 mb-4;
 }
 
+/* Mobile: sidebar fora da tela */
+@media (max-width: 1023px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.sidebar-expanded {
+        transform: translateX(0);
+    }
+}
 
 }

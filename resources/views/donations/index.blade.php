@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="content-wrapper">
+    <div class="content-wrapper-full">
         <div class="content-header">
             <h2 class="content-title">Receitas e Doações</h2>
             <nav class="breadcrumb">

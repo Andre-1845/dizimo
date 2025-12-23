@@ -34,20 +34,24 @@ document.addEventListener("DOMContentLoaded", () => {
 ===================================================== */
 document.addEventListener("DOMContentLoaded", () => {
     const toggleSidebar = document.getElementById("toggleSidebar");
-    const closeSidebar = document.getElementById("closeSidebar");
     const sidebar = document.getElementById("sidebar");
 
-    if (toggleSidebar && sidebar) {
-        toggleSidebar.addEventListener("click", () => {
-            sidebar.classList.toggle("sidebar-open");
-        });
-    }
+    if (!toggleSidebar || !sidebar) return;
 
-    if (closeSidebar && sidebar) {
-        closeSidebar.addEventListener("click", () => {
-            sidebar.classList.remove("sidebar-open");
-        });
-    }
+    toggleSidebar.addEventListener("click", () => {
+        sidebar.classList.toggle("sidebar-expanded");
+    });
+
+    // Fecha sidebar ao clicar fora (mobile)
+    document.addEventListener("click", (e) => {
+        if (
+            window.innerWidth < 1024 &&
+            !sidebar.contains(e.target) &&
+            !toggleSidebar.contains(e.target)
+        ) {
+            sidebar.classList.remove("sidebar-expanded");
+        }
+    });
 });
 
 /* =====================================================

@@ -4,9 +4,26 @@
 
 @section('content')
 
+    <!-- Titulo e trilha de navegacao -->
+
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Doações</h2>
+            <nav class="breadcrumb">
+                <a href="{{ route('dashboard.member') }}" class="breadcrumb-link">Dashboard</a>
+                <span>/</span>
+                <a href="{{ route('members.index') }}" class="breadcrumb-link">Membros</a>
+                <span>/</span>
+                <span>Cadastrar</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Titulo e trilha de navegacao -->
+
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h2 class="content-title">Nova Membro</h2>
+            <h2 class="content-title">Novo Membro</h2>
 
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">

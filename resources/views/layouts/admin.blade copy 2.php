@@ -37,12 +37,6 @@
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-container">
 
-                <button id="closeSidebar" class="sidebar-close-button">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-
                 <div class="sidebar-header">
                     <span class="sidebar-title">Dízimo</span>
                 </div>
@@ -53,9 +47,15 @@
                     </div>
                 @endauth
 
-                <nav class="sidebar-nav">
+                <nav class="sidebar-nav"> {{-- Links SIDEBAR --}}
+
+                    {{-- ===================== --}}
+                    {{--      DASHBOARDS       --}}
+                    {{-- ===================== --}}
+
                     @can('view-dashboard-admin')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'dashboard']) href="{{ route('dashboard.index') }}">
+                            @include('components.icons.painel_icon')
                             Dashboard
                         </a>
                     @endcan
@@ -64,35 +64,58 @@
                         <a @class([
                             'sidebar-link',
                             'active' => ($menu ?? '') === 'dashboard-dizimo',
-                        ]) href="{{ route('dashboard.dizimo_index') }}">
+                        ]) href="{{ route('dashboard.dizimo') }}">
+                            @include('components.icons.chartpie')
                             Dizimo Painel
                         </a>
                     @endcan
 
-                    <a href="{{ route('members.dashboard') }}" class="sidebar-link">
+                    <a href="{{ route('dashboard.member') }}" class="sidebar-link">
+                        @include('components.icons.dolar')
                         Meu Dizimo
                     </a>
-
+                    {{-- ===================== --}}
+                    {{--   USUARIOS E MEMBROS  --}}
+                    {{-- ===================== --}}
                     @can('view-members')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'members']) href="{{ route('members.index') }}">
+                            @include('components.icons.usercircle')
                             Membros
                         </a>
                     @endcan
 
+                    @can('index-user')
+                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'users']) href="{{ route('users.index') }}">
+                            @include('components.icons.usersgroup')
+                            Usuários
+                        </a>
+                    @endcan
+
+                    {{-- ===================== --}}
+                    {{--      FINANCEIRO       --}}
+                    {{-- ===================== --}}
+
                     @can('index-donations')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'donations']) href="{{ route('donations.index') }}">
-                            Doações
+                            @include('components.icons.plus')
+                            Receitas
                         </a>
                     @endcan
 
                     @can('index-expenses')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'expenses']) href="{{ route('expenses.index') }}">
+                            @include('components.icons.minus')
                             Despesas
                         </a>
                     @endcan
 
+                    {{-- ===================== --}}
+                    {{--     CONFIGURACOES     --}}
+                    {{-- ===================== --}}
+
                     @can('view-dashboard-admin')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'categories']) href="{{ route('categories.index') }}">
+                            @include('components.icons.docdolar')
                             Categorias
                         </a>
                     @endcan
@@ -102,23 +125,26 @@
                             'sidebar-link',
                             'active' => ($menu ?? '') === 'payment-methods',
                         ]) href="{{ route('payment-methods.index') }}">
+                            @include('components.icons.pay')
                             Formas de Pagamento
                         </a>
                     @endcan
 
-                    @can('index-user')
-                        <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'users']) href="{{ route('users.index') }}">
-                            Usuários
-                        </a>
-                    @endcan
+
 
                     @can('index-role')
                         <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'role']) href="{{ route('roles.index') }}">
+                            @include('components.icons.config')
                             Papeis
                         </a>
                     @endcan
 
+                    {{-- ===================== --}}
+                    {{--      PERFIL USER      --}}
+                    {{-- ===================== --}}
+
                     <a @class(['sidebar-link', 'active' => ($menu ?? '') === 'profile']) href="{{ route('profile.show') }}">
+                        @include('components.icons.user')
                         Perfil
                     </a>
 
