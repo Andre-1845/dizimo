@@ -24,38 +24,68 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // $users = User::orderBy('name', 'asc')->paginate(10);
-        $users = User::with('member')
+        // $users = User::with('member')
+        //     ->when(
+        //         $request->filled('name'),
+        //         fn($query) =>
+        //         $query->whereLike('name', '%' . $request->name . '%')
+        //     )
+        //     ->when(
+        //         $request->filled('email'),
+        //         fn($query) =>
+        //         $query->whereLike('email', '%' . $request->email . '%')
+        //     )
+        //     ->when(
+        //         $request->filled('start_date_registration'),
+        //         fn($query) =>
+        //         $query->where('created_at', '>=', $request->start_date_registration)
+        //     )
+        //     ->when(
+        //         $request->filled('end_date_registration'),
+        //         fn($query) =>
+        //         $query->where('created_at', '<=', $request->end_date_registration)
+        //     )
+        //     ->orderBy('name', 'asc')
+        //     ->paginate(10)
+        //     ->withQueryString();
+
+        // return view('users.index', [
+        //     'menu' => 'users',
+        //     'users' => $users,
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'start_date_registration' => $request->start_date_registration,
+        //     'end_date_registration' => $request->end_date_registration,
+        // ]);
+
+        // Nova abordagem
+
+
+        $users = User::query()
             ->when(
                 $request->filled('name'),
-                fn($query) =>
-                $query->whereLike('name', '%' . $request->name . '%')
+                fn($q) => $q->where('name', 'like', "%{$request->name}%")
             )
             ->when(
                 $request->filled('email'),
-                fn($query) =>
-                $query->whereLike('email', '%' . $request->email . '%')
+                fn($q) => $q->where('email', 'like', "%{$request->email}%")
             )
             ->when(
-                $request->filled('start_date_registration'),
-                fn($query) =>
-                $query->where('created_at', '>=', $request->start_date_registration)
+                $request->filled('status'),
+                fn($q) => $q->where('status_id', $request->status)
             )
             ->when(
-                $request->filled('end_date_registration'),
-                fn($query) =>
-                $query->where('created_at', '<=', $request->end_date_registration)
+                $request->filled('role'),
+                fn($q) => $q->role($request->role)
             )
-            ->orderBy('name', 'asc')
+            ->orderBy('name')
             ->paginate(10)
             ->withQueryString();
 
         return view('users.index', [
-            'menu' => 'users',
             'users' => $users,
-            'name' => $request->name,
-            'email' => $request->email,
-            'start_date_registration' => $request->start_date_registration,
-            'end_date_registration' => $request->end_date_registration,
+            'roles' => Role::orderBy('name')->get(),
+            'menu' => 'users',
         ]);
     }
 
@@ -114,7 +144,7 @@ class UserController extends Controller
             DB::commit();
 
 
-            //Verificar se veio algum papael selecionado
+            //Verificar se veio algum papel selecionado
             if ($request->filled('roles')) {
                 $validRoles = Role::whereIn('name', $request->roles)->pluck('name')->toArray();
                 $user->syncRoles($validRoles); // ou assignRole() se for um papel só

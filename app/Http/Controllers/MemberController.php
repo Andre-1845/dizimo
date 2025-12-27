@@ -12,15 +12,100 @@ class MemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $members = Member::orderBy('name')->paginate(10);
+        $members = Member::with('user')
+
+            // Nome do membro
+            ->when(
+                $request->filled('name'),
+                fn($q) =>
+                $q->where('name', 'like', '%' . $request->name . '%')
+            )
+
+            // Email do usuário relacionado
+            ->when(
+                $request->filled('email'),
+                fn($q) =>
+                $q->whereHas('user', function ($query) use ($request) {
+                    $query->where('email', 'like', '%' . $request->email . '%');
+                })
+            )
+
+            // Status do membro (ativo / inativo)
+            ->when(
+                $request->filled('active'),
+                fn($q) =>
+                $q->where('active', $request->active)
+            )
+
+            // Data de cadastro (início)
+            ->when(
+                $request->filled('start_date'),
+                fn($q) =>
+                $q->whereDate('created_at', '>=', $request->start_date)
+            )
+
+            // Data de cadastro (fim)
+            ->when(
+                $request->filled('end_date'),
+                fn($q) =>
+                $q->whereDate('created_at', '<=', $request->end_date)
+            )
+
+            ->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
+
+        /**
+         * 🔧 Configuração do filtro genérico
+         */
+        $filters = [
+            [
+                'type' => 'text',
+                'name' => 'name',
+                'label' => 'Nome do membro',
+                'placeholder' => 'Digite o nome',
+            ],
+            [
+                'type' => 'text',
+                'name' => 'email',
+                'label' => 'E-mail do usuário',
+                'placeholder' => 'Digite o e-mail',
+            ],
+
+            [
+                'type' => 'select',
+                'name' => 'active',
+                'label' => 'Status',
+                'options' => collect([
+                    ['id' => '1', 'name' => 'Ativo'],
+                    ['id' => '0', 'name' => 'Inativo'],
+                ]),
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+
+            [
+                'type' => 'date',
+                'name' => 'start_date',
+                'label' => 'Cadastro (de)',
+            ],
+            [
+                'type' => 'date',
+                'name' => 'end_date',
+                'label' => 'Cadastro (até)',
+            ],
+        ];
 
         return view('members.index', [
-            'members' => $members,
-            'menu' => 'members',
+            'menu'         => 'members',
+            'members'      => $members,
+            'filters' => $filters,
         ]);
     }
+
+
     /**
      * Show the form for creating a new resource.
      */

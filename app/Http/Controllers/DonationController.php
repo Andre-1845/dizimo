@@ -14,17 +14,135 @@ use Illuminate\Support\Facades\Storage;
 
 class DonationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $donations = Donation::with(['member', 'category', 'paymentMethod'])
-            ->orderByDesc('donation_date')
-            ->paginate(10);
+        $registrars = User::whereDoesntHave('roles', fn($q) => $q->where('name', 'Membro'))
+            ->orderBy('name')
+            ->get();
 
-        return view('donations.index', [
+        $donations = Donation::query()
+            ->with(['member', 'category', 'paymentMethod', 'user'])
+
+            ->when(
+                $request->filled('donor_name'),
+                fn($q) => $q->where('donor_name', 'like', "%{$request->donor_name}%")
+            )
+
+            ->when(
+                $request->filled('category_id'),
+                fn($q) => $q->where('category_id', $request->category_id)
+            )
+
+            ->when(
+                $request->filled('payment_method_id'),
+                fn($q) => $q->where('payment_method_id', $request->payment_method_id)
+            )
+
+            ->when(
+                $request->filled('user_id'),
+                fn($q) => $q->where('donations.user_id', $request->user_id)
+            )
+
+            ->when(
+                $request->filled('date_start'),
+                fn($q) => $q->whereDate('donation_date', '>=', $request->date_start)
+            )
+
+            ->when(
+                $request->filled('date_end'),
+                fn($q) => $q->whereDate('donation_date', '<=', $request->date_end)
+            )
+
+            ->when(
+                $request->filled('amount_min'),
+                fn($q) => $q->where('amount', '>=', $request->amount_min)
+            )
+
+            ->when(
+                $request->filled('amount_max'),
+                fn($q) => $q->where('amount', '<=', $request->amount_max)
+            )
+
+            ->when($request->filled('registered_type'), function ($q) use ($request) {
+
+                if ($request->registered_type === 'self') {
+                    $q->whereHas('member', function ($m) {
+                        $m->whereColumn('members.user_id', 'donations.user_id');
+                    });
+                }
+
+                if ($request->registered_type === 'third_party') {
+                    $q->whereHas('member', function ($m) {
+                        $m->whereColumn('members.user_id', '!=', 'donations.user_id');
+                    });
+                }
+            })
+
+
+            ->orderByDesc('donation_date')
+            ->paginate(10)
+            ->withQueryString();
+
+        $filters = [
+            [
+                'type' => 'text',
+                'name' => 'donor_name',
+                'label' => 'Doador',
+                'placeholder' => 'Nome do doador',
+            ],
+            [
+                'type' => 'select',
+                'name' => 'category_id',
+                'label' => 'Categoria',
+                'options' => Category::where('type', 'income')->orderBy('name')->get(),
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'select',
+                'name' => 'payment_method_id',
+                'label' => 'Forma de pagamento',
+                'options' => PaymentMethod::orderBy('name')->get(),
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'select',
+                'name' => 'user_id',
+                'label' => 'Cadastrado por',
+                'options' => $registrars,
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'select',
+                'name' => 'registered_type',
+                'label' => 'Tipo de registro',
+                'options' => collect([
+                    ['id' => 'self', 'name' => 'Pelo próprio membro'],
+                    ['id' => 'third_party', 'name' => 'Por terceiro'],
+                ]),
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'date',
+                'name' => 'date_start',
+                'label' => 'Data inicial',
+            ],
+            [
+                'type' => 'date',
+                'name' => 'date_end',
+                'label' => 'Data final',
+            ],
+        ];
+
+        return view('donations.index', compact('donations', 'filters') + [
             'menu' => 'donations',
-            'donations' => $donations,
         ]);
     }
+
+
 
 
     public function create()

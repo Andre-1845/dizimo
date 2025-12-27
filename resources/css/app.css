@@ -144,7 +144,7 @@
         @apply flex items-center space-x-3 px-2 py-2 text-sm text-gray-50 hover:bg-blue-900;
     }
     .sidebar-link.active {
-        @apply flex items-center space-x-3 px-2 py-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
+        @apply flex items-center space-x-3 px-2 py-2 mx-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
     }
     /****** Fim Sidebar ******/
 

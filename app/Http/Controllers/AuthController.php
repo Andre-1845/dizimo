@@ -55,10 +55,20 @@ class AuthController extends Controller
 
     public function loginProcess(LoginRequest $request)
     {
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             Log::notice('Erro de login.', ['email' => $request->email]);
             return back()->withInput()->with('error', 'Usuário ou senha incorretos');
         }
+        // VALIDACAO DE STATUS DO USUARIO
+
+        // if ($user->status_id !== 2) {
+        //     Auth::logout();
+
+        //     return back()->withErrors([
+        //         'email' => 'Seu cadastro ainda não está ativo. Verifique seu e-mail.'
+        //     ]);
+        // }
 
         Log::info('Login', ['action_user_id' => Auth::id()]);
 

@@ -4,72 +4,73 @@
 
 @section('content')
 
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">Categorias</h1>
+    <div class="content-box"> <!-- Content-Box  -->
+        <div class="content-box-header">
+            <h3 class="content-box-title">Listar</h3>
 
-        {{-- <a href="{{ route('donations.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Nova Doação
-        </a> --}}
-    </div>
+            <!-- Botoes (com icones)  -->
+            <div class="content-box-btn">
 
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr class="table-row-header">
-                    <th class="table-header">Categoria</th>
-                    <th class="table-header text-center">Tipo</th>
-                    {{-- <th class="table-header table-cell-lg-hidden">Forma</th> --}}
-                    <th class="table-header text-center">Data</th>
-                    {{-- <th class="table-header table-cell-lg-hidden">Cadastrado por</th>
-                    <th class="table-header center">Valor</th> --}}
-                    <th class="table-header center">Ações</th>
+                <!-- Botao NOVA DOACAO (com icone)  -->
+                <div class="content-box-btn">
+                    <a href="{{ route('categories.create') }}" class="btn-success flex items-center space-x-1"
+                        title="Cadastrar">
+                        @include('components.icons.plus')
 
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($categories as $category)
-                    <tr class="table-row-body">
-                        <td class="table-body">{{ $category->name ?? '—' }}</td>
-                        <td class="table-body text-center">{{ $category->type ?? '—' }}</td>
-                        {{-- <td class="table-body table-cell-lg-hidden">{{ $categories->paymentMethod->name ?? '—' }}</td> --}}
-                        <td class="table-body text-center">
-                            {{ \Carbon\Carbon::parse($category->created_at)->format('d/m/Y') }}
-                        </td>
-                        {{-- <td class="table-body table-cell-lg-hidden">{{ $categories>user->name ?? '—' }}</td>
-                        </td> --}}
-                        {{-- <td class="table-body text-right text-green-600 font-semibold">
-                            R$ {{ number_format($categories>amount, 2, ',', '.') }}
-                        </td> --}}
-                        <td class="table-body table-actions">
-                            <div class="flex items-center justify-end gap-2">
-                                <a class="btn-warning" href="{{ route('categories.index', $category->id) }}">
-                                    Editar
-                                </a>
+                        <span>Nova Categoria</span>
+                    </a>
+                </div>
+                <!--FIM  Botao NOVA DOACAO (com icone)  -->
 
-                                <form action="{{ route('categories.index', $category->id) }}" method="POST" class="inline"
-                                    onsubmit="return confirm('Deseja excluir esta doação?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn-danger py-2">
-                                        Excluir
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+            </div>
+            <!-- Botoes (com icones)  -->
+        </div>
+
+        <x-alert />
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr class="table-row-header">
+                        <th class="table-header">Categoria</th>
+                        <th class="table-header text-center">Tipo</th>
+
+                        <th class="table-header text-center">Data</th>
+
+                        <th class="table-header center">Ações</th>
+
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="py-4 text-center text-gray-600">
-                            Nenhuma doação registrada.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse ($categories as $category)
+                        <tr class="table-row-body">
+                            <td class="table-body">{{ $category->name ?? '—' }}</td>
 
-        <div class="mt-4">
-            {{ $categories->links() }}
+                            <td class="table-body text-center">
+                                {{ $category->type_label }}
+                            </td>
+
+
+                            <td class="table-body text-center">
+                                {{ \Carbon\Carbon::parse($category->created_at)->format('d/m/Y') }}
+                            </td>
+
+                            <x-table-actions-icons :show="route('categories.show', $category)" :edit="route('categories.edit', $category)" :delete="route('categories.destroy', $category)"
+                                confirm="Deseja excluir esta categoria?" />
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-600">
+                                Nenhuma doação registrada.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                {{ $categories->links() }}
+            </div>
         </div>
     </div>
-
 @endsection

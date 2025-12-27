@@ -18,4 +18,13 @@ class Category extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function getTypeLabelAttribute(): string
+    {
+        return match ($this->type) {
+            'income' => 'Receita',
+            'expense' => 'Despesa',
+            default => '-',
+        };
+    }
 }

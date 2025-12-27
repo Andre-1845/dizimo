@@ -75,12 +75,6 @@
                 </a>
             @endcan
 
-            @can('view-dashboard-admin')
-                <a @class(['sidebar-link', 'active' => $menu === 'payment-methods']) href="{{ route('payment-methods.index') }}">
-                    <span class="sidebar-icon">@include('components.icons.pay')</span>
-                    <span class="sidebar-text">Pagamentos</span>
-                </a>
-            @endcan
 
             @can('index-role')
                 <a @class(['sidebar-link', 'active' => $menu === 'roles']) href="{{ route('roles.index') }}">

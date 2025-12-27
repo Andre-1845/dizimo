@@ -26,13 +26,7 @@
 
                 <!-- Botao PAINEL (com icone)  -->
                 <a href="{{ route('dashboard.index') }}" class="btn-primary align-icon-btn" title="Painel">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
-                    </svg>
-
-
+                    @include('components.icons.painel_icon')
                     <span class="hide-name-btn">Painel</span>
                 </a>
                 <!-- Fim - Botao PAINEL  -->
@@ -41,11 +35,7 @@
                 <div class="content-box-btn">
                     <a href="{{ route('donations.create') }}" class="btn-success flex items-center space-x-1"
                         title="Cadastrar">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
+                        @include('components.icons.plus')
 
                         <span>Nova Doacao</span>
                     </a>
@@ -57,6 +47,10 @@
         </div>
 
         <x-alert />
+
+        <x-filters.generic :filters="$filters" route="donations.index" />
+
+
 
         <div class="table-container">
             <table class="table">
@@ -93,12 +87,7 @@
                                 @if ($donation->receipt_path)
                                     <a href="{{ asset('storage/' . $donation->receipt_path) }}" target="_blank"
                                         class="text-blue-600 hover:underline">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                                        </svg>
-
+                                        @include('components.icons.doc_view')
                                     </a>
                                 @else
                                     —

@@ -14,9 +14,10 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::orderBy('type', 'ASC')
+            ->orderBy('type', 'DESC')
             ->orderBy('name', 'ASC')
-            ->paginate(10);
-        return view('categories.index', compact('categories'));
+            ->paginate(20);
+        return view('categories.index', ['categories' => $categories, 'menu' => 'categories']);
     }
 
     /**
@@ -25,7 +26,7 @@ class CategoryController extends Controller
     public function create()
     {
         //
-        return view('categories.create');
+        return view('categories.create', ['menu' => 'categories']);
     }
 
     /**
@@ -36,7 +37,7 @@ class CategoryController extends Controller
         //
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:donation,expense',
+            'type' => 'required|in:income,expense',
         ]);
 
         Category::create($request->all());
@@ -48,9 +49,11 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
         //
+
+        return view('categories.show', ['category' => $category, 'menu' => 'categories']);
     }
 
     /**
@@ -59,7 +62,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         //
-        return view('categories.edit', compact('category'));
+        return view('categories.edit', ['category' => $category, 'menu' => 'categories']);
     }
     /**
      * Update the specified resource in storage.
@@ -69,7 +72,7 @@ class CategoryController extends Controller
         //
         $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:donation,expense',
+            'type' => 'required|in:income,expense',
         ]);
 
         $category->update($request->all());

@@ -33,9 +33,12 @@
 
         <x-alert />
 
+        <x-users.filter :roles="$roles" />
+
+
         <!-- Formulario de pesquisa -->
 
-        <form action="#" class="form-search">
+        {{-- <form action="#" class="form-search">
             <input type="text" name="name" class="form-input" placeholder="Digite o nome" value="{{ $name }}">
             <input type="text" name="email" class="form-input" placeholder="Digite o e-mail"
                 value="{{ $email }}">
@@ -65,7 +68,7 @@
                 </a>
             </div>
 
-        </form>
+        </form> --}}
         <!-- FIM - Formulario de pesquisa -->
 
         <div class="table-container">

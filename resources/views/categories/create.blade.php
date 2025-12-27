@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Nova Doação')
+@section('title', 'Nova Categoria')
 
 @section('content')
 
@@ -8,11 +8,11 @@
 
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Receitas</h2>
+            <h2 class="content-title">Categorias</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('donations.index') }}" class="breadcrumb-link">Receitas</a>
+                <a href="{{ route('categories.index') }}" class="breadcrumb-link">Categorias</a>
                 <span>/</span>
                 <span>Cadastrar</span>
             </nav>
@@ -23,13 +23,13 @@
 
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h3 class="content-box-title">Nova Doacao</h3>
+            <h3 class="content-box-title">Nova Categoria</h3>
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
 
                 <!-- Botao LISTAR (com icone)  -->
-                @can('index-donation')
-                    <a href="{{ route('donations.index') }}" class="btn-primary align-icon-btn" title="Listar">
+                @can('index-category')
+                    <a href="{{ route('categories.index') }}" class="btn-primary align-icon-btn" title="Listar">
                         @include('components.icons.list')
 
                         <span class="hide-name-btn">Listar</span>
@@ -43,14 +43,14 @@
 
         <x-alert />
 
-        <form method="POST" action="{{ route('donations.store') }}" class="bg-white rounded-xl shadow p-6 space-y-4">
+        <form method="POST" action="{{ route('categories.store') }}" class="bg-white rounded-xl shadow p-6 space-y-4">
 
             @csrf
             @method('POST')
 
-            <div>
-                <label class="form-label">Membro</label>
-                <select name="member_id" class="form-input">
+            {{-- <div>
+                <label class="form-label">Categoria</label>
+                <select name="name" class="form-input">
                     <option value="">Selecione</option>
                     @foreach ($members as $member)
                         <option value="{{ $member->id }}">
@@ -58,9 +58,9 @@
                         </option>
                     @endforeach
                 </select>
-            </div>
+            </div> --}}
 
-            <div>
+            {{-- <div>
                 <label class="form-label">Categoria</label>
                 <select name="category_id" class="form-input">
                     <option value="">Selecione</option>
@@ -70,9 +70,9 @@
                         </option>
                     @endforeach
                 </select>
-            </div>
+            </div> --}}
 
-            <div>
+            {{-- <div>
                 <label class="form-label">Forma de Pagamento</label>
                 <select name="payment_method_id" class="form-input">
                     <option value="">Selecione</option>
@@ -85,43 +85,36 @@
             </div>
             @error('payment_method_id')
                 <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-            @enderror
+            @enderror --}}
 
             <div>
-                <label class="form-label">Data</label>
-                <input type="date" name="donation_date" class="form-input" value="{{ now()->toDateString() }}">
+                <label class="form-label">Categoria</label>
+                <input type="text" name="name" class="form-input" value="{{ old('name') }}">
             </div>
 
-            <div>
-                <label class="form-label">Valor</label>
-                <input type="number" step="0.01" name="amount" class="form-input">
-            </div>
 
-            <div>
-                <label class="form-label">Observações</label>
-                <textarea name="notes" class="form-input"></textarea>
-            </div>
 
-            <div>
-                <label class="form-label">Comprovante</label>
-                <input type="file" name="receipt" accept=".pdf,.jpg,.jpeg,.png"
-                    class="block w-full text-sm text-gray-600
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded file:border-0
-                      file:text-sm file:font-semibold
-                      file:bg-blue-50 file:text-blue-700
-                      hover:file:bg-blue-100">
-                <p class="text-xs text-gray-400 mt-1">
-                    Tamanho máximo: 2MB
-                </p>
-                @error('receipt')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            @php
+                $types = [
+                    'income' => 'Receita',
+                    'expense' => 'Despesa',
+                ];
+            @endphp
+
+            <select name="type" class="form-input">
+                <option value="">Selecione</option>
+                @foreach ($types as $value => $label)
+                    <option value="{{ $value }}" @selected(old('type') === $value)>
+                        {{ $label }}
+                    </option>
+                @endforeach
+            </select>
+
+
             <div class="btn-md-div">
-                <button class="btn-primary-md">
+                <button class="btn-success-md">
                     @include('components.icons.save')
-                    Salvar Doação
+                    Salvar
                 </button>
             </div>
 
