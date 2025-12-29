@@ -20,6 +20,8 @@ use App\Http\Controllers\{
     ExpenseController
 };
 use App\Http\Controllers\MemberDonationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,12 +60,44 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showReq
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])
     ->name('password.update');
 
+
+
 /*
 |--------------------------------------------------------------------------
+| Email Verification
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})
+    ->middleware('auth')
+    ->name('verification.notice');
+
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); // dispara o evento Verified
+    return redirect('/login')->with('success', 'E-mail confirmado com sucesso! Agora você pode acessar o sistema.');
+})
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('success', 'E-mail de verificação reenviado.');
+})
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
+
+
+/*
+--------------------------------------------------------------------------
 | Área Autenticada
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified', 'user.status')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
