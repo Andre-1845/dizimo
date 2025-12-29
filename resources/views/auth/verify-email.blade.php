@@ -8,6 +8,8 @@
                 Confirme seu e-mail
             </h2>
 
+            <x-alert />
+
             <p class="text-sm text-gray-600 mb-4">
                 Seu cadastro foi realizado com sucesso, mas seu e-mail ainda não foi confirmado.
                 <br>
@@ -29,7 +31,7 @@
 
             <form method="POST" action="{{ route('logout') }}" class="mt-4 text-center">
                 @csrf
-                <button type="submit" class="text-sm text-gray-500 hover:underline">
+                <button type="submit" class="btn-danger">
                     Sair
                 </button>
             </form>

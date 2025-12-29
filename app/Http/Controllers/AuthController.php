@@ -8,6 +8,7 @@ use App\Http\Requests\LoginRequest;
 use App\Models\Member;
 use App\Models\User;
 use Exception;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -115,13 +116,17 @@ class AuthController extends Controller
                 'active'  => true,
             ]);
 
+
+            // 🔥 DISPARA O EMAIL DE VERIFICAÇÃO
+            event(new Registered($user));
+
             DB::commit();
 
             Log::info('Usuário e membro cadastrados', ['user_id' => $user->id]);
 
             return redirect()
                 ->route('login')
-                ->with('success', 'Cadastro realizado com sucesso!');
+                ->with('success', 'Cadastro realizado com sucesso! Um e-mail de ativação foi enviado para o endereço cadastrado. Ative o e-mail antes de acessar o sistema.');
         } catch (\Exception $e) {
 
             DB::rollBack();

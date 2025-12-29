@@ -23,8 +23,13 @@
                     </button>
 
                     <div id="dropdownContent" class="dropdown-content hidden">
-                        <a href="{{ route('profile.show') }}" class="dropdown-item">Perfil</a>
-                        <a href="{{ route('logout') }}" class="dropdown-item">Sair</a>
+                        <a href="{{ route('profile.show') }}" class="dropdown-item text-center">Perfil</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                Sair
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
