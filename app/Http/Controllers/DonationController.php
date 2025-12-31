@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DonationRequest;
 use App\Models\Donation;
 use App\Models\Member;
 use App\Models\Category;
@@ -76,6 +77,10 @@ class DonationController extends Controller
                         $m->whereColumn('members.user_id', '!=', 'donations.user_id');
                     });
                 }
+
+                if ($request->registered_type === 'system') {
+                    $q->whereNull('member_id');
+                }
             })
 
 
@@ -121,6 +126,7 @@ class DonationController extends Controller
                 'options' => collect([
                     ['id' => 'self', 'name' => 'Pelo próprio membro'],
                     ['id' => 'third_party', 'name' => 'Por terceiro'],
+                    ['id' => 'system', 'name' => 'Administração'],
                 ]),
                 'value' => 'id',
                 'labelField' => 'name',
@@ -155,17 +161,9 @@ class DonationController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(DonationRequest $request)
     {
-        $data = $request->validate([
-            'member_id'         => 'nullable|exists:members,id',
-            'category_id'       => 'required|exists:categories,id',
-            'payment_method_id' => 'nullable|exists:payment_methods,id',
-            'donation_date'     => 'required|date',
-            'amount'            => 'required|numeric|min:0.01',
-            'notes'             => 'nullable|string',
-            'receipt'           => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
+        $data = $request->validated();
 
         // Busca explícita do membro (se houver)
         $member = null;
@@ -187,7 +185,7 @@ class DonationController extends Controller
             'payment_method_id' => $data['payment_method_id'] ?? null,
 
             // 🔑 SNAPSHOT HISTÓRICO (FONTE DA VERDADE)
-            'donor_name'        => $member?->name ?? 'Doação sem membro',
+            'donor_name'        => $member?->name ?? 'Administração',
 
             'amount'            => $data['amount'],
             'donation_date'     => $data['donation_date'],
@@ -228,17 +226,9 @@ class DonationController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request, Donation $donation)
+    public function update(DonationRequest $request, Donation $donation)
     {
-        $data = $request->validate([
-            'member_id'         => 'nullable|exists:members,id',
-            'category_id'       => 'required|exists:categories,id',
-            'payment_method_id' => 'nullable|exists:payment_methods,id',
-            'donation_date'     => 'required|date',
-            'amount'            => 'required|numeric|min:0.01',
-            'notes'             => 'nullable|string',
-            'receipt'           => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
+        $data = $request->validated();
 
         // Resolve o membro (se houver)
         $member = null;
@@ -259,7 +249,7 @@ class DonationController extends Controller
         }
 
         // 🔑 Atualiza snapshot histórico
-        $data['donor_name'] = $member?->name ?? 'Doação sem membro';
+        $data['donor_name'] = $member?->name ?? 'Administração';
 
         $donation->update($data);
 

@@ -70,7 +70,7 @@
                 <tbody>
                     @forelse ($donations as $donation)
                         <tr class="table-row-body">
-                            <td class="table-body">{{ $donation->member->name ?? '—' }}</td>
+                            <td class="table-body">{{ $donation->display_donor ?? '—' }}</td>
                             <td class="table-body">{{ $donation->category->name ?? '—' }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $donation->paymentMethod->name ?? '—' }}</td>
                             <td class="table-body">

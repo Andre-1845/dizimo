@@ -58,4 +58,13 @@ class Donation extends Model
     {
         return $this->belongsTo(PaymentMethod::class);
     }
+
+    public function getDisplayDonorAttribute(): string
+    {
+        if ($this->member) {
+            return $this->member->name;
+        }
+
+        return $this->donor_name ?: 'Administração';
+    }
 }

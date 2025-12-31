@@ -52,8 +52,9 @@
                 <label class="form-label">Membro</label>
                 <select name="member_id" class="form-input">
                     <option value="">Selecione</option>
+                    <option value="">Administração</option>
                     @foreach ($members as $member)
-                        <option value="{{ $member->id }}">
+                        <option value="{{ $member->id }}" @selected(old('member_id') == $member->id)>
                             {{ $member->name }}
                         </option>
                     @endforeach

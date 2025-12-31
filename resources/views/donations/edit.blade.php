@@ -56,6 +56,7 @@
             <div>
                 <label class="form-label">Membro</label>
                 <select name="member_id" class="form-input">
+                    <option value="">Administração</option>
                     @foreach ($members as $member)
                         <option value="{{ $member->id }}" @selected($donation->member_id == $member->id)>
                             {{ $member->name }}
