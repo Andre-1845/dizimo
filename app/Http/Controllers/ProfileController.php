@@ -58,9 +58,9 @@ class ProfileController extends Controller
                 'email' => $request->email,
             ]);
 
-            if ($user->member) {
+            if ($user->member && filled('member_name')) {
                 $user->member->update([
-                    'name'  => $request->name,
+                    'name'  => $request->member_name,
                     'phone' => $request->phone,
                 ]);
             }

@@ -24,7 +24,8 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'  => 'required|string|max:255',
+            'user_name'  => 'required|string|max:255',
+            'member_name'  => 'required|string|max:255',
             'email' => [
                 'required',
                 'email',
@@ -37,8 +38,9 @@ class ProfileUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'user.name.required'  => 'O nome é 33 obrigatório',
-            'user.email.required' => 'O e-mail é 44 obrigatório',
+            'user.name.required'  => 'O nome de usuário é obrigatório',
+            'member.name.required'  => 'O nome de membro é obrigatório',
+            'user.email.required' => 'O e-mail é obrigatório',
             'user.email.email'    => 'Informe um e-mail válido',
             'user.email.unique'   => 'Este e-mail já está em uso',
         ];

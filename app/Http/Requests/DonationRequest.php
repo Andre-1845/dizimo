@@ -38,16 +38,16 @@ class DonationRequest extends FormRequest
         return [
 
 
-            'category_id.required' => 'Selecione a categoria da despesa.',
+            'category_id.required' => 'Selecione a categoria da receita/doação.',
             'category_id.exists'   => 'Categoria inválida.',
 
             'payment_method_id.required' => 'Selecione a forma de pagamento.',
             'payment_method_id.exists'   => 'Forma de pagamento inválida.',
 
-            'donation_date.required' => 'Informe a data da despesa.',
-            'donation_date.before_or_equal' => 'A data da despesa não pode ser futura.',
+            'donation_date.required' => 'Informe a data da receita/doação.',
+            'donation_date.before_or_equal' => 'A data da receita/doação não pode ser futura.',
 
-            'amount.required' => 'Informe o valor da despesa.',
+            'amount.required' => 'Informe o valor da receita/doação.',
             'amount.min'      => 'O valor deve ser maior que zero.',
 
             'receipt.mimes' => 'O comprovante deve ser PDF ou imagem.',

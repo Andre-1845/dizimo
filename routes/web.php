@@ -14,6 +14,7 @@ use App\Http\Controllers\{
     RoleController,
     RolePermissionController,
     CategoryController,
+    DizimoReportController,
     PaymentMethodController,
     MemberController,
     DonationController,
@@ -119,6 +120,33 @@ Route::middleware('auth', 'verified', 'user.status')->group(function () {
     Route::put('/meu-painel/dizimo', [MemberDashboardController::class, 'updateTithe'])
         ->name('dashboard.member.update-tithe')
         ->middleware('permission:edit-member');
+
+    // **********   REPORTS ************ //
+
+    Route::prefix('dashboard/dizimos')->middleware(['auth'])->group(function () {
+
+        Route::get('/pagaram', [DizimoReportController::class, 'paid'])
+            ->name('dizimos.paid');
+
+        Route::get('/pendentes', [DizimoReportController::class, 'pending'])
+            ->name('dizimos.pending');
+
+        Route::get('/anonimos', [DizimoReportController::class, 'anonymous'])
+            ->name('dizimos.anonymous');
+    });
+
+    Route::prefix('dashboard/dizimos/export')->middleware(['auth'])->group(function () {
+
+        Route::get('/pagaram/csv', [DizimoReportController::class, 'exportPaidCsv'])
+            ->name('dizimos.export.paid.csv');
+
+        Route::get('/pendentes/csv', [DizimoReportController::class, 'exportPendingCsv'])
+            ->name('dizimos.export.pending.csv');
+
+        Route::get('/anonimos/csv', [DizimoReportController::class, 'exportAnonymousCsv'])
+            ->name('dizimos.export.anonymous.csv');
+    });
+
 
     /*
     |--------------------------------------------------------------------------

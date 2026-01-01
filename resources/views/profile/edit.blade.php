@@ -29,11 +29,7 @@
                     can-delete="destroy-user" delete-confirm="Deseja excluir o usuário {{ $user->name }}?" />
                 <!-- Botoes (com icones)  -->
             </div>
-
-
-
         </div>
-
 
         <x-alert />
 
@@ -41,13 +37,25 @@
             @csrf
             @method('PUT')
 
-            <h3 class="font-semibold mb-3">Dados de acesso</h3>
+            <h3 class="font-semibold mb-3">Dados de acesso (usuário)</h3>
 
-            <label class="form-label" for="name">Usuário: </label>
-            <input class="form-input" type="text" name="user_name" value="{{ old('name', $user->name) }}">
+            <label class="form-label" for="user_name">Usuário: </label>
+            <input class="form-input" type="text" name="user_name" value="{{ old('user_name', $user->name) }}">
 
             <label class="form-label" for="email">Email: </label>
             <input class="form-input" type="email" name="email" value="{{ old('email', $user->email) }}">
+
+
+            @if ($user->member)
+                <h3 class="font-semibold mb-3">Dados do membro</h3>
+
+                <label class="form-label" for="member_name">Nome: </label>
+                <input class="form-input" type="text" name="member_name"
+                    value="{{ old('member_name', $user->member->name) }}">
+
+                <label class="form-label" for="phone">Telefone: </label>
+                <input class="form-input" type="text" name="phone" value="{{ old('phone', $user->member->phone) }}">
+            @endif
 
             <div class="btn-md-div">
                 <button class="btn-success">

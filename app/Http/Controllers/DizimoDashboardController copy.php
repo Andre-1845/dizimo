@@ -2,25 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Donation;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class DizimoDashboardController extends Controller
 {
+
     public function index(Request $request)
     {
+        // *****  Paginacao  ********
+        $perPage = (int) $request->get('per_page', 10);
+
+        $allowedPerPage = [10, 20, 50, 100];
+        if (!in_array($perPage, $allowedPerPage)) {
+            $perPage = 10;
+        }
         // ===============================
         // 1. Filtros
         // ===============================
-        $year  = (int) $request->get('year', now()->year);
-        $month = (int) $request->get('month', now()->month);
+        $year  = $request->get('year', now()->year);
+        $month = $request->get('month', now()->month);
 
         // ===============================
         // 2. Categoria DÍZIMO
         // ===============================
         $dizimoCategory = Category::where('name', 'Dízimo')->firstOrFail();
+        // se preferir slug:
+        // Category::where('slug', 'dizimo')->firstOrFail();
 
         // ===============================
         // 3. Total PREVISTO (membros ativos)
@@ -29,7 +41,7 @@ class DizimoDashboardController extends Controller
             ->sum('monthly_tithe');
 
         // ===============================
-        // 4. Total ARRECADADO (mês e ano)
+        // 4. Total ARRECADADO (mes ou ano)
         // ===============================
         $totalCollected = Donation::where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
@@ -39,6 +51,16 @@ class DizimoDashboardController extends Controller
         $totalCollectedYear = Donation::where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
             ->sum('amount');
+
+        // $query = Donation::where('category_id', $dizimoCategory->id)
+        //     ->whereYear('donation_date', $year);
+
+        // if ($month) {
+        //     $query->whereMonth('donation_date', $month);
+        // }
+
+        // $totalCollected = $query->sum('amount');
+
 
         // ===============================
         // 5. Total EM FALTA
@@ -52,72 +74,67 @@ class DizimoDashboardController extends Controller
             ? round(($totalCollected / $totalExpected) * 100, 2)
             : 0;
 
-        // ===============================
-        // 7. Cards OPERACIONAIS
-        // ===============================
+        $percentageMissing = 100 - $percentageCollected;
 
-        // Membros que pagaram
-        $membersPaidCount = Member::where('active', true)
+        // ===============================
+        // 7. Membros que PAGARAM o dízimo
+        // ===============================
+        $membersWithTithe = Member::where('active', true)
             ->whereHas('donations', function ($q) use ($year, $month, $dizimoCategory) {
                 $q->where('category_id', $dizimoCategory->id)
                     ->whereYear('donation_date', $year)
                     ->whereMonth('donation_date', $month);
             })
-            ->count();
+            ->with(['donations' => function ($q) use ($year, $month, $dizimoCategory) {
+                $q->where('category_id', $dizimoCategory->id)
+                    ->whereYear('donation_date', $year)
+                    ->whereMonth('donation_date', $month);
+            }])
+            ->paginate($perPage, ['*'], 'paid_page')
+            ->withQueryString();
 
-        $membersPaidTotal = Donation::whereNotNull('member_id')
-            ->where('category_id', $dizimoCategory->id)
-            ->whereYear('donation_date', $year)
-            ->whereMonth('donation_date', $month)
-            ->sum('amount');
-
-        // Membros pendentes
-        $membersPendingCount = Member::where('active', true)
+        // ===============================
+        // 8. Membros que NÃO DOARAM
+        // ===============================
+        $membersWithoutTithe = Member::where('active', true)
             ->whereDoesntHave('donations', function ($q) use ($year, $month, $dizimoCategory) {
                 $q->where('category_id', $dizimoCategory->id)
                     ->whereYear('donation_date', $year)
                     ->whereMonth('donation_date', $month);
             })
-            ->count();
-
-        $membersPendingTotal = Member::where('active', true)
-            ->whereDoesntHave('donations', function ($q) use ($year, $month, $dizimoCategory) {
-                $q->where('category_id', $dizimoCategory->id)
-                    ->whereYear('donation_date', $year)
-                    ->whereMonth('donation_date', $month);
-            })
-            ->sum('monthly_tithe');
-
-        // Doações anônimas / administração
-        $anonymousCount = Donation::whereNull('member_id')
-            ->where('category_id', $dizimoCategory->id)
-            ->whereYear('donation_date', $year)
-            ->whereMonth('donation_date', $month)
-            ->count();
-
-        $anonymousTotal = Donation::whereNull('member_id')
-            ->where('category_id', $dizimoCategory->id)
-            ->whereYear('donation_date', $year)
-            ->whereMonth('donation_date', $month)
-            ->sum('amount');
+            ->paginate($perPage, ['*'], 'unpaid_page')
+            ->withQueryString();
 
         // ===============================
-        // 8. Retorno da view
+        // 9. Dados para gráfico mensal (ano)
         // ===============================
-        return view('dashboard.dizimo_index', compact(
-            'year',
-            'month',
-            'totalExpected',
-            'totalCollected',
-            'totalCollectedYear',
-            'totalMissing',
-            'percentageCollected',
-            'membersPaidCount',
-            'membersPaidTotal',
-            'membersPendingCount',
-            'membersPendingTotal',
-            'anonymousCount',
-            'anonymousTotal'
-        ));
+        $titheByMonth = Donation::selectRaw('MONTH(donation_date) as month, SUM(amount) as total')
+            ->where('category_id', $dizimoCategory->id)
+            ->whereYear('donation_date', $year)
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        // ===============================
+        // 10. Retorno da view
+        // ===============================
+        return view('dashboard.dizimo_index', [
+            'year'                  => $year,
+            'month'                 => $month,
+
+            'totalExpected'         => $totalExpected,
+            'totalCollected'        => $totalCollected,
+            'totalMissing'          => $totalMissing,
+            'totalCollectedYear'    => $totalCollectedYear,
+
+            'percentageCollected'   => $percentageCollected,
+            'percentageMissing'     => $percentageMissing,
+
+            'membersWithTithe'      => $membersWithTithe,
+            'membersWithoutTithe'   => $membersWithoutTithe,
+
+            'titheByMonth'          => $titheByMonth,
+
+            'menu'                  => 'dashboard-dizimo',
+        ]);
     }
 }
