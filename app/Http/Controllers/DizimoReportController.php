@@ -7,6 +7,8 @@ use App\Models\Member;
 use App\Models\Donation;
 use App\Models\Category;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class DizimoReportController extends Controller
 {
@@ -41,62 +43,18 @@ class DizimoReportController extends Controller
             ->with(['donations' => function ($q) use ($filters, $category) {
                 $q->where('category_id', $category->id)
                     ->whereYear('donation_date', $filters['year'])
-                    ->whereMonth('donation_date', $filters['month']);
+                    ->whereMonth('donation_date', $filters['month'])
+                    ->orderBy('donation_date', 'desc');
             }])
             ->orderBy('name')
             ->paginate($filters['perPage'])
             ->withQueryString();
 
-        return view('dashboard.reports.dizimo_paid', compact(
-            'members',
-            'filters'
-        ));
-    }
-
-    // =========================================
-    // 2. MEMBROS PENDENTES
-    // =========================================
-    public function pending(Request $request)
-    {
-        $filters = $this->filtros($request);
-        $category = $this->dizimoCategory();
-
-        $members = Member::where('active', true)
-            ->whereDoesntHave('donations', function ($q) use ($filters, $category) {
-                $q->where('category_id', $category->id)
-                    ->whereYear('donation_date', $filters['year'])
-                    ->whereMonth('donation_date', $filters['month']);
-            })
-            ->orderBy('name')
-            ->paginate($filters['perPage'])
-            ->withQueryString();
-
-        return view('dashboard.reports.dizimo_pending', compact(
-            'members',
-            'filters'
-        ));
-    }
-
-    // =========================================
-    // 3. DOAÇÕES ANÔNIMAS / ADMINISTRAÇÃO
-    // =========================================
-    public function anonymous(Request $request)
-    {
-        $filters = $this->filtros($request);
-        $category = $this->dizimoCategory();
-
-        $donations = Donation::whereNull('member_id')
-            ->where('category_id', $category->id)
-            ->whereYear('donation_date', $filters['year'])
-            ->whereMonth('donation_date', $filters['month'])
-            ->orderBy('donation_date', 'desc')
-            ->paginate($filters['perPage'])
-            ->withQueryString();
-
-        return view('dashboard.reports.dizimo_anonymous', compact(
-            'donations',
-            'filters'
-        ));
+        return view('dashboard.reports.dizimo_paid', [
+            'menu' => 'dashboard-dizimo',
+            'members' => $members,
+            'filters' => $filters,
+        ]);
     }
 
     public function exportPaidCsv(Request $request): StreamedResponse
@@ -126,20 +84,94 @@ class DizimoReportController extends Controller
 
             $handle = fopen('php://output', 'w');
 
+            // BOM UTF-8 (evita problemas com acentos)
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
             // Cabeçalho
-            fputcsv($handle, ['Membro', 'Valor']);
+            fputcsv($handle, ['Membro', 'Datas das Doações', 'Valor'], ';');
 
             foreach ($members as $member) {
+                // fputcsv($handle, [
+                //     $member->name,
+                //     number_format($member->donations->sum('amount'), 2, '.', '')
+                // ]);
+
+
+                $dates = $member->donations
+                    ->pluck('donation_date')
+                    ->map(fn($d) => $d->format('d/m/Y'))
+                    ->join(' | ');
+
                 fputcsv($handle, [
                     $member->name,
+                    $dates,
                     number_format($member->donations->sum('amount'), 2, '.', '')
-                ]);
+                ], ';');
             }
 
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ]);
+    }
+
+    public function exportPaidPdf(Request $request)
+    {
+        $year  = (int) $request->get('year', now()->year);
+        $month = (int) $request->get('month', now()->month);
+
+        $category = Category::where('name', 'Dízimo')->firstOrFail();
+
+        $members = Member::where('active', true)
+            ->whereHas('donations', function ($q) use ($category, $year, $month) {
+                $q->where('category_id', $category->id)
+                    ->whereYear('donation_date', $year)
+                    ->whereMonth('donation_date', $month);
+            })
+            ->with(['donations' => function ($q) use ($category, $year, $month) {
+                $q->where('category_id', $category->id)
+                    ->whereYear('donation_date', $year)
+                    ->whereMonth('donation_date', $month);
+            }])
+            ->orderBy('name')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.dizimo_paid', compact(
+            'members',
+            'year',
+            'month'
+        ))->setPaper('a4', 'portrait')
+            ->setOptions([
+                'enable_php' => true,
+            ]);
+
+        return $pdf->download("dizimo_pagaram_{$month}_{$year}.pdf");
+    }
+
+
+    // =========================================
+    // 2. MEMBROS PENDENTES
+    // =========================================
+    public function pending(Request $request)
+    {
+        $filters = $this->filtros($request);
+        $category = $this->dizimoCategory();
+
+        $members = Member::where('active', true)
+            ->whereDoesntHave('donations', function ($q) use ($filters, $category) {
+                $q->where('category_id', $category->id)
+                    ->whereYear('donation_date', $filters['year'])
+                    ->whereMonth('donation_date', $filters['month']);
+            })
+            ->orderBy('name')
+            ->paginate($filters['perPage'])
+            ->withQueryString();
+
+        return view('dashboard.reports.dizimo_pending', [
+            'menu' => 'dashboard-dizimo',
+            'members' => $members,
+            'filters' => $filters,
         ]);
     }
 
@@ -165,13 +197,16 @@ class DizimoReportController extends Controller
 
             $handle = fopen('php://output', 'w');
 
-            fputcsv($handle, ['Membro', 'Valor Previsto']);
+            // BOM UTF-8 (evita problemas com acentos)
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            fputcsv($handle, ['Membro', 'Valor Previsto'], ';');
 
             foreach ($members as $member) {
                 fputcsv($handle, [
                     $member->name,
                     number_format($member->monthly_tithe, 2, '.', '')
-                ]);
+                ], ';');
             }
 
             fclose($handle);
@@ -181,6 +216,52 @@ class DizimoReportController extends Controller
         ]);
     }
 
+    public function exportPendingPdf(Request $request)
+    {
+        $year  = (int) $request->get('year', now()->year);
+        $month = (int) $request->get('month', now()->month);
+
+        $members = Member::where('active', true)
+            ->whereDoesntHave('donations', function ($q) use ($year, $month) {
+                $q->whereYear('donation_date', $year)
+                    ->whereMonth('donation_date', $month);
+            })
+            ->orderBy('name')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.dizimo_pending', compact(
+            'members',
+            'year',
+            'month'
+        ))->setPaper('a4', 'portrait');
+
+        return $pdf->download("dizimo_pendentes_{$month}_{$year}.pdf");
+    }
+
+
+
+    // =========================================
+    // 3. DOAÇÕES ANÔNIMAS / ADMINISTRAÇÃO
+    // =========================================
+    public function anonymous(Request $request)
+    {
+        $filters = $this->filtros($request);
+        $category = $this->dizimoCategory();
+
+        $donations = Donation::whereNull('member_id')
+            ->where('category_id', $category->id)
+            ->whereYear('donation_date', $filters['year'])
+            ->whereMonth('donation_date', $filters['month'])
+            ->orderBy('donation_date', 'desc')
+            ->paginate($filters['perPage'])
+            ->withQueryString();
+
+        return view('dashboard.reports.dizimo_anonymous', [
+            'menu' => 'dashboard-dizimo',
+            'donations' => $donations,
+            'filters' => $filters,
+        ]);
+    }
 
     public function exportAnonymousCsv(Request $request): StreamedResponse
     {
@@ -202,14 +283,17 @@ class DizimoReportController extends Controller
 
             $handle = fopen('php://output', 'w');
 
-            fputcsv($handle, ['Origem', 'Data', 'Valor']);
+            // BOM UTF-8 (evita problemas com acentos)
+            fprintf($handle, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            fputcsv($handle, ['Origem', 'Data', 'Valor'], ';');
 
             foreach ($donations as $donation) {
                 fputcsv($handle, [
                     $donation->donor_name ?? 'Administração',
                     $donation->donation_date->format('d/m/Y'),
                     number_format($donation->amount, 2, '.', '')
-                ]);
+                ], ';');
             }
 
             fclose($handle);
@@ -218,6 +302,31 @@ class DizimoReportController extends Controller
             'Content-Disposition' => "attachment; filename=\"$filename\"",
         ]);
     }
+
+
+    public function exportAnonymousPdf(Request $request)
+    {
+        $year  = (int) $request->get('year', now()->year);
+        $month = (int) $request->get('month', now()->month);
+
+        $category = Category::where('name', 'Dízimo')->firstOrFail();
+
+        $donations = Donation::whereNull('member_id')
+            ->where('category_id', $category->id)
+            ->whereYear('donation_date', $year)
+            ->whereMonth('donation_date', $month)
+            ->orderBy('donation_date')
+            ->get();
+
+        $pdf = Pdf::loadView('pdf.dizimo_anonymous', compact(
+            'donations',
+            'year',
+            'month'
+        ))->setPaper('a4', 'portrait');
+
+        return $pdf->download("dizimo_anonimos_{$month}_{$year}.pdf");
+    }
+
 
 
 

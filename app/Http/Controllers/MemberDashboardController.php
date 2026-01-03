@@ -43,7 +43,7 @@ class MemberDashboardController extends Controller
         $totalDonated = (clone $query)->sum('amount');
 
         return view('members.dashboard', [
-            'menu'         => 'my-donations',
+            'menu'         => 'dashboard-member',
             'donations'    => $donations,
             'totalDonated' => $totalDonated,
             'monthlyTithe' => $member->monthly_tithe,

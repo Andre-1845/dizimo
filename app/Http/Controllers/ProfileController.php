@@ -18,14 +18,14 @@ class ProfileController extends Controller
         /** @var User $user */
         $user = Auth::user()->load('member');
 
-        return view('profile.show', compact('user'));
+        return view('profile.show', ['user' => $user, 'menu' => 'profile']);
     }
 
     public function edit()
     {
         $user = Auth::user()->load('member');
 
-        return view('profile.edit', compact('user'));
+        return view('profile.edit', ['user' => $user, 'menu' => 'profile']);
     }
 
     public function update(ProfileUpdateRequest $request)
@@ -79,7 +79,8 @@ class ProfileController extends Controller
     public function editPassword()
     {
         return view('profile.edit_password', [
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'menu' => 'profile'
         ]);
     }
 

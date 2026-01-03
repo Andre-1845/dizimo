@@ -11,6 +11,9 @@ class DizimoDashboardController extends Controller
 {
     public function index(Request $request)
     {
+
+        // dd($request->query());
+
         // ===============================
         // 1. Filtros
         // ===============================
@@ -118,6 +121,6 @@ class DizimoDashboardController extends Controller
             'membersPendingTotal',
             'anonymousCount',
             'anonymousTotal'
-        ));
+        ) + ['menu' => 'dashboard-dizimo']);
     }
 }

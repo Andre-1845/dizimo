@@ -28,8 +28,10 @@
     {{-- CARDS FINANCEIROS --}}
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
         <x-dashboard.card title="Dízimo Previsto" value="R$ {{ number_format($totalExpected, 2, ',', '.') }}" />
-        <x-dashboard.card title="Arrecadado no Mês" value="R$ {{ number_format($totalCollected, 2, ',', '.') }}" />
-        <x-dashboard.card title="Em Falta" value="R$ {{ number_format($totalMissing, 2, ',', '.') }}" />
+        <x-dashboard.card title="Arrecadado no Mês" value="R$ {{ number_format($totalCollected, 2, ',', '.') }}"
+            valueClass="text-green-600" />
+        <x-dashboard.card title="Em Falta" value="R$ {{ number_format($totalMissing, 2, ',', '.') }}"
+            valueClass="text-red-600" />
         <x-dashboard.card title="Percentual" value="{{ $percentageCollected }}%" />
         <x-dashboard.card title="Arrecadado no Ano" value="R$ {{ number_format($totalCollectedYear, 2, ',', '.') }}" />
     </div>
@@ -38,34 +40,43 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {{-- PAGARAM --}}
-        <div class="bg-white rounded shadow p-5">
+        <div class="bg-green-100 rounded border shadow p-5">
             <p class="text-gray-500 text-sm">Membros Dizimistas</p>
-            <p class="text-2xl font-bold text-green-600">{{ $membersPaidCount }}</p>
-            <p class="text-sm mt-1">R$ {{ number_format($membersPaidTotal, 2, ',', '.') }}</p>
+            <p class="text-3xl font-bold text-green-600">{{ $membersPaidCount }}</p>
+            <p class="text-lg font-semibold mt-1">
+                R$ {{ number_format($membersPaidTotal, 2, ',', '.') }}
+            </p>
 
-            <a href="{{ route('dizimos.paid', request()->query()) }}" class="btn-secondary mt-4 inline-block">
+            <a href="{{ route('dizimos.paid', request()->query()) }}"
+                class="btn-success mt-4 inline-flex items-center justify-center">
                 Ver lista
             </a>
         </div>
 
         {{-- PENDENTES --}}
-        <div class="bg-white rounded shadow p-5">
+        <div class="bg-red-100 rounded border shadow p-5">
             <p class="text-gray-500 text-sm">Doações Pendentes</p>
-            <p class="text-2xl font-bold text-red-600">{{ $membersPendingCount }}</p>
-            <p class="text-sm mt-1">R$ {{ number_format($membersPendingTotal, 2, ',', '.') }}</p>
+            <p class="text-3xl font-bold text-red-600">{{ $membersPendingCount }}</p>
+            <p class="text-lg font-semibold mt-1">
+                R$ {{ number_format($membersPendingTotal, 2, ',', '.') }}
+            </p>
 
-            <a href="{{ route('dizimos.pending', request()->query()) }}" class="btn-secondary mt-4 inline-block">
+            <a href="{{ route('dizimos.pending', request()->query()) }}"
+                class="btn-danger mt-4 inline-flex items-center justify-center">
                 Ver lista
             </a>
         </div>
 
         {{-- ANÔNIMAS --}}
-        <div class="bg-white rounded shadow p-5">
+        <div class="bg-gray-100 rounded border shadow p-5">
             <p class="text-gray-500 text-sm">Doações Administrativas</p>
-            <p class="text-2xl font-bold text-blue-600">{{ $anonymousCount }}</p>
-            <p class="text-sm mt-1">R$ {{ number_format($anonymousTotal, 2, ',', '.') }}</p>
+            <p class="text-3xl font-bold text-blue-600">{{ $anonymousCount }}</p>
+            <p class="text-lg font-semibold mt-1">
+                R$ {{ number_format($anonymousTotal, 2, ',', '.') }}
+            </p>
 
-            <a href="{{ route('dizimos.anonymous', request()->query()) }}" class="btn-secondary mt-4 inline-block">
+            <a href="{{ route('dizimos.anonymous', request()->query()) }}"
+                class="btn-info mt-4 inline-flex items-center justify-center">
                 Ver lançamentos
             </a>
         </div>

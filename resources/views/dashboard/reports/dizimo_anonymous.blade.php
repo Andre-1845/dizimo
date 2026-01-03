@@ -14,16 +14,22 @@
     </p>
 
     {{-- AÇÕES --}}
-    <div class="flex gap-3 mb-4">
-        <button class="btn-secondary">PDF</button>
-        <button class="btn-secondary">Excel</button>
-    </div>
+    <x-report.actions pdfRoute="dizimos.export.anonymous.pdf" csvRoute="dizimos.export.anonymous.csv"
+        backRoute="dashboard.dizimo" :params="[
+            'month' => request('month'),
+            'year' => request('year'),
+        ]">
+
+        {{-- Futuro --}}
+        {{-- <a class="btn-primary">Outro botão</a> --}}
+    </x-report.actions>
 
     <div class="bg-white rounded shadow p-4">
 
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b">
+                    <th class="text-center py-2">Ordem</th>
                     <th class="text-left py-2">Origem</th>
                     <th class="text-left py-2">Data</th>
                     <th class="text-right py-2">Valor</th>
@@ -32,6 +38,7 @@
             <tbody>
                 @forelse ($donations as $donation)
                     <tr class="border-b last:border-0">
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="py-2">
                             {{ $donation->donor_name ?? 'Administração' }}
                         </td>

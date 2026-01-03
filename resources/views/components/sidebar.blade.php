@@ -5,11 +5,11 @@
             <span class="sidebar-title">Dízimo</span>
         </div>
 
-        @auth
+        {{-- @auth
             <div class="sidebar-user">
                 {{ Auth::user()->name }}
             </div>
-        @endauth
+        @endauth --}}
 
         <nav class="sidebar-nav">
 

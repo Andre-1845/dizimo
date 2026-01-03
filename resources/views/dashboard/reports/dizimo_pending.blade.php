@@ -14,16 +14,22 @@
     </p>
 
     {{-- AÇÕES --}}
-    <div class="flex gap-3 mb-4">
-        <button class="btn-secondary">PDF</button>
-        <button class="btn-secondary">Excel</button>
-    </div>
+    <x-report.actions pdfRoute="dizimos.export.pending.pdf" csvRoute="dizimos.export.pending.csv" backRoute="dashboard.dizimo"
+        :params="[
+            'month' => request('month'),
+            'year' => request('year'),
+        ]">
+
+        {{-- Futuro --}}
+        {{-- <a class="btn-primary">Outro botão</a> --}}
+    </x-report.actions>
 
     <div class="bg-white rounded shadow p-4">
 
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b">
+                    <th>Ordem</th>
                     <th class="text-left py-2">Membro</th>
                     <th class="text-right py-2">Valor Previsto</th>
                 </tr>
@@ -31,6 +37,7 @@
             <tbody>
                 @forelse ($members as $member)
                     <tr class="border-b last:border-0">
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="py-2">{{ $member->name }}</td>
                         <td class="py-2 text-right text-red-600 font-semibold">
                             R$ {{ number_format($member->monthly_tithe, 2, ',', '.') }}

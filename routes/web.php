@@ -145,7 +145,18 @@ Route::middleware('auth', 'verified', 'user.status')->group(function () {
 
         Route::get('/anonimos/csv', [DizimoReportController::class, 'exportAnonymousCsv'])
             ->name('dizimos.export.anonymous.csv');
+
+
+        Route::get('/pagaram/pdf', [DizimoReportController::class, 'exportPaidPdf'])
+            ->name('dizimos.export.paid.pdf');
+
+        Route::get('/pendentes/pdf', [DizimoReportController::class, 'exportPendingPdf'])
+            ->name('dizimos.export.pending.pdf');
+
+        Route::get('/anonimos/pdf', [DizimoReportController::class, 'exportAnonymousPdf'])
+            ->name('dizimos.export.anonymous.pdf');
     });
+
 
 
     /*
