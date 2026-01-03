@@ -38,7 +38,7 @@
             <tbody>
                 @forelse ($donations as $donation)
                     <tr class="border-b last:border-0">
-                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center"> {{ $donations->firstItem() + $loop->index }}</td>
                         <td class="py-2">
                             {{ $donation->donor_name ?? 'Administração' }}
                         </td>

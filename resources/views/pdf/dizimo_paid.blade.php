@@ -6,8 +6,19 @@
 
     <style>
         @page {
-            margin: 40px 30px 60px 30px;
-            /* espaço para rodapé */
+            margin: 40px 30px 70px 30px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 40px;
+
+            text-align: center;
+            font-size: 9px;
+            color: #999;
         }
 
         body {
@@ -81,20 +92,16 @@
     </table>
 
     {{-- RODAPÉ --}}
-    <script type="text/php">
-        if (isset($pdf)) {
-            $text = "Relatório dízimo do período {{ sprintf('%02d', $month) }}/{{ $year }}        página {PAGE_NUM}/{PAGE_COUNT}";
-            $size = 8;
-            $font = $fontMetrics->getFont("DejaVu Sans", "normal");
-            $color = [150, 150, 150];
-
-            $width = $fontMetrics->getTextWidth($text, $font, $size);
-            $x = ($pdf->get_width() - $width) / 2;
-            $y = $pdf->get_height() - 40;
-
-            $pdf->page_text($x, $y, $text, $font, $size, $color);
+    <footer>
+        Relatório dízimo – período
+        {{ \App\Helpers\DateHelper::periodoExtenso($month, $year) }}
+        — página <span class="page-number"></span>
+    </footer>
+    <style>
+        .page-number:after {
+            content: counter(page);
         }
-    </script>
+    </style>
 
 </body>
 

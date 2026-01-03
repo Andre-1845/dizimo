@@ -37,7 +37,7 @@
             <tbody>
                 @forelse ($members as $member)
                     <tr class="border-b last:border-0">
-                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td class="text-center"> {{ $members->firstItem() + $loop->index }}</td>
                         <td class="py-2">{{ $member->name }}</td>
                         <td class="py-2 text-right text-red-600 font-semibold">
                             R$ {{ number_format($member->monthly_tithe, 2, ',', '.') }}

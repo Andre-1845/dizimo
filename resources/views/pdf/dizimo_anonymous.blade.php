@@ -4,6 +4,24 @@
 <head>
     <meta charset="utf-8">
     <style>
+        @page {
+            margin: 40px 30px 70px 30px;
+        }
+
+
+
+        footer {
+            position: fixed;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 40px;
+
+            text-align: center;
+            font-size: 9px;
+            color: #999;
+        }
+
         body {
             font-family: DejaVu Sans;
             font-size: 12px;
@@ -64,6 +82,17 @@
             @endforeach
         </tbody>
     </table>
+
+    <footer>
+        Relatório dízimo – período
+        {{ \App\Helpers\DateHelper::periodoExtenso($month, $year) }}
+        — página <span class="page-number"></span>
+    </footer>
+    <style>
+        .page-number:after {
+            content: counter(page);
+        }
+    </style>
 
 </body>
 
