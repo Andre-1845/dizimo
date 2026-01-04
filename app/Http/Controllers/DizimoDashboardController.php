@@ -14,6 +14,15 @@ class DizimoDashboardController extends Controller
 
         // dd($request->query());
 
+        /* =====================
+     |  CONTADORES
+     ===================== */
+
+        $membersCount = Member::count();
+        $membersActiveCount = Member::active()->count();
+
+        $membersInactiveCount = ($membersCount - $membersActiveCount);
+
         // ===============================
         // 1. Filtros
         // ===============================
@@ -60,12 +69,11 @@ class DizimoDashboardController extends Controller
         // ===============================
 
         // Membros que pagaram
-        $membersPaidCount = Member::where('active', true)
-            ->whereHas('donations', function ($q) use ($year, $month, $dizimoCategory) {
-                $q->where('category_id', $dizimoCategory->id)
-                    ->whereYear('donation_date', $year)
-                    ->whereMonth('donation_date', $month);
-            })
+        $membersPaidCount = Member::whereHas('donations', function ($q) use ($year, $month, $dizimoCategory) {
+            $q->where('category_id', $dizimoCategory->id)
+                ->whereYear('donation_date', $year)
+                ->whereMonth('donation_date', $month);
+        })
             ->count();
 
         $membersPaidTotal = Donation::whereNotNull('member_id')
@@ -110,6 +118,9 @@ class DizimoDashboardController extends Controller
         return view('dashboard.dizimo_index', compact(
             'year',
             'month',
+            'membersCount',
+            'membersActiveCount',
+            'membersInactiveCount',
             'totalExpected',
             'totalCollected',
             'totalCollectedYear',

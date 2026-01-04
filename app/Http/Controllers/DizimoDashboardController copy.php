@@ -21,6 +21,16 @@ class DizimoDashboardController extends Controller
         if (!in_array($perPage, $allowedPerPage)) {
             $perPage = 10;
         }
+        /* =====================
+     |  CONTADORES
+     ===================== */
+
+        $membersCount = Member::count();
+        $membersActiveCount = Member::active()->count();
+
+        $membersInactiveCount = ($membersCount - $membersActiveCount);
+
+
         // ===============================
         // 1. Filtros
         // ===============================
@@ -120,6 +130,10 @@ class DizimoDashboardController extends Controller
         return view('dashboard.dizimo_index', [
             'year'                  => $year,
             'month'                 => $month,
+
+            'membersCount'   => $membersCount,
+            'membersActiveCount' => $membersActiveCount,
+            'membersInactiveCount' => $membersInactiveCount,
 
             'totalExpected'         => $totalExpected,
             'totalCollected'        => $totalCollected,

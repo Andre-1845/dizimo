@@ -48,7 +48,9 @@
 
         <x-alert />
 
-        <x-filters.generic :filters="$filters" route="donations.index" />
+
+        <x-filters.generic :filters="$filters" :route="route('donations.index')" />
+
 
 
 

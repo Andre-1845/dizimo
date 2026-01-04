@@ -37,6 +37,31 @@
     </div>
 
     {{-- CARDS OPERACIONAIS --}}
+
+    {{-- MEMBROS --}}
+
+    <div
+        class="bg-gray-100 rounded-xl border shadow-lg px-14 py-8
+            flex justify-between text-center my-6
+            max-w-sm mx-auto">
+
+
+        <div>
+            <p class="text-gray-500 text-sm mb-1">Membros Ativos</p>
+            <p class="text-2xl font-bold text-blue-600">
+                {{ $membersActiveCount }}
+            </p>
+        </div>
+
+        <div>
+            <p class="text-gray-500 text-sm mb-1">Membros Inativos</p>
+            <p class="text-2xl font-bold text-red-600">
+                {{ $membersInactiveCount }}
+            </p>
+        </div>
+
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         {{-- PAGARAM --}}
@@ -44,7 +69,7 @@
             <p class="text-gray-500 text-sm">Membros Dizimistas</p>
             <p class="text-3xl font-bold text-green-600">{{ $membersPaidCount }}</p>
             <p class="text-lg font-semibold mt-1">
-                R$ {{ number_format($membersPaidTotal, 2, ',', '.') }}
+                R$ {{ money($membersPaidTotal) }}
             </p>
 
             <a href="{{ route('dizimos.paid', request()->query()) }}"
@@ -58,7 +83,7 @@
             <p class="text-gray-500 text-sm">Doações Pendentes</p>
             <p class="text-3xl font-bold text-red-600">{{ $membersPendingCount }}</p>
             <p class="text-lg font-semibold mt-1">
-                R$ {{ number_format($membersPendingTotal, 2, ',', '.') }}
+                R$ {{ money($membersPendingTotal) }}
             </p>
 
             <a href="{{ route('dizimos.pending', request()->query()) }}"
@@ -72,7 +97,7 @@
             <p class="text-gray-500 text-sm">Doações Administrativas</p>
             <p class="text-3xl font-bold text-blue-600">{{ $anonymousCount }}</p>
             <p class="text-lg font-semibold mt-1">
-                R$ {{ number_format($anonymousTotal, 2, ',', '.') }}
+                R$ {{ money($anonymousTotal) }}
             </p>
 
             <a href="{{ route('dizimos.anonymous', request()->query()) }}"

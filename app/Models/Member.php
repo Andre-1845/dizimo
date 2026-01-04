@@ -29,6 +29,14 @@ class Member extends Model
     }
 
 
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
+
+
+
 
     protected static function booted()
     {

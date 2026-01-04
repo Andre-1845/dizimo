@@ -51,7 +51,7 @@
             class="bg-white rounded-xl shadow p-6 space-y-4">
 
             @csrf
-            @method('PUT')
+            @method('PATCH')
 
             <div>
                 <label class="form-label">Membro</label>

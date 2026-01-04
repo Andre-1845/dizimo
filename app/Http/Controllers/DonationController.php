@@ -18,6 +18,7 @@ class DonationController extends Controller
     public function index(Request $request)
     {
         $registrars = User::whereDoesntHave('roles', fn($q) => $q->where('name', 'Membro'))
+            // ->whereHas('donations')
             ->orderBy('name')
             ->get();
 

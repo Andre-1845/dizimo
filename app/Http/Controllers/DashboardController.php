@@ -15,7 +15,8 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $year  = $request->get('year', now()->year);
+        $year = (int) $request->get('year', now()->year);
+
         $month = $request->filled('month') ? $request->month : null;
 
         /* =====================
@@ -39,6 +40,9 @@ class DashboardController extends Controller
      ===================== */
 
         $membersCount = Member::count();
+        $membersActiveCount = Member::active()->count();
+
+        $membersInactiveCount = ($membersCount - $membersActiveCount);
 
         /* =====================
      |  ÚLTIMOS REGISTROS
@@ -74,17 +78,36 @@ class DashboardController extends Controller
      |  Doações por categoria
      ===================== */
 
-        $donationsByCategory = Donation::join('categories', 'categories.id', '=', 'donations.category_id')
-            ->selectRaw('categories.name as category, SUM(donations.amount) as total')
-            ->groupBy('categories.name')
-            ->pluck('total', 'category');
+        // $donationsByCategory = Donation::join('categories', 'categories.id', '=', 'donations.category_id')
+        //     ->selectRaw('categories.name as category, SUM(donations.amount) as total')
+        //     ->groupBy('categories.name')
+        //     ->pluck('total', 'category');
 
-        $expensesByCategory = Expense::join('categories', 'categories.id', '=', 'expenses.category_id')
+        // $expensesByCategory = Expense::join('categories', 'categories.id', '=', 'expenses.category_id')
+        //     ->selectRaw('categories.name as category, SUM(expenses.amount) as total')
+        //     ->groupBy('categories.name')
+        //     ->pluck('total', 'category');
+
+        $expensesByCategoryQuery = Expense::join('categories', 'categories.id', '=', 'expenses.category_id')
             ->selectRaw('categories.name as category, SUM(expenses.amount) as total')
+            ->whereYear('expenses.expense_date', $year);
+
+        if ($month) {
+            $expensesByCategoryQuery->whereMonth('expenses.expense_date', $month);
+        }
+
+        $expensesByCategory = $expensesByCategoryQuery
             ->groupBy('categories.name')
             ->pluck('total', 'category');
 
 
+        $availableYears = Donation::selectRaw('YEAR(donation_date) as year')
+            ->union(
+                Expense::selectRaw('YEAR(expense_date) as year')
+            )
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
         /* =====================
      |  RETURN
      ===================== */
@@ -92,12 +115,17 @@ class DashboardController extends Controller
         return view('dashboard.index', [
             'year' => $year,
             'month' => $month,
+            'availableYears' => $availableYears,
+
 
             // Cards
             'totalDonations' => $totalDonations,
             'totalExpenses'  => $totalExpenses,
             'balance'        => $balance,
             'membersCount'   => $membersCount,
+            'membersActiveCount' => $membersActiveCount,
+            'membersInactiveCount' => $membersInactiveCount,
+
 
             // Listas
             'lastDonations' => $lastDonations,
@@ -106,7 +134,7 @@ class DashboardController extends Controller
             // Gráficos
             'donationsByMonth'    => $donationsByMonth,
             'expensesByMonth'     => $expensesByMonth,
-            'donationsByCategory' => $donationsByCategory,
+            // 'donationsByCategory' => $donationsByCategory,
             'expensesByCategory' => $expensesByCategory,
 
         ]);

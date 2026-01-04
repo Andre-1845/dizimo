@@ -8,7 +8,7 @@
         Membros que contribuíram com Dízimo
     </h1>
 
-    <p class="text-sm text-gray-500 mb-4">
+    <p class="text-lg text-center text-gray-900 font-semibold mb-4">
         {{ \Carbon\Carbon::create()->month($filters['month'])->translatedFormat('F') }}
         / {{ $filters['year'] }}
     </p>
@@ -52,14 +52,20 @@
                     <th class="text-center py-2">Ordem</th>
                     <th class="text-left py-2">Membro</th>
                     <th class="text-center py-2">Data</th>
-                    <th class="text-right py-2">Valor</th>
+                    <th class="text-right py-2">Valor doado</th>
+                    <th class="text-right py-2">Dizimo previsto</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($members as $member)
                     <tr class="border-b last:border-0">
                         <td class="text-center"> {{ $members->firstItem() + $loop->index }}</td>
-                        <td class="py-2">{{ $member->name }}</td>
+                        <td class="py-2">{{ $member->name }}
+                            @if (!$member->active)
+                                <span class="text-xs text-red-600"> (Inativo)</span>
+                            @endif
+
+                        </td>
                         <td class="py-2 text-center">
                             @foreach ($member->donations as $donation)
                                 <div>
@@ -68,9 +74,15 @@
                             @endforeach
                         </td>
                         </td>
-                        <td class="py-2 text-right text-green-600 font-semibold">
+                        <td class="py-2 text-right text-green-700 font-semibold">
                             R$
-                            {{ number_format($member->donations->sum('amount'), 2, ',', '.') }}
+                            {{ money($member->donations->sum('amount')) }}
+                        </td>
+                        <td class="py-2 text-right">
+                            R$
+                            {{ money($member->monthly_tithe) }}
+
+
                         </td>
                     </tr>
                 @empty
@@ -81,6 +93,22 @@
                     </tr>
                 @endforelse
             </tbody>
+            <tfoot>
+                <tr class="border-t font-semibold bg-gray-50">
+                    <td colspan="3" class="py-2 text-right">
+                        Totais
+                    </td>
+
+                    <td class="py-2 text-right text-green-700">
+                        R$ {{ money($totalDoado) }}
+                    </td>
+
+                    <td class="py-2 text-right">
+                        R$ {{ money($totalPrevisto) }}
+                    </td>
+                </tr>
+            </tfoot>
+
         </table>
 
         <div class="mt-4">

@@ -72,7 +72,7 @@
 
         <div class="bg-gray-50 rounded-xl shadow p-6 mb-8">
             <h2 class="text-lg font-semibold mb-4">
-                Doações x Despesas — {{ $year }}
+                Receitas x Despesas — {{ $year }}
             </h2>
 
             <canvas id="donationsExpensesChart" height="120"></canvas>

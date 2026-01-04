@@ -60,6 +60,9 @@
         <x-alert />
 
 
+        <x-filters.generic :filters="$filters" :route="route('expenses.index')" />
+
+
         <div class="table-container">
             <table class="table">
                 <thead>

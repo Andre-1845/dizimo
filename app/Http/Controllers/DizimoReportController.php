@@ -34,12 +34,11 @@ class DizimoReportController extends Controller
         $filters = $this->filtros($request);
         $category = $this->dizimoCategory();
 
-        $members = Member::where('active', true)
-            ->whereHas('donations', function ($q) use ($filters, $category) {
-                $q->where('category_id', $category->id)
-                    ->whereYear('donation_date', $filters['year'])
-                    ->whereMonth('donation_date', $filters['month']);
-            })
+        $members = Member::whereHas('donations', function ($q) use ($filters, $category) {
+            $q->where('category_id', $category->id)
+                ->whereYear('donation_date', $filters['year'])
+                ->whereMonth('donation_date', $filters['month']);
+        })
             ->with(['donations' => function ($q) use ($filters, $category) {
                 $q->where('category_id', $category->id)
                     ->whereYear('donation_date', $filters['year'])
@@ -50,10 +49,32 @@ class DizimoReportController extends Controller
             ->paginate($filters['perPage'])
             ->withQueryString();
 
+        $membersAll = Member::whereHas('donations', function ($q) use ($filters, $category) {
+            $q->where('category_id', $category->id)
+                ->whereYear('donation_date', $filters['year'])
+                ->whereMonth('donation_date', $filters['month']);
+        })
+            ->with(['donations' => function ($q) use ($filters, $category) {
+                $q->where('category_id', $category->id)
+                    ->whereYear('donation_date', $filters['year'])
+                    ->whereMonth('donation_date', $filters['month']);
+            }])
+            ->get();
+
+        $totalDoado = $membersAll
+            ->sum(fn($member) => $member->donations->sum('amount'));
+
+        $totalPrevisto = $membersAll
+            ->sum('monthly_tithe');
+
+
+
         return view('dashboard.reports.dizimo_paid', [
             'menu' => 'dashboard-dizimo',
             'members' => $members,
             'filters' => $filters,
+            'totalDoado' =>  $totalDoado,
+            'totalPrevisto' => $totalPrevisto,
         ]);
     }
 
@@ -64,12 +85,11 @@ class DizimoReportController extends Controller
 
         $category = Category::where('name', 'Dízimo')->firstOrFail();
 
-        $members = Member::where('active', true)
-            ->whereHas('donations', function ($q) use ($category, $year, $month) {
-                $q->where('category_id', $category->id)
-                    ->whereYear('donation_date', $year)
-                    ->whereMonth('donation_date', $month);
-            })
+        $members = Member::whereHas('donations', function ($q) use ($category, $year, $month) {
+            $q->where('category_id', $category->id)
+                ->whereYear('donation_date', $year)
+                ->whereMonth('donation_date', $month);
+        })
             ->with(['donations' => function ($q) use ($category, $year, $month) {
                 $q->where('category_id', $category->id)
                     ->whereYear('donation_date', $year)
@@ -123,12 +143,11 @@ class DizimoReportController extends Controller
 
         $category = Category::where('name', 'Dízimo')->firstOrFail();
 
-        $members = Member::where('active', true)
-            ->whereHas('donations', function ($q) use ($category, $year, $month) {
-                $q->where('category_id', $category->id)
-                    ->whereYear('donation_date', $year)
-                    ->whereMonth('donation_date', $month);
-            })
+        $members = Member::whereHas('donations', function ($q) use ($category, $year, $month) {
+            $q->where('category_id', $category->id)
+                ->whereYear('donation_date', $year)
+                ->whereMonth('donation_date', $month);
+        })
             ->with(['donations' => function ($q) use ($category, $year, $month) {
                 $q->where('category_id', $category->id)
                     ->whereYear('donation_date', $year)

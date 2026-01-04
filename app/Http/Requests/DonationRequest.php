@@ -21,6 +21,8 @@ class DonationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
+
         return [
             //
             'member_id'         => ['nullable', 'exists:members,id'],
@@ -29,7 +31,12 @@ class DonationRequest extends FormRequest
             'donation_date'      => ['required', 'date', 'before_or_equal:today'],
             'amount'            => ['required', 'numeric', 'min:0.01'],
             'notes'             => ['nullable', 'string'],
-            'receipt'           => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:2048'],
+            'receipt' => array_filter([
+                $isUpdate ? 'nullable' : 'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'max:2048',
+            ]),
         ];
     }
 

@@ -43,7 +43,9 @@
 
         <x-alert />
 
-        <form method="POST" action="{{ route('donations.store') }}" class="bg-white rounded-xl shadow p-6 space-y-4">
+        <form method="POST" action="{{ route('donations.store') }}" enctype="multipart/form-data"
+            class="bg-white rounded-xl shadow p-6 space-y-4">
+
 
             @csrf
             @method('POST')
@@ -51,7 +53,6 @@
             <div>
                 <label class="form-label">Membro</label>
                 <select name="member_id" class="form-input">
-                    <option value="">Selecione</option>
                     <option value="">Administração</option>
                     @foreach ($members as $member)
                         <option value="{{ $member->id }}" @selected(old('member_id') == $member->id)>

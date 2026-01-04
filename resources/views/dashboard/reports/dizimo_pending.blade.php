@@ -40,7 +40,7 @@
                         <td class="text-center"> {{ $members->firstItem() + $loop->index }}</td>
                         <td class="py-2">{{ $member->name }}</td>
                         <td class="py-2 text-right text-red-600 font-semibold">
-                            R$ {{ number_format($member->monthly_tithe, 2, ',', '.') }}
+                            R$ {{ money($member->monthly_tithe) }}
                         </td>
                     </tr>
                 @empty

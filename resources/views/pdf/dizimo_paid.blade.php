@@ -68,14 +68,19 @@
                 <th>Ordem</th>
                 <th>Membro</th>
                 <th>Data</th>
-                <th class="right">Valor</th>
+                <th class="right">Valor doado</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($members as $member)
                 <tr>
                     <td class="center">{{ $loop->iteration }}</td>
-                    <td>{{ $member->name }}</td>
+                    <td>{{ $member->name }}
+                        @if (!$member->active)
+                            <span class="text-xs text-gray-500">(Inativo)</span>
+                        @endif
+
+                    </td>
 
                     <td class="center">
                         @foreach ($member->donations as $donation)

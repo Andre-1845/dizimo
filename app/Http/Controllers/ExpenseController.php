@@ -7,6 +7,7 @@ use App\Http\Requests\ExpenseRequest;
 use App\Models\Expense;
 use App\Models\Category;
 use App\Models\PaymentMethod;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,15 +17,118 @@ class ExpenseController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index()
+    // public function index()
+    // {
+    //     $expenses = Expense::with(['category', 'paymentMethod'])
+    //         ->orderByDesc('expense_date')
+    //         ->paginate(10);
+
+    //     return view('expenses.index', [
+    //         'expenses' => $expenses,
+    //         'menu' => 'expenses',
+    //     ]);
+    // }
+
+    public function index(Request $request)
     {
-        $expenses = Expense::with(['category', 'paymentMethod'])
+        $users = User::whereHas('expenses')
+            ->orderBy('name')
+            ->get();
+
+
+        $expenses = Expense::query()
+            ->with(['category', 'paymentMethod', 'user'])
+
+            ->when(
+                $request->filled('category_id'),
+                fn($q) => $q->where('category_id', $request->category_id)
+            )
+
+            ->when(
+                $request->filled('payment_method_id'),
+                fn($q) => $q->where('payment_method_id', $request->payment_method_id)
+            )
+
+            ->when(
+                $request->filled('user_id'),
+                fn($q) => $q->where('user_id', $request->user_id)
+            )
+
+            ->when(
+                !empty($request->date_start),
+                fn($q) => $q->whereDate('expense_date', '>=', $request->date_start)
+            )
+
+            ->when(
+                !empty($request->date_end),
+                fn($q) => $q->whereDate('expense_date', '<=', $request->date_end)
+            )
+
+            ->when(
+                $request->filled('amount_min'),
+                fn($q) => $q->where('amount', '>=', $request->amount_min)
+            )
+
+            ->when(
+                $request->filled('amount_max'),
+                fn($q) => $q->where('amount', '<=', $request->amount_max)
+            )
+
             ->orderByDesc('expense_date')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
+
+        $filters = [
+            [
+                'type' => 'select',
+                'name' => 'category_id',
+                'label' => 'Categoria',
+                'options' => Category::where('type', 'expense')->orderBy('name')->get(),
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'select',
+                'name' => 'payment_method_id',
+                'label' => 'Forma de pagamento',
+                'options' => PaymentMethod::orderBy('name')->get(),
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'select',
+                'name' => 'user_id',
+                'label' => 'Cadastrado por',
+                'options' => $users,
+                'value' => 'id',
+                'labelField' => 'name',
+            ],
+            [
+                'type' => 'date',
+                'name' => 'date_start',
+                'label' => 'Data inicial',
+            ],
+            [
+                'type' => 'date',
+                'name' => 'date_end',
+                'label' => 'Data final',
+            ],
+            [
+                'type' => 'number',
+                'name' => 'amount_min',
+                'label' => 'Valor mínimo',
+            ],
+            [
+                'type' => 'number',
+                'name' => 'amount_max',
+                'label' => 'Valor máximo',
+            ],
+        ];
 
         return view('expenses.index', [
             'expenses' => $expenses,
-            'menu' => 'expenses',
+            'filters'  => $filters,
+            'menu'     => 'expenses',
         ]);
     }
 

@@ -37,6 +37,37 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Member::class);
     }
 
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    // ======================
+    // SCOPES DE STATUS
+    // ======================
+
+    public function scopePending($query)
+    {
+        return $query->where('status_id', 1);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status_id', 2);
+    }
+
+    public function scopeSuspended($query)
+    {
+        return $query->where('status_id', 3);
+    }
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -46,7 +46,7 @@
                             {{ \Carbon\Carbon::parse($donation->donation_date)->format('d/m/Y') }}
                         </td>
                         <td class="py-2 text-right text-blue-600 font-semibold">
-                            R$ {{ number_format($donation->amount, 2, ',', '.') }}
+                            R$ {{ money($donation->amount) }}
                         </td>
                     </tr>
                 @empty

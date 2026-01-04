@@ -38,7 +38,6 @@
                     <tr class="table-row-header">
                         <th class="table-header">ID</th>
                         <th class="table-header">Papel</th>
-                        <th class="table-header center">Guard-name</th>
                         <th class="table-header text-center">Permissões</th>
                         <th class="table-header table-cell-lg-hidden">Criado em</th>
                         <th class="table-header table-cell-lg-hidden">Editado em</th>
@@ -50,7 +49,6 @@
                         <tr class="table-row-body">
                             <td class="table-body">{{ $role->id }}</td>
                             <td class="table-body">{{ $role->name ?? '—' }}</td>
-                            <td class="table-body">{{ $role->guard_name }}</td>
                             <td class="table-body table-link text-center"> <a
                                     href="{{ route('role-permissions.index', ['role' => $role->id]) }}">Permissoes</a></td>
                             <td class="table-body">{{ $role->created_at->format('d/m/Y') }}</td>
