@@ -4,10 +4,8 @@
 
 @section('content')
 
-    <x-alert />
-
     <div class="content-header">
-        <h1 class="text-2xl font-bold mb-6">Minhas Doações</h1>
+        <h1 class="content-title">Minhas Doações</h1>
 
 
         <a href="{{ route('member.donation.create') }}" class="btn-primary">
@@ -15,9 +13,10 @@
         </a>
     </div>
 
+    <x-alert />
 
     {{-- FILTRO --}}
-    <form method="GET" class="flex gap-4 mb-6">
+    <form method="GET" class="flex gap-4 my-6">
         <select name="year" class="border rounded p-2">
             <option value="">Ano (todos)</option>
             @for ($y = now()->year; $y >= now()->year - 5; $y--)
@@ -74,8 +73,8 @@
                     <th class="table-header">Data</th>
                     <th class="table-header">Categoria</th>
                     <th class="table-header">Cadastrado por</th>
-                    <th class="table-header">Valor</th>
-                    <th class="table-header center">Comprovante</th>
+                    <th class="table-header text-center">Valor</th>
+                    <th class="table-header text-center">Comprovante</th>
                 </tr>
             </thead>
             <tbody>
@@ -94,11 +93,11 @@
                             R$ {{ number_format($donation->amount, 2, ',', '.') }}
                         </td>
                         {{-- Link do Recibo --}}
-                        <td class="table-body table-actions">
+                        <td class="table-body flex justify-center items-center">
                             @if ($donation->receipt_path)
                                 <a href="{{ asset('storage/' . $donation->receipt_path) }}" target="_blank"
                                     class="text-blue-600 hover:underline">
-                                    Ver
+                                    @include('components.icons.doc_view')
                                 </a>
                             @else
                                 —

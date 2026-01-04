@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->where('status_id', 2);
     }
 
-    public function scopeSuspended($query)
+    public function scopeInactive($query)
     {
         return $query->where('status_id', 3);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\Member;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,8 @@ class DashboardController extends Controller
         /* =====================
      |  CONTADORES
      ===================== */
-
+        $usersActiveCount = User::active()->count();
+        $usersPendingCount = User::pending()->count();
         $membersCount = Member::count();
         $membersActiveCount = Member::active()->count();
 
@@ -125,6 +127,8 @@ class DashboardController extends Controller
             'membersCount'   => $membersCount,
             'membersActiveCount' => $membersActiveCount,
             'membersInactiveCount' => $membersInactiveCount,
+            'usersActiveCount' => $usersActiveCount,
+            'usersPendingCount' => $usersPendingCount,
 
 
             // Listas

@@ -60,9 +60,9 @@
 
             {{-- Membros --}}
             <div class="bg-gray-100 border rounded-xl text-center  shadow p-6">
-                <p class="text-sm text-gray-500">Membros</p>
+                <p class="text-sm text-gray-500">Usuários Ativos</p>
                 <p class="text-2xl font-bold text-gray-800">
-                    {{ $membersCount }}
+                    {{ $usersActiveCount }}
                 </p>
             </div>
 
