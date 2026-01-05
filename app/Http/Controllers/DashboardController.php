@@ -24,7 +24,8 @@ class DashboardController extends Controller
      |  TOTAIS (CARDS)
      ===================== */
 
-        $donationsQuery = Donation::whereYear('donation_date', $year);
+        $donationsQuery = Donation::confirmed()
+            ->whereYear('donation_date', $year);
         $expensesQuery  = Expense::whereYear('expense_date', $year);
 
         if ($month) {
@@ -65,7 +66,8 @@ class DashboardController extends Controller
      |  Doações x Despesas
      ===================== */
 
-        $donationsByMonth = Donation::selectRaw('MONTH(donation_date) as month, SUM(amount) as total')
+        $donationsByMonth = Donation::confirmed()
+            ->selectRaw('MONTH(donation_date) as month, SUM(amount) as total')
             ->whereYear('donation_date', $year)
             ->groupBy('month')
             ->pluck('total', 'month');
@@ -152,7 +154,8 @@ class DashboardController extends Controller
         $month = $request->filled('month') ? $request->month : null;
 
         // Doações
-        $donationsQuery = Donation::whereYear('donation_date', $year);
+        $donationsQuery = Donation::confirmed()
+            ->whereYear('donation_date', $year);
         if ($month) {
             $donationsQuery->whereMonth('donation_date', $month);
         }

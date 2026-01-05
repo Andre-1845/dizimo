@@ -270,4 +270,31 @@ class DonationController extends Controller
             ->route('donations.index')
             ->with('success', 'Doação removida com sucesso.');
     }
+
+    // app/Http/Controllers/DonationController.php
+
+    public function pending()
+    {
+        $donations = Donation::where('is_confirmed', false)
+            ->with(['member', 'category', 'paymentMethod'])
+            ->orderBy('donation_date', 'asc')
+            ->paginate(15);
+
+        return view('donations.pending', compact('donations') + ['menu' => 'confirm']);
+    }
+
+    public function confirm(Donation $donation)
+    {
+        if ($donation->is_confirmed) {
+            return back()->with('warning', 'Esta doação já foi confirmada.');
+        }
+
+        $donation->update([
+            'is_confirmed' => true,
+            'confirmed_at' => now(),
+            'confirmed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Doação confirmada com sucesso.');
+    }
 }

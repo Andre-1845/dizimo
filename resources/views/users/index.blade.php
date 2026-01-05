@@ -74,7 +74,7 @@
         <div class="table-container">
             <table class="table">
                 <thead>
-                    <tr class="table-row-header"r>
+                    <tr class="table-row-header">
                         <th class="table-header">ID</th>
                         <th class="table-header">Usuario</th>
                         <th class="table-header">Nome</th>

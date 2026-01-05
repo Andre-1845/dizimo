@@ -66,6 +66,13 @@
                 </a>
             @endcan
 
+            @can('index-donation')
+                <a @class(['sidebar-link', 'active' => $menu === 'confirm']) href="{{ route('donations.pending') }}">
+                    <span class="sidebar-icon">@include('components.icons.question')</span>
+                    <span class="sidebar-text">Confirmações</span>
+                </a>
+            @endcan
+
             {{-- ================= CONFIGURAÇÕES ================= --}}
 
             @can('view-dashboard-admin')

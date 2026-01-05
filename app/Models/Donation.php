@@ -19,10 +19,15 @@ class Donation extends Model
         'donation_date',
         'notes',
         'receipt_path',
+        'is_confirmed',
+        'confirmed_at',
+        'confirmed_by',
     ];
 
     protected $casts = [
         'donation_date' => 'date',
+        'is_confirmed' => 'boolean',
+        'confirmed_at' => 'datetime',
     ];
 
     /**
@@ -33,6 +38,12 @@ class Donation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function confirmedBy()
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
+    }
+
 
     /**
      * Quem contribuiu (membro)
@@ -66,5 +77,19 @@ class Donation extends Model
         }
 
         return $this->donor_name ?: 'Administração';
+    }
+
+    public function scopeConfirmed($query)
+    {
+        return $query->where('is_confirmed', true);
+    }
+
+    public static function totalConfirmed(array $filters = [])
+    {
+        return self::confirmed()
+            ->when($filters['user_id'] ?? null, fn($q, $v) => $q->where('user_id', $v))
+            ->when($filters['month'] ?? null, fn($q, $v) => $q->whereMonth('donation_date', $v))
+            ->when($filters['year'] ?? null, fn($q, $v) => $q->whereYear('donation_date', $v))
+            ->sum('amount');
     }
 }

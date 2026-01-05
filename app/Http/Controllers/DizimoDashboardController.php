@@ -43,12 +43,14 @@ class DizimoDashboardController extends Controller
         // ===============================
         // 4. Total ARRECADADO (mês e ano)
         // ===============================
-        $totalCollected = Donation::where('category_id', $dizimoCategory->id)
+        $totalCollected = Donation::confirmed()
+            ->where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
             ->whereMonth('donation_date', $month)
             ->sum('amount');
 
-        $totalCollectedYear = Donation::where('category_id', $dizimoCategory->id)
+        $totalCollectedYear = Donation::confirmed()
+            ->where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
             ->sum('amount');
 
@@ -106,7 +108,8 @@ class DizimoDashboardController extends Controller
             ->whereMonth('donation_date', $month)
             ->count();
 
-        $anonymousTotal = Donation::whereNull('member_id')
+        $anonymousTotal = Donation::confirmed()
+            ->whereNull('member_id')
             ->where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
             ->whereMonth('donation_date', $month)

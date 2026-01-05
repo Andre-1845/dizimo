@@ -80,9 +80,14 @@
                             </td>
                             <td class="table-body table-cell-lg-hidden">{{ $donation->user->name ?? '—' }}
                             </td>
-                            </td>
-                            <td class="table-body text-right text-green-600 font-semibold">
-                                R$ {{ number_format($donation->amount, 2, ',', '.') }}
+
+                            <td @class([
+                                'table-body text-right font-semibold',
+                                'text-green-600' => $donation->is_confirmed,
+                                'text-orange-500' => !$donation->is_confirmed,
+                            ])
+                                title="{{ $donation->is_confirmed ? 'Doação confirmada' : 'Aguardando validação' }}">
+                                R$ {{ money($donation->amount) }}
                             </td>
                             {{-- Link do Recibo --}}
                             <td class="table-body">

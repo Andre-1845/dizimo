@@ -11,6 +11,12 @@
         <a href="{{ route('member.donation.create') }}" class="btn-primary">
             Nova Doação
         </a>
+        <div class="mt-6 text-right">
+            <a href="{{ route('dashboard.member.old') }}" class="text-sm text-blue-600 hover:underline">
+                Visualizar dashboard antigo (comparação)
+            </a>
+        </div>
+
     </div>
 
     <x-alert />
@@ -75,6 +81,7 @@
                     <th class="table-header">Cadastrado por</th>
                     <th class="table-header text-center">Valor</th>
                     <th class="table-header text-center">Comprovante</th>
+                    <th class="table-header text-center">Confirmação</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,19 +97,41 @@
                             {{ $donation->user->name }}
                         </td>
                         <td class="table-body text-right text-green-600 font-semibold">
-                            R$ {{ number_format($donation->amount, 2, ',', '.') }}
+                            R$ {{ money($donation->amount) }}
                         </td>
+
                         {{-- Link do Recibo --}}
-                        <td class="table-body flex justify-center items-center">
+                        <td class="table-body text-center">
                             @if ($donation->receipt_path)
-                                <a href="{{ asset('storage/' . $donation->receipt_path) }}" target="_blank"
-                                    class="text-blue-600 hover:underline">
-                                    @include('components.icons.doc_view')
-                                </a>
+                                <div class="flex justify-center items-center">
+                                    <a href="{{ asset('storage/' . $donation->receipt_path) }}" target="_blank"
+                                        class="text-blue-600 hover:underline">
+                                        @include('components.icons.doc_view')
+                                    </a>
+                                </div>
                             @else
                                 —
                             @endif
-                        </td> {{-- FIM Link do Recibo --}}
+                        </td>
+                        {{-- FIM Link do Recibo --}}
+
+                        <td class="table-body text-center">
+                            <div class="flex flex-col items-center gap-1">
+                                @if ($donation->is_confirmed)
+                                    <span class="text-green-600 font-semibold">
+                                        Confirmada
+                                    </span>
+                                    <span class="text-xs text-gray-500">
+                                        {{ $donation->confirmed_at->format('d/m/Y H:i') }}
+                                    </span>
+                                @else
+                                    <span class="text-yellow-600">
+                                        Aguardando validação
+                                    </span>
+                                @endif
+                            </div>
+                        </td>
+
                     </tr>
                 @empty
                     <tr>

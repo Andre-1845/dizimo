@@ -54,6 +54,7 @@
                     <th class="text-center py-2">Data</th>
                     <th class="text-right py-2">Valor doado</th>
                     <th class="text-right py-2">Dizimo previsto</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -74,16 +75,20 @@
                             @endforeach
                         </td>
                         </td>
-                        <td class="py-2 text-right text-green-700 font-semibold">
-                            R$
-                            {{ money($member->donations->sum('amount')) }}
+                        <td @class([
+                            'text-right font-semibold',
+                            'text-green-600' => $donation->is_confirmed,
+                            'text-orange-500' => !$donation->is_confirmed,
+                        ])
+                            title="{{ $donation->is_confirmed ? 'Doação confirmada' : 'Aguardando validação' }}">
+                            R$ {{ money($member->donations->sum('amount')) }}
                         </td>
+
                         <td class="py-2 text-right">
                             R$
                             {{ money($member->monthly_tithe) }}
-
-
                         </td>
+
                     </tr>
                 @empty
                     <tr>

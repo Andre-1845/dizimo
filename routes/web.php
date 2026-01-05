@@ -121,6 +121,16 @@ Route::middleware('auth', 'verified', 'user.status')->group(function () {
         ->name('dashboard.member.update-tithe')
         ->middleware('permission:edit-member');
 
+    Route::get('/meu-painel-antigo', [DashboardController::class, 'member'])
+        ->name('dashboard.member.old')
+        ->middleware([
+            'auth',
+            'verified',
+            'user.status',
+            'permission:view-dashboard-member'
+        ]);
+
+
     // **********   REPORTS ************ //
 
     Route::prefix('dashboard/dizimos')->middleware(['auth'])->group(function () {
@@ -248,11 +258,33 @@ Route::middleware('auth', 'verified', 'user.status')->group(function () {
     | Financeiro
     |--------------------------------------------------------------------------
     */
+
+Route::prefix('donations')->group(function () {
+
+    Route::get('/pendentes', [DonationController::class, 'pending'])
+        ->name('donations.pending')
+        ->middleware('permission:index-donation');
+
+    Route::patch('/{donation}/confirm', [DonationController::class, 'confirm'])
+        ->name('donations.confirm');
+});
+
 Route::resource('donations', DonationController::class)
     ->middleware('permission:index-donation');
 
+
 Route::resource('expenses', ExpenseController::class)
     ->middleware('permission:index-expense');
+
+// routes/web.php
+
+
+Route::get('/donations/pendentes', [DonationController::class, 'pending'])
+    ->name('donations.pending');
+
+Route::patch('/donations/{donation}/confirm', [DonationController::class, 'confirm'])
+    ->name('donations.confirm');
+
 
 /*
     |--------------------------------------------------------------------------
