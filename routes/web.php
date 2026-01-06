@@ -23,6 +23,7 @@ use App\Http\Controllers\{
 use App\Http\Controllers\MemberDonationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\SiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,11 @@ use Illuminate\Http\Request;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/', [SiteController::class, 'home'])
+    ->name('site.home');
+
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
