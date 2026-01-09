@@ -30,7 +30,8 @@
         },
 
         "files": [
-        "app/Helpers/money.php"
+        "app/Helpers/Money.php",
+        "app/Helpers/PhoneHelper.php"
     ]
     },
 

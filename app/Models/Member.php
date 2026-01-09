@@ -34,7 +34,15 @@ class Member extends Model
         return $query->where('active', true);
     }
 
+    public function setPhoneAttribute($value)
+    {
+        $this->attributes['phone'] = preg_replace('/\D/', '', $value);
+    }
 
+    public function getPhoneFormattedAttribute(): ?string
+    {
+        return format_phone($this->phone);
+    }
 
 
 

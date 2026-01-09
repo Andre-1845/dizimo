@@ -31,7 +31,7 @@ class ProfileUpdateRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore(Auth::id()),
             ],
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|min:10|max:15',
         ];
     }
 

@@ -1,7 +1,7 @@
 @extends('layouts.login')
 
 @section('content')
-    <h1 class="title-login">Cadastrar Novo Usuário</h1>
+    <h2 class="title-login">Cadastrar Novo Usuário</h2>
 
     <x-alert />
 
@@ -12,8 +12,8 @@
         <!-- Campo nome -->
         <div class="form-group-login">
             <label for="name" class="form-label-login">Nome</label>
-            <input type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Nome completo"
-                class="form-input-login" />
+            <input class="form-input-login" type="text" name="name" id="name" value="{{ old('name') }}"
+                placeholder="Nome completo" />
         </div>
 
         <!-- Campo e-mail -->
@@ -38,6 +38,7 @@
         <!-- Link para página de login e botão cadastrar novo usuário -->
         <div class="btn-group-login">
             <a href="{{ route('login') }}" class="link-login">Login</a>
+            <a href="{{ route('site.home') }}" class="link-login">HomePage</a>
             <button type="submit" class="btn-primary-md">Cadastrar</button>
         </div>
 

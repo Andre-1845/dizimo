@@ -13,7 +13,7 @@
 <body class="bg-login">
     <div class="card-login">
         <div class="logo-wrapper-login">
-            <a href="{{ route('home') }}">
+            <a href="{{ route('site.home') }}">
                 <img class="w-20" src="{{ asset('images/sarex.png') }}" alt="LOGO" />
             </a>
         </div>

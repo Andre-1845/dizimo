@@ -52,7 +52,7 @@
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Telefone: </span>
-                <span class="detail-content">{{ $member->phone ?? '—' }}</span>
+                <span class="detail-content">{{ $member->phone_formatted ?? '—' }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Status: </span>

@@ -11,12 +11,28 @@
             </div>
         @endauth --}}
 
+
         <nav class="sidebar-nav">
+
+            {{-- ================= SITE ================= --}}
+            @can('manage-site-content')
+                <a @class([
+                    'sidebar-link',
+                    'active' => request()->routeIs('admin.site.*'),
+                ]) href="{{ route('admin.site.index') }}">
+                    <span class="sidebar-icon">@include('components.icons.picture')</span>
+                    <span class="sidebar-text">Conteúdo do Site</span>
+                </a>
+            @endcan
+
 
             {{-- ================= DASHBOARDS ================= --}}
 
             @can('view-dashboard-admin')
-                <a @class(['sidebar-link', 'active' => $menu === 'dashboard']) href="{{ route('dashboard.index') }}">
+                <a @class([
+                    'sidebar-link',
+                    'active' => request()->routeIs('dashboard.index'),
+                ]) href="{{ route('dashboard.index') }}">
                     <span class="sidebar-icon">@include('components.icons.painel_icon')</span>
                     <span class="sidebar-text">Dashboard</span>
                 </a>

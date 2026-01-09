@@ -20,12 +20,17 @@
         <!-- Link para página de login e botão recuperar senha -->
         <div class="btn-group-login">
             <a href="{{ route('login') }}" class="link-login">Login</a>
+
             <button type="submit" class="btn-primary-md">Recuperar</button>
         </div>
 
         <!-- Criar Nova Conta -->
+
         <div class="mt-4 text-center">
             <a href="{{ route('register') }}" class="link-login">Criar nova conta!</a>
+        </div>
+        <div class="mt-4 text-center">
+            <a href="{{ route('site.home') }}" class="link-login">HomePage</a>
         </div>
 
     </form>

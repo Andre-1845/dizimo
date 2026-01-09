@@ -12,4 +12,13 @@ class SiteImage extends Model
         'caption',
         'order',
     ];
+
+    public function section()
+    {
+        return $this->belongsTo(
+            SiteSection::class,
+            'section_key',
+            'key'
+        );
+    }
 }

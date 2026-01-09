@@ -12,7 +12,8 @@ class SiteController extends Controller
     {
         // dd('entrou no SiteController');
         // Seções ativas ordenadas
-        $sections = SiteSection::where('is_active', true)
+        $sections = SiteSection::with('images')
+            ->where('is_active', true)
             ->orderBy('order')
             ->get()
             ->keyBy('key');
@@ -22,10 +23,13 @@ class SiteController extends Controller
             ->get()
             ->groupBy('section_key');
 
-        // Eventos ativos (agenda)
-        $events = SiteEvent::active()
+        // Eventos ativos e atuais (agenda)
+
+        $events = SiteEvent::where('is_active', true)
+            ->whereDate('event_date', '>=', now())
             ->orderBy('event_date')
             ->get();
+
 
         return view('site.home', compact(
             'sections',

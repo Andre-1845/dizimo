@@ -30,14 +30,12 @@
             <button type="submit" class="btn-danger">Acessar</button>
 
         </div>
-
         <div class="mt-4 text-center">
             <a href="{{ route('register') }}" class="link-login">Criar nova conta!</a>
         </div>
+        <div class="mt-4 text-center">
+            <a href="{{ route('site.home') }}" class="link-login">HomePage</a>
+        </div>
 
     </form>
-    <br>
-    {{-- <a href="{{ route('home') }}">Inicio</a><br><br> --}}
-    {{-- <a href="{{ route('password.request') }}">Esqueceu a senha ?</a><br><br>
-    Não é cadastrado ? <a href="{{ route('register') }}">Inscrever-se</a> --}}
 @endsection

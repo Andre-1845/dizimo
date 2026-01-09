@@ -1,29 +1,41 @@
 @extends('layouts.login')
 
 @section('content')
-    <h3>Nova Senha</h3>
+    <h3 class="title-login">Nova Senha</h3>
 
     <x-alert />
-    {{-- {{ dd($token) }} --}}
-    <form action="{{ route('password.update') }}" method="post">
+
+    <form class="form-group-login" action="{{ route('password.update') }}" method="post">
         @csrf
         @method('post')
 
         <input type="hidden" name="token" value="{{ $token }}">
 
-        <label for="email">Email: </label>
-        <input type="email" name="email" id="email" placeholder="Digite o email" value="{{ old('email', $email) }}"
-            readonly><br><br>
+        <!-- Campo e-mail -->
+        <div class="form-group-login">
+            <label for="email" class="form-label-login">Email: </label>
+            <input class="form-input-login" type="email" name="email" id="email" placeholder="Digite o email"
+                value="{{ old('email', $email) }}" readonly><br><br>
+        </div>
 
-        <label for="password">Senha: </label>
-        <input type="password" name="password" id="password" placeholder="Digite a senha"><br><br>
+        <!-- Campo senha -->
+        <div class="form-group-login">
+            <label for="password" class="form-label-login">Senha: </label>
+            <input class="form-input-login" type="password" name="password" id="password"
+                placeholder="Digite a senha"><br><br>
 
-        <label for="">Confirmar Senha: </label>
-        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Repita a Senha"><br><br>
-        {{-- {{ dd($token) }} --}}
-        <button type="submit">Cadastrar</button><br><br>
+            <!-- Campo confirmar senha -->
+            <div class="form-group-login">
+                <label class="form-label-login" for="password_confirmation">Confirmar Senha: </label>
+                <input class="form-input-login" type="password" name="password_confirmation" id="password_confirmation"
+                    placeholder="Repita a Senha"><br><br>
+            </div>
 
+            <div class="btn-group-login">
+
+                <a href="{{ route('login') }}">LOGIN</a>
+                <a href="{{ route('site.home') }}" class="link-login">HomePage</a>
+                <button class="btn-primary" type="submit">Cadastrar</button>
+            </div>
     </form>
-
-    <a href="{{ route('login') }}">LOGIN</a><br>
 @endsection

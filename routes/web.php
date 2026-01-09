@@ -1,8 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+
+/*
+|--------------------------------------------------------------------------
+| Controllers
+|--------------------------------------------------------------------------
+*/
 use App\Http\Controllers\{
-    HomeController,
     AuthController,
     ForgotPasswordController,
     DashboardController,
@@ -18,28 +25,30 @@ use App\Http\Controllers\{
     PaymentMethodController,
     MemberController,
     DonationController,
-    ExpenseController
+    ExpenseController,
+    SiteController
 };
+
 use App\Http\Controllers\MemberDonationController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Admin\{
+    SiteSectionController,
+    SiteEventController,
+    SiteImageController,
+    SiteSettingController
+};
 
 /*
 |--------------------------------------------------------------------------
-| Rotas Públicas
+| SITE PÚBLICO
 |--------------------------------------------------------------------------
 */
-
 
 Route::get('/', [SiteController::class, 'home'])
     ->name('site.home');
 
-// Route::get('/', [HomeController::class, 'index'])->name('home');
-
 /*
 |--------------------------------------------------------------------------
-| Autenticação
+| AUTENTICAÇÃO
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -51,7 +60,7 @@ Route::post('/register', [AuthController::class, 'store'])->name('register.store
 
 /*
 |--------------------------------------------------------------------------
-| Recuperação de Senha
+| RECUPERAÇÃO DE SENHA
 |--------------------------------------------------------------------------
 */
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
@@ -66,49 +75,70 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showReq
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])
     ->name('password.update');
 
-
-
 /*
 |--------------------------------------------------------------------------
-| Email Verification
+| VERIFICAÇÃO DE E-MAIL
 |--------------------------------------------------------------------------
 */
-
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})
+Route::get('/email/verify', fn() => view('auth.verify-email'))
     ->middleware('auth')
     ->name('verification.notice');
 
-
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill(); // dispara o evento Verified
-    return redirect('/login')->with('success', 'E-mail confirmado com sucesso! Agora você pode acessar o sistema.');
-})
-    ->middleware(['auth', 'signed'])
-    ->name('verification.verify');
-
+    $request->fulfill();
+    return redirect('/login')
+        ->with('success', 'E-mail confirmado com sucesso!');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('success', 'E-mail de verificação reenviado.');
-})
-    ->middleware(['auth', 'throttle:6,1'])
-    ->name('verification.send');
-
+    return back()->with('success', 'E-mail reenviado.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 /*
---------------------------------------------------------------------------
-| Área Autenticada
+|--------------------------------------------------------------------------
+| CMS DO SITE (ADMIN)
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth', 'verified', 'user.status')->group(function () {
+Route::middleware(['auth', 'verified', 'permission:manage-site-content'])
+    ->prefix('admin/site')
+    ->name('admin.site.')
+    ->group(function () {
+
+        Route::get('/', function () {
+            return view('admin.site.index');
+        })->name('index');
+
+        Route::resource('sections', SiteSectionController::class)
+            ->only(['index', 'edit', 'update']);
+
+        Route::resource('events', SiteEventController::class);
+
+        Route::get('settings', [SiteSettingController::class, 'edit'])
+            ->name('settings.edit');
+
+        Route::put('settings', [SiteSettingController::class, 'update'])
+            ->name('settings.update');
+
+        Route::get('sections/{section}/images', [SiteImageController::class, 'index'])
+            ->name('images.index');
+
+        Route::post('sections/{section}/images', [SiteImageController::class, 'store'])
+            ->name('images.store');
+
+        Route::delete('images/{image}', [SiteImageController::class, 'destroy'])
+            ->name('images.destroy');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| SISTEMA (USUÁRIOS AUTENTICADOS)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
 
     /*
-    |--------------------------------------------------------------------------
     | Dashboards
-    |--------------------------------------------------------------------------
     */
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard.index')
@@ -134,91 +164,57 @@ Route::middleware('auth', 'verified', 'user.status')->group(function () {
             'user.status',
             'permission:view-dashboard-member'
         ]);
-
-
-    // **********   REPORTS ************ //
-
-    Route::prefix('dashboard/dizimos')->middleware(['auth'])->group(function () {
-
-        Route::get('/pagaram', [DizimoReportController::class, 'paid'])
-            ->name('dizimos.paid');
-
-        Route::get('/pendentes', [DizimoReportController::class, 'pending'])
-            ->name('dizimos.pending');
-
-        Route::get('/anonimos', [DizimoReportController::class, 'anonymous'])
-            ->name('dizimos.anonymous');
-    });
-
-    Route::prefix('dashboard/dizimos/export')->middleware(['auth'])->group(function () {
-
-        Route::get('/pagaram/csv', [DizimoReportController::class, 'exportPaidCsv'])
-            ->name('dizimos.export.paid.csv');
-
-        Route::get('/pendentes/csv', [DizimoReportController::class, 'exportPendingCsv'])
-            ->name('dizimos.export.pending.csv');
-
-        Route::get('/anonimos/csv', [DizimoReportController::class, 'exportAnonymousCsv'])
-            ->name('dizimos.export.anonymous.csv');
-
-
-        Route::get('/pagaram/pdf', [DizimoReportController::class, 'exportPaidPdf'])
-            ->name('dizimos.export.paid.pdf');
-
-        Route::get('/pendentes/pdf', [DizimoReportController::class, 'exportPendingPdf'])
-            ->name('dizimos.export.pending.pdf');
-
-        Route::get('/anonimos/pdf', [DizimoReportController::class, 'exportAnonymousPdf'])
-            ->name('dizimos.export.anonymous.pdf');
-    });
-
-
-
     /*
-    |--------------------------------------------------------------------------
-    | Perfil
-    |--------------------------------------------------------------------------
+    | Relatórios
     */
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'show'])
-            ->name('profile.show')
-            ->middleware('permission:show-profile');
+    Route::prefix('dashboard/dizimos')->group(function () {
+        Route::get('pagaram', [DizimoReportController::class, 'paid'])->name('dizimos.paid');
+        Route::get('pendentes', [DizimoReportController::class, 'pending'])->name('dizimos.pending');
+        Route::get('anonimos', [DizimoReportController::class, 'anonymous'])->name('dizimos.anonymous');
+    });
 
-        Route::get('/edit', [ProfileController::class, 'edit'])
-            ->name('profile.edit')
-            ->middleware('permission:edit-profile');
+    Route::prefix('dashboard/dizimos/export')->group(function () {
+        Route::get('pagaram/csv', [DizimoReportController::class, 'exportPaidCsv'])->name('dizimos.export.paid.csv');
+        Route::get('pendentes/csv', [DizimoReportController::class, 'exportPendingCsv'])->name('dizimos.export.pending.csv');
+        Route::get('anonimos/csv', [DizimoReportController::class, 'exportAnonymousCsv'])->name('dizimos.export.anonymous.csv');
 
-        Route::put('/', [ProfileController::class, 'update'])
-            ->name('profile.update')
-            ->middleware('permission:edit-profile');
-
-        Route::get('/password', [ProfileController::class, 'editPassword'])
-            ->name('profile.password.edit')
-            ->middleware('permission:edit-profile-password');
-
-        Route::put('/password', [ProfileController::class, 'updatePassword'])
-            ->name('profile.password.update')
-            ->middleware('permission:edit-profile-password');
+        Route::get('pagaram/pdf', [DizimoReportController::class, 'exportPaidPdf'])->name('dizimos.export.paid.pdf');
+        Route::get('pendentes/pdf', [DizimoReportController::class, 'exportPendingPdf'])->name('dizimos.export.pending.pdf');
+        Route::get('anonimos/pdf', [DizimoReportController::class, 'exportAnonymousPdf'])->name('dizimos.export.anonymous.pdf');
     });
 
     /*
-    |--------------------------------------------------------------------------
-    | Administração de Usuários e Permissões
-    |--------------------------------------------------------------------------
+    | Financeiro
     */
-    Route::resource('users', UserController::class)
-        ->middleware('permission:index-user');
-    Route::get('/users/{user}/password', [UserController::class, 'editPassword'])
-        ->name('users.password.edit')
-        ->middleware('permission:edit-password-user');
+    Route::prefix('donations')->group(function () {
+        Route::get('pendentes', [DonationController::class, 'pending'])
+            ->name('donations.pending')
+            ->middleware('permission:index-donation');
 
-    Route::put('/users/{user}/password', [UserController::class, 'updatePassword'])
-        ->name('users.password.update')
-        ->middleware('permission:edit-password-user');
+        Route::patch('{donation}/confirm', [DonationController::class, 'confirm'])
+            ->name('donations.confirm')
+            ->middleware('permission:index-donation');
+    });
 
+    Route::resource('donations', DonationController::class)
+        ->middleware('permission:index-donation');
 
-    Route::resource('roles', RoleController::class)
-        ->middleware('permission:index-role');
+    Route::resource('expenses', ExpenseController::class)
+        ->middleware('permission:index-expense');
+
+    /*
+    | Cadastros
+    */
+    Route::resource('users', UserController::class)->middleware('permission:index-user');
+    Route::resource('roles', RoleController::class)->middleware('permission:index-role');
+    Route::resource('statuses', StatusController::class)->middleware('permission:index-user-status');
+    Route::resource('categories', CategoryController::class)->middleware('permission:index-category');
+    Route::resource('payment-methods', PaymentMethodController::class);
+    Route::resource('members', MemberController::class)->middleware('permission:index-member');
+
+    /*
+    | Permissoes
+    */
 
     Route::prefix('role-permissions')->group(function () {
         Route::get('/{role}', [RolePermissionController::class, 'index'])
@@ -233,74 +229,25 @@ Route::middleware('auth', 'verified', 'user.status')->group(function () {
             [RolePermissionController::class, 'toggle']
         )->name('role-permissions.toggle');
     });
+    /*
+    | Área do Membro
+    */
+    Route::prefix('meu-dizimo')->middleware('permission:view-dashboard-member')->group(function () {
+        Route::get('doacoes/create', [MemberDonationController::class, 'create'])
+            ->name('member.donation.create');
 
-
+        Route::post('doacoes', [MemberDonationController::class, 'store'])
+            ->name('member.donation.store');
+    });
 
     /*
-    |--------------------------------------------------------------------------
-    | Cadastros Gerais
-    |--------------------------------------------------------------------------
+    | Perfil
     */
-    Route::resource('statuses', StatusController::class)
-        ->middleware('permission:index-user-status');
-
-    Route::resource('categories', CategoryController::class)
-        ->middleware('permission:index-category');
-
-    Route::resource('payment-methods', PaymentMethodController::class);
-
-    /*
-    |--------------------------------------------------------------------------
-    | Membros
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('members', MemberController::class)
-        ->middleware('permission:index-member');
-});
-
-/*
-    |--------------------------------------------------------------------------
-    | Financeiro
-    |--------------------------------------------------------------------------
-    */
-
-Route::prefix('donations')->group(function () {
-
-    Route::get('/pendentes', [DonationController::class, 'pending'])
-        ->name('donations.pending')
-        ->middleware('permission:index-donation');
-
-    Route::patch('/{donation}/confirm', [DonationController::class, 'confirm'])
-        ->name('donations.confirm');
-});
-
-Route::resource('donations', DonationController::class)
-    ->middleware('permission:index-donation');
-
-
-Route::resource('expenses', ExpenseController::class)
-    ->middleware('permission:index-expense');
-
-// routes/web.php
-
-
-Route::get('/donations/pendentes', [DonationController::class, 'pending'])
-    ->name('donations.pending');
-
-Route::patch('/donations/{donation}/confirm', [DonationController::class, 'confirm'])
-    ->name('donations.confirm');
-
-
-/*
-    |--------------------------------------------------------------------------
-    | Área do Membro (doações próprias)
-    |--------------------------------------------------------------------------
-    */
-Route::prefix('meu-dizimo')->middleware('permission:view-dashboard-member')->group(function () {
-
-    Route::get('/doacoes/create', [MemberDonationController::class, 'create'])
-        ->name('member.donation.create');
-
-    Route::post('/doacoes', [MemberDonationController::class, 'store'])
-        ->name('member.donation.store');
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
+        Route::put('/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    });
 });

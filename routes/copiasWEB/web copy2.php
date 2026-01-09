@@ -13,6 +13,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\Member\MemberDonationController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDashboardController;
+use App\Http\Controllers\MemberDonationController as ControllersMemberDonationController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -80,10 +81,10 @@ Route::put('/dashboardMember', [MemberDashboardController::class, 'updateTithe']
     ->middleware('permission:update-tithe');
 
 Route::middleware(['auth', 'role:Membro'])->group(function () {
-    Route::get('/meu-dizimo/doacoes/create', [MemberDonationController::class, 'create'])
+    Route::get('/meu-dizimo/doacoes/create', [ControllersMemberDonationController::class, 'create'])
         ->name('member.create_donation');
 
-    Route::post('/meu-dizimo/doacoes', [MemberDonationController::class, 'store'])
+    Route::post('/meu-dizimo/doacoes', [ControllersMemberDonationController::class, 'store'])
         ->name('member.store_donation');
 });
 

@@ -20,8 +20,31 @@ class AuthController extends Controller
     //
     public function index()
     {
+        // Se já estiver logado, não mostra login
+        if (auth()->check()) {
+
+            // Admin
+            if (auth()->user()->can('view-dashboard-admin')) {
+                return redirect()->route('dashboard.index');
+            }
+
+            // Tesouraria / dízimo
+            if (auth()->user()->can('view-dashboard-dizimo')) {
+                return redirect()->route('dashboard.dizimo');
+            }
+
+            // Membro
+            if (auth()->user()->can('view-dashboard-member')) {
+                return redirect()->route('dashboard.member');
+            }
+
+            // Fallback seguro
+            return redirect()->route('dashboard.index');
+        }
+
         return view('auth.login');
     }
+
 
     // public function processlogin(LoginRequest $request)
     // {
@@ -85,7 +108,7 @@ class AuthController extends Controller
 
         Auth::logout();
 
-        return redirect()->route('login')->with('success', 'LOGOUT executado!!');
+        return redirect()->route('site.home')->with('success', 'LOGOUT executado!!');
     }
 
     public function create()

@@ -22,8 +22,16 @@
                         </svg>
                     </button>
 
+                    {{-- *** NAVBAR DO USUARIO *** --}}
+
                     <div id="dropdownContent" class="dropdown-content hidden">
+                        {{-- **** PERFIL **** --}}
                         <a href="{{ route('profile.show') }}" class="dropdown-item text-center">Perfil</a>
+
+                        {{-- **** HOME PAGE **** --}}
+                        <a href="{{ route('site.home') }}" class="dropdown-item text-center">Home Page</a>
+
+                        {{-- **** SAIR **** --}}
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item">

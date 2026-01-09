@@ -26,24 +26,40 @@
             </a>
 
             {{-- Menu --}}
-            <nav class="hidden md:flex gap-6 text-sm font-medium">
-                <a href="{{ route('site.home') }}" class="hover:text-blue-600">
-                    Início
-                </a>
-                <a href="#about" class="hover:text-blue-600">
-                    Sobre
-                </a>
-                <a href="#agenda" class="hover:text-blue-600">
-                    Agenda
-                </a>
-                <a href="#contact" class="hover:text-blue-600">
-                    Contato
-                </a>
+            <nav class="hidden md:flex gap-6 items-center">
 
-                {{-- Link para o sistema --}}
-                <a href="{{ route('login') }}" class="text-blue-600 hover:underline">
-                    Área do Membro
-                </a>
+                <a href="{{ route('site.home') }}">Início</a>
+                <a href="#about">Sobre</a>
+                <a href="#agenda">Agenda</a>
+                <a href="#grupoJovem">Grupo Jovem</a>
+                <a href="#contact">Contato</a>
+
+                {{-- VISITANTE --}}
+                @guest
+                    <a href="{{ route('register') }}" class="px-4 py-2 bg-blue-600 text-white rounded">
+                        Faça seu cadastro
+                    </a>
+
+                    <a href="{{ route('login') }}" class="text-blue-600 hover:underline">
+                        Login
+                    </a>
+                @endguest
+
+                {{-- USUÁRIO LOGADO --}}
+                @auth
+                    {{-- MEMBRO --}}
+                    @if (auth()->user()->member)
+                        <a href="{{ route('dashboard.member') }}" class="px-4 py-2 bg-green-600 text-white rounded">
+                            Meu Painel
+                        </a>
+                    @else
+                        {{-- ADMIN / OUTROS --}}
+                        <a href="{{ route('dashboard.index') }}" class="px-4 py-2 bg-gray-800 text-white rounded">
+                            Dashboard
+                        </a>
+                    @endif
+                @endauth
+
             </nav>
 
         </div>
