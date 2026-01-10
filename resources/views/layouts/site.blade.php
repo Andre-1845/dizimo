@@ -28,11 +28,19 @@
             {{-- Menu --}}
             <nav class="hidden md:flex gap-6 items-center">
 
-                <a href="{{ route('site.home') }}">Início</a>
-                <a href="#about">Sobre</a>
-                <a href="#agenda">Agenda</a>
-                <a href="#grupoJovem">Grupo Jovem</a>
-                <a href="#contact">Contato</a>
+                <a href="{{ route('site.home') }}" class="site-link">Início</a>
+                <a href="#about" class="site-link">Sobre</a>
+                <a href="#agenda" class="site-link">Agenda</a>
+                <a href="#horarios" class="site-link">Horários e Informações
+                </a>
+
+                <a href="https://www.instagram.com/grupocarloacutis_resende/" target="_blank" rel="noopener noreferrer"
+                    class="site-link">
+                    Grupo Jovem
+                </a>
+
+
+                <a href="#contact" class="site-link">Contato</a>
 
                 {{-- VISITANTE --}}
                 @guest
@@ -40,7 +48,7 @@
                         Faça seu cadastro
                     </a>
 
-                    <a href="{{ route('login') }}" class="text-blue-600 hover:underline">
+                    <a href="{{ route('login') }}" class="site-link">
                         Login
                     </a>
                 @endguest

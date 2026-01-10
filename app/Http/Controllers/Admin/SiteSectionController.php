@@ -31,9 +31,22 @@ class SiteSectionController extends Controller
         ]);
 
         $section->update($data);
+        $this->reindexOrder();
 
         return redirect()
             ->route('admin.site.sections.index')
             ->with('success', 'Seção atualizada com sucesso.');
+    }
+
+    private function reindexOrder(): void
+    {
+        SiteSection::orderBy('order')
+            ->get()
+            ->values()
+            ->each(function ($section, $index) {
+                $section->update([
+                    'order' => $index + 1
+                ]);
+            });
     }
 }

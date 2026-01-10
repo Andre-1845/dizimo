@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteActivity;
 use App\Models\SiteSection;
 use App\Models\SiteEvent;
 use App\Models\SiteImage;
@@ -30,11 +31,16 @@ class SiteController extends Controller
             ->orderBy('event_date')
             ->get();
 
+        $activities = SiteActivity::where('active', true)
+            ->orderBy('order')
+            ->get();
+
 
         return view('site.home', compact(
             'sections',
             'images',
-            'events'
+            'events',
+            'activities'
         ));
     }
 }

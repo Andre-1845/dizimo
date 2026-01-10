@@ -5,7 +5,16 @@
 @section('content')
     <div class="max-w-4xl mx-auto">
 
-        <h1 class="text-2xl font-bold mb-6">Configurações do Site</h1>
+        <h1 class="content-title my-6">Configurações do Site</h1>
+        <div class="flex justify-between items-center">
+            <div></div>
+            <div>
+                <a href="{{ route('admin.site.index') }}" class="btn-info">
+                    Voltar
+                </a>
+            </div>
+
+        </div>
 
         @if (session('success'))
             <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
@@ -19,49 +28,44 @@
 
             {{-- Nome da igreja --}}
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Nome da Igreja</label>
+                <label class="block form-label">Nome da Igreja</label>
                 <input type="text" name="church_name" value="{{ $settings['church_name'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2">
+                    class="w-full form-input">
             </div>
 
             {{-- Endereço --}}
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Endereço</label>
-                <input type="text" name="address" value="{{ $settings['address'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2">
+                <label class="block form-label">Endereço</label>
+                <input type="text" name="address" value="{{ $settings['address'] ?? '' }}" class="w-full form-input">
             </div>
 
             {{-- Telefone --}}
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Telefone</label>
-                <input type="text" name="phone" value="{{ $settings['phone'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2" id="phone">
+                <label class="block form-label">Telefone</label>
+                <input type="text" name="phone" value="{{ $settings['phone'] ?? '' }}" class="w-full form-input"
+                    id="phone">
             </div>
 
             {{-- Email --}}
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">E-mail</label>
-                <input type="email" name="email" value="{{ $settings['email'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2">
+                <label class="block form-label">E-mail</label>
+                <input type="email" name="email" value="{{ $settings['email'] ?? '' }}" class="w-full form-input">
             </div>
 
             {{-- Redes sociais --}}
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Instagram</label>
-                <input type="url" name="instagram" value="{{ $settings['instagram'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2">
+                <label class="block form-label">Instagram</label>
+                <input type="url" name="instagram" value="{{ $settings['instagram'] ?? '' }}" class="w-full form-input">
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Facebook</label>
-                <input type="url" name="facebook" value="{{ $settings['facebook'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2">
+                <label class="block form-label">Facebook</label>
+                <input type="url" name="facebook" value="{{ $settings['facebook'] ?? '' }}" class="w-full form-input">
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">YouTube</label>
-                <input type="url" name="youtube" value="{{ $settings['youtube'] ?? '' }}"
-                    class="w-full rounded border px-3 py-2">
+                <label class="block form-label">YouTube</label>
+                <input type="url" name="youtube" value="{{ $settings['youtube'] ?? '' }}" class="w-full form-input">
             </div>
 
 

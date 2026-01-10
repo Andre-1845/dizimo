@@ -34,7 +34,9 @@ use App\Http\Controllers\Admin\{
     SiteSectionController,
     SiteEventController,
     SiteImageController,
-    SiteSettingController
+    SiteSettingController,
+    SiteActivityController,
+    SitePersonController
 };
 
 /*
@@ -45,6 +47,8 @@ use App\Http\Controllers\Admin\{
 
 Route::get('/', [SiteController::class, 'home'])
     ->name('site.home');
+Route::get('/equipe', [TeamController::class, 'index'])
+    ->name('site.team');
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +113,17 @@ Route::middleware(['auth', 'verified', 'permission:manage-site-content'])
             return view('admin.site.index');
         })->name('index');
 
+        Route::resource(
+            'site-activities',
+            SiteActivityController::class
+        );
+
+        // Equipe da Igreja
+        Route::resource(
+            'people',
+            SitePersonController::class
+        );
+
         Route::resource('sections', SiteSectionController::class)
             ->only(['index', 'edit', 'update']);
 
@@ -129,6 +144,7 @@ Route::middleware(['auth', 'verified', 'permission:manage-site-content'])
         Route::delete('images/{image}', [SiteImageController::class, 'destroy'])
             ->name('images.destroy');
     });
+
 
 /*
 |--------------------------------------------------------------------------

@@ -1,24 +1,28 @@
 <div class="mb-4">
-    <label>Título</label>
+    <label class="form-label">Título</label>
     <input type="text" name="title" value="{{ old('title', $event->title ?? '') }}" class="form-input" required>
 </div>
 
 <div class="mb-4">
-    <label>Data</label>
+    <label class="form-label">Data</label>
     <input type="date" name="event_date"
         value="{{ old('event_date', isset($event) ? $event->event_date->format('Y-m-d') : '') }}" class="form-input"
         required>
 </div>
 
 <div class="mb-4">
-    <label>Hora</label>
+    <label class="form-label">Hora</label>
     <input type="time" name="time" value="{{ old('time', $event->time ?? '') }}" class="form-input">
 </div>
 
-<div class="mb-4">
-    <label>Descrição</label>
-    <textarea name="description" rows="4" class="form-textarea">{{ old('description', $event->description ?? '') }}</textarea>
+<div class="mb-4 ">
+    <label class="block font-medium mb-1 form-label">
+        Descrição
+    </label>
+
+    <textarea class="form-input" name="description" rows="4" class="form-textarea w-full">{{ old('description', $event->description ?? '') }}</textarea>
 </div>
+
 
 <div class="mb-4">
     <label>

@@ -4,33 +4,46 @@
 
 @section('content')
 
-    <h1 class="content-title">Agenda do Site</h1>
+    <h1 class="content-title my-6">Agenda do Site</h1>
+    <div class="flex justify-between mb-4">
+        <div>
+            <a href="{{ route('admin.site.index') }}" class="btn-info">
+                Voltar
+            </a>
+        </div>
 
-    <a href="{{ route('admin.site.events.create') }}" class="btn-primary mb-4">
-        Novo Evento
-    </a>
+        <div>
+            <a href="{{ route('admin.site.events.create') }}" class="btn-primary mb-4">
+                @include('components.icons.plus')
+                Novo Evento
+            </a>
+        </div>
+
+    </div>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Data</th>
-                <th>Título</th>
-                <th>Status</th>
-                <th></th>
+            <tr class="table-row-header ">
+                <th class="table-header center">Data</th>
+                <th class="table-header">Título</th>
+                <th class="table-header center">Status</th>
+                <th class="table-header center">Ações</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($events as $event)
-                <tr>
-                    <td>{{ $event->event_date->format('d/m/Y') }}</td>
-                    <td>{{ $event->title }}</td>
-                    <td>
+                <tr class="table-row-body">
+                    <td class="table-body text-center">{{ $event->event_date->format('d/m/Y') }}</td>
+                    <td class="table-body">{{ $event->title }}</td>
+                    <td class="table-body text-center">
                         {{ $event->is_active ? 'Ativo' : 'Inativo' }}
                     </td>
-                    <td class="text-right">
-                        <a href="{{ route('admin.site.events.edit', $event) }}" class="text-blue-600">
-                            Editar
-                        </a>
+                    <td class="table-actions">
+                        <div class="flex justify-center items-center">
+                            <a href="{{ route('admin.site.events.edit', $event) }}" class="btn-primary">
+                                Editar
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @endforeach

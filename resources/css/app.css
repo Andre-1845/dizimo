@@ -162,7 +162,6 @@
     @apply max-w-full px-1 sm:px-2 lg:px-4;
 }
 
-
     .content-header{
         @apply flex justify-between items-center;
     }
@@ -238,7 +237,7 @@
     }
 
     .table-actions {
-        @apply flex align-middle py-4 text-center space-x-1;
+        @apply  py-4 text-center space-x-1 border-b border-gray-400;
 
     }
     .table-link {
@@ -341,8 +340,8 @@
     .btn-info {
         @apply inline-flex items-center justify-center
             gap-1 px-3 h-10 leading-none align-middle
-            bg-cyan-500 text-white text-sm rounded
-            hover:bg-cyan-600 transition-colors cursor-pointer;
+            bg-gray-500 text-white text-sm rounded
+            hover:bg-gray-600 transition-colors cursor-pointer;
     }
 
     /* Botão warning */
@@ -460,6 +459,26 @@
     .sidebar.sidebar-expanded {
         transform: translateX(0);
     }
+}
+
+/* **** SITE *****/
+
+.site-link{
+    @apply text-sm font-semibold text-gray-700 hover:text-blue-600;
+}
+
+.card-config-site {
+    @apply block p-6 border rounded-lg shadow-sm
+           transition
+           hover:bg-blue-50 hover:border-blue-400 hover:shadow-lg;
+}
+
+
+.card-config-title {
+    @apply text-lg font-semibold mb-2;
+}
+.card-config-subtitle {
+    @apply text-sm text-gray-600;
 }
 
 }

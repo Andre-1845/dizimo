@@ -38,6 +38,7 @@
 
 
     {{-- BOAS-VINDAS --}}
+
     @if (isset($sections['welcome']))
         <section class="py-20 bg-white">
             <div class="max-w-4xl mx-auto px-6 text-center">
@@ -45,6 +46,10 @@
                 <h2 class="text-3xl md:text-4xl font-bold mb-6">
                     {{ $sections['welcome']->title ?? '' }}
                 </h2>
+
+                @if ($sections['welcome']->subtitle)
+                    <p class="text-lg text-gray-600 leading-relaxed">{{ $sections['welcome']->subtitle }}</p>
+                @endif
 
                 <p class="text-lg text-gray-600 leading-relaxed">
                     {{ $sections['welcome']->content ?? '' }}
@@ -56,6 +61,7 @@
 
     {{-- SOBRE --}}
     @if (isset($sections['about']))
+
         <section id="about" class="py-20 bg-gray-100">
             <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
 
@@ -64,6 +70,10 @@
                     <h2 class="text-3xl font-bold mb-4">
                         {{ $sections['about']->title ?? '' }}
                     </h2>
+
+                    @if ($sections['about']->subtitle)
+                        <p class=" mb-3 text-lg text-gray-600 leading-relaxed">{{ $sections['about']->subtitle }}</p>
+                    @endif
 
                     <p class="text-gray-700 leading-relaxed">
                         {{ $sections['about']->content ?? '' }}
@@ -83,6 +93,10 @@
     @if (isset($sections['gallery']))
         <section class="py-20 bg-gray-100">
 
+            <h2 class="text-3xl font-bold mx-6 mb-4">
+                {{ $sections['gallery']->title ?? '' }}
+            </h2>
+            {{-- Loop das imagens --}}
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 px-6">
                 @foreach ($sections['gallery']->images as $image)
                     <div class="aspect-square overflow-hidden rounded shadow">
@@ -91,7 +105,7 @@
                     </div>
                 @endforeach
             </div>
-
+            {{-- Loop das imagens --}}
         </section>
     @endif
 
@@ -102,9 +116,15 @@
         <section id="agenda" class="py-20 bg-white">
             <div class="max-w-6xl mx-auto px-6">
 
-                <h2 class="text-3xl font-bold text-center mb-12">
-                    Agenda
+                <h2 class="text-3xl font-bold text-center mb-4">
+                    {{ $sections['agenda']->title ?? '' }}
                 </h2>
+
+                @if (!empty($sections['agenda']->subtitle))
+                    <p class="text-center text-gray-600 mb-10">
+                        {{ $sections['agenda']->subtitle }}
+                    </p>
+                @endif
 
                 <div class="grid gap-8 md:grid-cols-3">
                     @foreach ($events as $event)
@@ -132,6 +152,75 @@
         </section>
     @endif
 
+    {{-- HORARIOS --}}
+    @if ($sections['activities']->is_active ?? false)
+        <section id="horarios" class="py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-6">
+
+                <h2 class="text-3xl font-bold text-center mb-4">
+                    {{ $sections['activities']->title ?? '' }}
+                </h2>
+
+                @if (!empty($sections['activities']->subtitle))
+                    <p class="text-center text-gray-600 mb-10">
+                        {{ $sections['activities']->subtitle }}
+                    </p>
+                @endif
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 rounded-lg">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                    Atividade
+                                </th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                    Dia
+                                </th>
+                                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                    Horário
+                                </th>
+                                <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
+                                    Contato
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="divide-y">
+                            @foreach ($activities as $activity)
+                                <tr>
+                                    <td class="px-4 py-3 font-medium">
+                                        {{ $activity->name }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        {{ $activity->day }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        {{ $activity->time }}
+                                    </td>
+                                    <td class="px-4 py-3 text-center space-x-2">
+                                        @if ($activity->schedule_link)
+                                            <a href="{{ url($activity->schedule_link) }}"
+                                                class="text-blue-600 hover:underline">
+                                                Agendar
+                                            </a>
+                                        @endif
+
+                                        @if ($activity->email)
+                                            <a href="mailto:{{ $activity->email }}" class="text-blue-600 hover:underline">
+                                                E-mail
+                                            </a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </section>
+    @endif
 
     {{-- CONTATO --}}
     @if (isset($sections['contact']))
