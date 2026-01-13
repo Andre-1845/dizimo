@@ -78,6 +78,10 @@
                     <p class="text-gray-700 leading-relaxed">
                         {{ $sections['about']->content ?? '' }}
                     </p>
+
+                    <a href="{{ route('site.team') }}" class="inline-block mt-6 text-blue-600 hover:underline font-medium">
+                        Conheça nossa equipe
+                    </a>
                 </div>
 
                 {{-- Imagem --}}
@@ -197,20 +201,33 @@
                                     <td class="px-4 py-3">
                                         {{ $activity->time }}
                                     </td>
-                                    <td class="px-4 py-3 text-center space-x-2">
-                                        @if ($activity->schedule_link)
-                                            <a href="{{ url($activity->schedule_link) }}"
-                                                class="text-blue-600 hover:underline">
-                                                Agendar
-                                            </a>
-                                        @endif
+                                    <td class="px-4 py-3 text-center">
+                                        <div class="flex flex-col items-center gap-1 text-sm">
 
-                                        @if ($activity->email)
-                                            <a href="mailto:{{ $activity->email }}" class="text-blue-600 hover:underline">
-                                                E-mail
-                                            </a>
-                                        @endif
+                                            @if (!empty($activity->schedule_link))
+                                                <a href="{{ url($activity->schedule_link) }}"
+                                                    class="text-blue-600 hover:underline">
+                                                    Agendar
+                                                </a>
+                                            @endif
+
+                                            @if (!empty($activity->email))
+                                                <a href="mailto:{{ $activity->email }}"
+                                                    class="text-blue-600 hover:underline">
+                                                    {{ $activity->email }}
+                                                </a>
+                                            @endif
+
+                                            @if (!empty($activity->phone))
+                                                <a href="tel:{{ preg_replace('/\D/', '', $activity->phone) }}"
+                                                    class="text-blue-600 hover:underline">
+                                                    {{ format_phone($activity->phone) }}
+                                                </a>
+                                            @endif
+
+                                        </div>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -221,6 +238,32 @@
             </div>
         </section>
     @endif
+
+    {{-- AVISOS --}}
+    @if ($notices->count())
+        <section id="avisos" class="py-12 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-2xl font-semibold mb-6 text-center">
+                    Avisos da Igreja
+                </h2>
+
+                <div class="space-y-6">
+                    @foreach ($notices as $notice)
+                        <div class="bg-white border rounded p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold mb-2">
+                                {{ $notice->title }}
+                            </h3>
+
+                            <p class="text-gray-700 whitespace-pre-line">
+                                {{ $notice->content }}
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
 
     {{-- CONTATO --}}
     @if (isset($sections['contact']))

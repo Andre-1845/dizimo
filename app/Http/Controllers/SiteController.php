@@ -6,6 +6,7 @@ use App\Models\SiteActivity;
 use App\Models\SiteSection;
 use App\Models\SiteEvent;
 use App\Models\SiteImage;
+use App\Models\SiteNotice;
 
 class SiteController extends Controller
 {
@@ -35,12 +36,18 @@ class SiteController extends Controller
             ->orderBy('order')
             ->get();
 
+        $notices = SiteNotice::visible()
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+
 
         return view('site.home', compact(
             'sections',
             'images',
             'events',
-            'activities'
+            'activities',
+            'notices',
         ));
     }
 }

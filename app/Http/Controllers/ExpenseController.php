@@ -10,27 +10,15 @@ use App\Models\PaymentMethod;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ExpenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-    // public function index()
-    // {
-    //     $expenses = Expense::with(['category', 'paymentMethod'])
-    //         ->orderByDesc('expense_date')
-    //         ->paginate(10);
-
-    //     return view('expenses.index', [
-    //         'expenses' => $expenses,
-    //         'menu' => 'expenses',
-    //     ]);
-    // }
 
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Expense::class);
+
         $users = User::whereHas('expenses')
             ->orderBy('name')
             ->get();
@@ -138,6 +126,8 @@ class ExpenseController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Expense::class);
+
         return view('expenses.create', [
             'menu' => 'expenses',
             'categories' => Category::where('type', 'expense')->orderBy('name')->get(),
@@ -151,6 +141,8 @@ class ExpenseController extends Controller
 
     public function store(ExpenseRequest $request)
     {
+        $this->authorize('create', Expense::class);
+
         $data = $request->validated();
 
         $data['user_id'] = Auth::id();
@@ -174,6 +166,8 @@ class ExpenseController extends Controller
 
     public function edit(Expense $expense)
     {
+        $this->authorize('update', $expense);
+
         return view('expenses.edit', [
             'expense' => $expense,
             'menu' => 'expenses',
@@ -187,9 +181,16 @@ class ExpenseController extends Controller
      */
     public function update(ExpenseRequest $request, Expense $expense)
     {
+        $this->authorize('update', $expense);
+
         $data = $request->validated();
 
         $data['user_id'] = Auth::id();
+
+        // Apaga comprovante anterior quando enviado um novo
+        if ($request->hasFile('receipt') && $expense->receipt_path) {
+            Storage::disk('public')->delete($expense->receipt_path);
+        }
 
         // Upload do comprovante
         if ($request->hasFile('receipt')) {
@@ -209,6 +210,8 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
+        $this->authorize('delete', $expense);
+
         $expense->delete();
 
         return redirect()
@@ -223,6 +226,8 @@ class ExpenseController extends Controller
     public function show(Expense $expense)
     {
         //
+        $this->authorize('view', $expense);
+
         return view('expenses.show', ['expense' => $expense, 'menu' => 'expenses']);
     }
 }

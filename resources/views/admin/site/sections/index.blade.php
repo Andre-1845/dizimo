@@ -19,6 +19,7 @@
                 </a>
             </div>
         </div>
+        <x-alert />
     </div>
 
     {{-- Tabela --}}
@@ -53,15 +54,9 @@
 
                         <td class="table-body text-center">
                             @if ($section->is_active)
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                                    Ativa
-                                </span>
+                                <x-badge type="active">Ativa</x-badge>
                             @else
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
-                                    Inativa
-                                </span>
+                                <x-badge type="inactive">Inativa</x-badge>
                             @endif
                         </td>
 

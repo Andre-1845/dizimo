@@ -34,6 +34,31 @@
                 </p>
             </a>
 
+            {{-- Horarios e informacoes --}}
+            <a href="{{ route('admin.site.site-activities.index') }}" class="card-config-site">
+                <h2 class="card-config-title">Horários e Informações</h2>
+                <p class="card-config-subtitle">
+                    Cadastrar e editar atividades, horários e informações exibidas no site.
+                </p>
+            </a>
+
+            {{-- Equipe --}}
+            <a href="{{ route('admin.site.people.index') }}" class="card-config-site">
+                <h2 class="card-config-title">Equipe</h2>
+                <p class="card-config-subtitle">
+                    Cadastrar e editar a equipe exibida no site.
+                </p>
+            </a>
+
+            {{-- Avisos da Igreja --}}
+            <a href="{{ route('admin.site.notices.index') }}" class="card-config-site">
+                <h2 class="card-config-title">Avisos</h2>
+                <p class="card-config-subtitle">
+                    Cadastrar e editar avisos exibidos no site.
+                </p>
+            </a>
+
+
         </div>
     </div>
 @endsection

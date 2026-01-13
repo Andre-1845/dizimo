@@ -10,6 +10,8 @@ class SiteSectionController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', SiteSection::class);
+
         $sections = SiteSection::orderBy('order')->get();
 
         return view('admin.site.sections.index', compact('sections') + ['menu' => 'site']);
@@ -17,11 +19,15 @@ class SiteSectionController extends Controller
 
     public function edit(SiteSection $section)
     {
+        $this->authorize('update', $section);
+
         return view('admin.site.sections.edit', compact('section'));
     }
 
     public function update(Request $request, SiteSection $section)
     {
+        $this->authorize('update', $section);
+
         $data = $request->validate([
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',

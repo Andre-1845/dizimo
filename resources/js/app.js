@@ -1,9 +1,14 @@
 import "./bootstrap";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css";
 
 Chart.register(ChartDataLabels);
 window.Chart = Chart;
+
+/* ******   CROPPER JS ********** */
+window.Cropper = Cropper;
 
 /* =====================================================
    DROPDOWN USUÁRIO

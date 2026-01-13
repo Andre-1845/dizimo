@@ -17,6 +17,9 @@ class DonationController extends Controller
 {
     public function index(Request $request)
     {
+
+        $this->authorize('viewAny', Donation::class);
+
         $registrars = User::whereDoesntHave('roles', fn($q) => $q->where('name', 'Membro'))
             // ->whereHas('donations')
             ->orderBy('name')
@@ -154,6 +157,9 @@ class DonationController extends Controller
 
     public function create()
     {
+
+        $this->authorize('create', Donation::class);
+
         return view('donations.create', [
             'menu' => 'donations',
             'members' => Member::orderBy('name')->get(),
@@ -164,6 +170,9 @@ class DonationController extends Controller
 
     public function store(DonationRequest $request)
     {
+
+        $this->authorize('create', Donation::class);
+
         $data = $request->validated();
 
         // Busca explícita do membro (se houver)
@@ -192,6 +201,7 @@ class DonationController extends Controller
             'donation_date'     => $data['donation_date'],
             'notes'             => $data['notes'] ?? null,
             'receipt_path'      => $receiptPath,
+            'is_confirmed' => false,
         ]);
 
         return redirect()
@@ -206,6 +216,9 @@ class DonationController extends Controller
     public function show(Donation $donation)
     {
         //
+
+        $this->authorize('view', $donation);
+
         return view('donations.show', ['donation' => $donation, 'menu' => 'donations']);
     }
     /**
@@ -214,6 +227,8 @@ class DonationController extends Controller
     public function edit(Donation $donation)
     {
         //
+        $this->authorize('update', $donation);
+
         return view('donations.edit', [
             'menu' => 'donations',
             'donation' => $donation,
@@ -229,6 +244,8 @@ class DonationController extends Controller
 
     public function update(DonationRequest $request, Donation $donation)
     {
+        $this->authorize('update', $donation);
+
         $data = $request->validated();
 
         // Resolve o membro (se houver)
@@ -264,6 +281,9 @@ class DonationController extends Controller
      */
     public function destroy(Donation $donation)
     {
+
+        $this->authorize('delete', $donation);
+
         $donation->delete();
 
         return redirect()
@@ -275,6 +295,8 @@ class DonationController extends Controller
 
     public function pending()
     {
+        $this->authorize('viewAny', Donation::class);
+
         $donations = Donation::where('is_confirmed', false)
             ->with(['member', 'category', 'paymentMethod'])
             ->orderBy('donation_date', 'asc')
@@ -285,6 +307,8 @@ class DonationController extends Controller
 
     public function confirm(Donation $donation)
     {
+        $this->authorize('confirm', $donation);
+
         if ($donation->is_confirmed) {
             return back()->with('warning', 'Esta doação já foi confirmada.');
         }
@@ -292,7 +316,7 @@ class DonationController extends Controller
         $donation->update([
             'is_confirmed' => true,
             'confirmed_at' => now(),
-            'confirmed_by' => auth()->id(),
+            'confirmed_by' => Auth::id(),
         ]);
 
         return back()->with('success', 'Doação confirmada com sucesso.');

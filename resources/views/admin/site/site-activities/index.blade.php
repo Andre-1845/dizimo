@@ -9,6 +9,8 @@
         <p class="text-gray-500">Gerencie missas, confissões e atividades semanais</p>
     </div>
 
+    <x-alert />
+
     <div class="flex justify-between mb-4">
         <div>
             <a href="{{ route('admin.site.index') }}" class="btn-info">
@@ -44,9 +46,9 @@
                         <td class="table-body">{{ $activity->time }}</td>
                         <td class="table-body text-center">
                             @if ($activity->active)
-                                <span class="text-green-600">Ativo</span>
+                                <x-badge type="active">Ativo</x-badge>
                             @else
-                                <span class="text-gray-500">Inativo</span>
+                                <x-badge type="inactive">Inativo</x-badge>
                             @endif
                         </td>
                         <td class="table-actions">
@@ -76,5 +78,6 @@
             </tbody>
         </table>
     </div>
+
 
 @endsection

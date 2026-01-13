@@ -90,8 +90,12 @@
                         <tr class="table-row-body">
                             <td class="table-body">{{ $member->name }}</td>
                             <td class="table-body">{{ $member->user->email ?? '—' }}</td>
-                            <td class="table-body"><span class="{{ $member->active ? 'text-green-600' : 'text-red-600' }}">
-                                    {{ $member->active ? 'Ativo' : 'Inativo' }}
+                            <td class="table-body">
+                                @if ($member->active)
+                                    <x-badge type="active">Ativo</x-badge>
+                                @else
+                                    <x-badge type="inactive">Inativo</x-badge>
+                                @endif
                             </td>
                             <td class="table-body text-right">{{ $member->monthly_tithe ?? '—' }}</td>
                             <x-table-actions-icons :show="route('members.show', $member)" :edit="route('members.edit', $member)" :delete="route('members.destroy', $member)"

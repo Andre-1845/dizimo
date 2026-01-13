@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -29,9 +29,9 @@
             <nav class="hidden md:flex gap-6 items-center">
 
                 <a href="{{ route('site.home') }}" class="site-link">Início</a>
-                <a href="#about" class="site-link">Sobre</a>
-                <a href="#agenda" class="site-link">Agenda</a>
-                <a href="#horarios" class="site-link">Horários e Informações
+                <a href="{{ route('site.home') }}#about" class="site-link">Sobre</a>
+                <a href="{{ route('site.home') }}#agenda" class="site-link">Agenda</a>
+                <a href="{{ route('site.home') }}#horarios" class="site-link">Horários e Informações
                 </a>
 
                 <a href="https://www.instagram.com/grupocarloacutis_resende/" target="_blank" rel="noopener noreferrer"
@@ -40,7 +40,8 @@
                 </a>
 
 
-                <a href="#contact" class="site-link">Contato</a>
+                <a href="{{ route('site.home') }}#avisos" class="site-link">Avisos</a>
+                <a href="{{ route('site.home') }}#contact" class="site-link">Contato</a>
 
                 {{-- VISITANTE --}}
                 @guest

@@ -10,6 +10,8 @@ class SiteEventController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', SiteEvent::class);
+
         $events = SiteEvent::orderBy('event_date')
             ->paginate(10);
 
@@ -18,11 +20,15 @@ class SiteEventController extends Controller
 
     public function create()
     {
+        $this->authorize('create', SiteEvent::class);
+
         return view('admin.site.events.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', SiteEvent::class);
+
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'event_date'  => 'required|date',
@@ -40,11 +46,15 @@ class SiteEventController extends Controller
 
     public function edit(SiteEvent $event)
     {
+        $this->authorize('update', $event);
+
         return view('admin.site.events.edit', compact('event'));
     }
 
     public function update(Request $request, SiteEvent $event)
     {
+        $this->authorize('update', $event);
+
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'event_date'  => 'required|date',
@@ -62,6 +72,8 @@ class SiteEventController extends Controller
 
     public function destroy(SiteEvent $event)
     {
+        $this->authorize('delete', $event);
+
         $event->delete();
 
         return redirect()

@@ -11,6 +11,7 @@ class SiteActivity extends Model
         'day',
         'time',
         'email',
+        'phone',
         'schedule_link',
         'order',
         'active',

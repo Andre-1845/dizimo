@@ -10,18 +10,24 @@ class SiteActivityController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', SiteActivity::class);
+
         $activities = SiteActivity::orderBy('order')->get();
         return view('admin.site.site-activities.index', compact('activities'));
     }
 
     public function create()
     {
+        $this->authorize('create', SiteActivity::class);
+
         $data['order'] = SiteActivity::max('order') + 1;
         return view('admin.site.site-activities.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', SiteActivity::class);
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'day' => 'required|string|max:100',
@@ -52,16 +58,21 @@ class SiteActivityController extends Controller
 
     public function edit(SiteActivity $siteActivity)
     {
+        $this->authorize('update', $siteActivity);
+
         return view('admin.site.site-activities.edit', compact('siteActivity'));
     }
 
     public function update(Request $request, SiteActivity $siteActivity)
     {
+        $this->authorize('update', $siteActivity);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'day'  => 'required|string|max:100',
             'time' => 'required|string|max:100',
             'email' => 'nullable|email',
+            'phone' => 'nullable|string|max:30',
             'schedule_link' => 'nullable|string|max:255',
             'order' => 'nullable|integer',
         ]);
@@ -82,6 +93,8 @@ class SiteActivityController extends Controller
 
     public function destroy(SiteActivity $siteActivity)
     {
+        $this->authorize('delete', $siteActivity);
+
         $siteActivity->delete();
         // Reorganiza a ordem após exclusão
         $this->reindexOrder();

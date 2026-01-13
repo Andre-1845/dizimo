@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Storage;
 
 class SiteImageController extends Controller
 {
-    public function index(SiteSection $section)
+    public function index(SiteImage $section)
     {
+        $this->authorize('view', SiteImage::class);
+
         $images = SiteImage::where('section_key', $section->key)
             ->orderBy('order')
             ->get();
@@ -21,6 +23,7 @@ class SiteImageController extends Controller
 
     public function store(Request $request, SiteSection $section)
     {
+        $this->authorize('create', SiteImage::class);
         $data = $request->validate([
             'image'   => 'required|image|max:2048',
             'caption' => 'nullable|string|max:255',
@@ -40,6 +43,8 @@ class SiteImageController extends Controller
 
     public function destroy(SiteImage $image)
     {
+        $this->authorize('delete', $image);
+
         Storage::disk('public')->delete($image->image_path);
         $image->delete();
 

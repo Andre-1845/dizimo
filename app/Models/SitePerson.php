@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\StringHelper;
 use Illuminate\Database\Eloquent\Model;
 
 class SitePerson extends Model
@@ -20,4 +21,14 @@ class SitePerson extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($person) {
+            if (filled($person->name)) {
+                $person->name = StringHelper::formatName($person->name);
+                $person->role = ucfirst(mb_strtolower($person->role));
+            }
+        });
+    }
 }

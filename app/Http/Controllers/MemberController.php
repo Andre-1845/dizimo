@@ -14,6 +14,8 @@ class MemberController extends Controller
      */
     public function index(Request $request)
     {
+
+        $this->authorize('viewAny', Member::class);
         $members = Member::with('user')
 
             // Nome do membro
@@ -111,6 +113,8 @@ class MemberController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Member::class);
+
         return view('members.create', [
             'menu' => 'members',
         ]);
@@ -120,6 +124,8 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Member::class);
+
         $data = $request->all();
         $data['active'] = $request->has('active');
 
@@ -146,6 +152,8 @@ class MemberController extends Controller
     //
     public function show(Member $member)
     {
+        $this->authorize('view', $member);
+
         $member->load('user');
 
         return view('members.show', [
@@ -161,6 +169,8 @@ class MemberController extends Controller
 
     public function edit(Member $member)
     {
+        $this->authorize('update', $member);
+
         $member->load('user');
         return view('members.edit', [
             'member' => $member,
@@ -175,6 +185,8 @@ class MemberController extends Controller
 
     public function update(Request $request, Member $member)
     {
+        $this->authorize('update', $member);
+
         $data = $request->all();
         $data['active'] = $request->has('active');
 
@@ -233,6 +245,8 @@ class MemberController extends Controller
 
     public function destroy(Member $member)
     {
+        $this->authorize('delete', $member);
+
         $member->delete();
 
         return redirect()

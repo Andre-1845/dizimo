@@ -36,8 +36,10 @@ use App\Http\Controllers\Admin\{
     SiteImageController,
     SiteSettingController,
     SiteActivityController,
+    SiteNoticeController,
     SitePersonController
 };
+use App\Http\Controllers\Site\TeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,27 +115,46 @@ Route::middleware(['auth', 'verified', 'permission:manage-site-content'])
             return view('admin.site.index');
         })->name('index');
 
+        // Atividades do site (horarios)
         Route::resource(
             'site-activities',
             SiteActivityController::class
-        );
+        )
+            ->middleware('permission:manage-site-activities');;
 
         // Equipe da Igreja
         Route::resource(
             'people',
             SitePersonController::class
-        );
+        )
+            ->middleware('permission:manage-site-notices');
+
+        // Avisos do site
+        Route::resource(
+            'notices',
+            SiteNoticeController::class
+        )
+            ->middleware('permission:manage-site-notices');
+
+        Route::resource(
+            'events',
+            SiteEventController::class
+        )
+            ->middleware('permission:manage-site-events');
+
 
         Route::resource('sections', SiteSectionController::class)
-            ->only(['index', 'edit', 'update']);
+            ->only(['index', 'edit', 'update'])
+            ->middleware('permission:manage-site-sections');;
 
-        Route::resource('events', SiteEventController::class);
 
         Route::get('settings', [SiteSettingController::class, 'edit'])
-            ->name('settings.edit');
+            ->name('settings.edit')
+            ->middleware('permission:manage-site-settings');;
 
         Route::put('settings', [SiteSettingController::class, 'update'])
-            ->name('settings.update');
+            ->name('settings.update')
+            ->middleware('permission:manage-site-settings');;
 
         Route::get('sections/{section}/images', [SiteImageController::class, 'index'])
             ->name('images.index');
@@ -213,18 +234,52 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
     });
 
     Route::resource('donations', DonationController::class)
-        ->middleware('permission:index-donation');
+        ->middleware([
+            'index'   => 'permission:index-donation',
+            'show'    => 'permission:show-donation',
+            'create'  => 'permission:create-donation',
+            'store'   => 'permission:create-donation',
+            'edit'    => 'permission:edit-donation',
+            'update'  => 'permission:edit-donation',
+            'destroy' => 'permission:destroy-donation',
+        ]);
 
     Route::resource('expenses', ExpenseController::class)
-        ->middleware('permission:index-expense');
+        ->middleware([
+            'index'   => 'permission:index-expense',
+            'show'    => 'permission:show-expense',
+            'create'  => 'permission:create-expense',
+            'store'   => 'permission:create-expense',
+            'edit'    => 'permission:edit-expense',
+            'update'  => 'permission:edit-expense',
+            'destroy' => 'permission:destroy-expense',
+        ]);
 
     /*
     | Cadastros
     */
-    Route::resource('users', UserController::class)->middleware('permission:index-user');
+    Route::resource('users', UserController::class)
+        ->middleware([
+            'index'   => 'permission:index-user',
+            'show'    => 'permission:show-user',
+            'create'  => 'permission:create-user',
+            'store'   => 'permission:create-user',
+            'edit'    => 'permission:edit-user',
+            'update'  => 'permission:edit-user',
+            'destroy' => 'permission:destroy-user',
+        ]);
     Route::resource('roles', RoleController::class)->middleware('permission:index-role');
     Route::resource('statuses', StatusController::class)->middleware('permission:index-user-status');
-    Route::resource('categories', CategoryController::class)->middleware('permission:index-category');
+    Route::resource('categories', CategoryController::class)
+        ->middleware([
+            'index'   => 'permission:index-category',
+            'show'    => 'permission:show-category',
+            'create'  => 'permission:create-category',
+            'store'   => 'permission:create-category',
+            'edit'    => 'permission:edit-category',
+            'update'  => 'permission:edit-category',
+            'destroy' => 'permission:destroy-category',
+        ]);
     Route::resource('payment-methods', PaymentMethodController::class);
     Route::resource('members', MemberController::class)->middleware('permission:index-member');
 
@@ -243,7 +298,8 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
         Route::put(
             '/{role}/{permission}',
             [RolePermissionController::class, 'toggle']
-        )->name('role-permissions.toggle');
+        )->name('role-permissions.toggle')
+            ->middleware('permission:update-role-permission');
     });
     /*
     | Área do Membro

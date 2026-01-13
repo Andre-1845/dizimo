@@ -2,10 +2,10 @@
 
 if (!function_exists('format_phone')) {
 
-    function format_phone(?string $phone): ?string
+    function format_phone(?string $phone): string
     {
-        if (!$phone) {
-            return null;
+        if (empty($phone)) {
+            return '';
         }
 
         // Remove tudo que não for número
@@ -14,7 +14,7 @@ if (!function_exists('format_phone')) {
         // Celular (11 dígitos)
         if (strlen($numbers) === 11) {
             return sprintf(
-                '(%s)%s-%s',
+                '(%s) %s-%s',
                 substr($numbers, 0, 2),
                 substr($numbers, 2, 5),
                 substr($numbers, 7)
@@ -24,14 +24,14 @@ if (!function_exists('format_phone')) {
         // Fixo (10 dígitos)
         if (strlen($numbers) === 10) {
             return sprintf(
-                '(%s)%s-%s',
+                '(%s) %s-%s',
                 substr($numbers, 0, 2),
                 substr($numbers, 2, 4),
                 substr($numbers, 6)
             );
         }
 
-        // Caso fora do padrão
+        // Fora do padrão, retorna como veio
         return $phone;
     }
 }

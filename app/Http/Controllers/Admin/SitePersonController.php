@@ -14,6 +14,8 @@ class SitePersonController extends Controller
      */
     public function index()
     {
+        $this->authorize('view', SitePerson::class);
+
         $people = SitePerson::orderBy('order')->get();
 
         return view('admin.site.people.index', compact('people'));
@@ -24,6 +26,8 @@ class SitePersonController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', SitePerson::class);
+
         return view('admin.site.people.create');
     }
 
@@ -32,6 +36,8 @@ class SitePersonController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', SitePerson::class);
+
         $data = $request->validate([
             'name'        => 'required|string|max:255',
             'role'        => 'required|string|max:255',
@@ -57,6 +63,7 @@ class SitePersonController extends Controller
         unset($data['photo_cropped']);
 
         SitePerson::create($data);
+        $this->reindexOrder();
 
         return redirect()
             ->route('admin.site.people.index')
@@ -68,6 +75,8 @@ class SitePersonController extends Controller
      */
     public function edit(SitePerson $person)
     {
+        $this->authorize('update', $person);
+
         return view('admin.site.people.edit', compact('person'));
     }
 
@@ -76,6 +85,8 @@ class SitePersonController extends Controller
      */
     public function update(Request $request, SitePerson $person)
     {
+        $this->authorize('update', $person);
+
         $data = $request->validate([
             'name'        => 'required|string|max:255',
             'role'        => 'required|string|max:255',
@@ -100,6 +111,7 @@ class SitePersonController extends Controller
         unset($data['photo_cropped']);
 
         $person->update($data);
+        $this->reindexOrder();
 
         return redirect()
             ->route('admin.site.people.index')
@@ -111,6 +123,8 @@ class SitePersonController extends Controller
      */
     public function destroy(SitePerson $person)
     {
+        $this->authorize('delete', $person);
+
         if ($person->photo_path && Storage::disk('public')->exists($person->photo_path)) {
             Storage::disk('public')->delete($person->photo_path);
         }

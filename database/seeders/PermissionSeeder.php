@@ -145,8 +145,14 @@ class PermissionSeeder extends Seeder
             [
                 'group' => 'Site',
                 'items' => [
-                    ['name' => 'manage-site-content
-',               'display' => 'Editar site'],
+                    [
+                        ['name' => 'view-site-admin',      'display' => 'Acessar CMS do site'],
+                        ['name' => 'edit-site-sections',   'display' => 'Editar seções do site'],
+                        ['name' => 'manage-site-gallery',  'display' => 'Gerenciar galeria'],
+                        ['name' => 'manage-site-notices',  'display' => 'Gerenciar avisos'],
+                        ['name' => 'manage-site-activities', 'display' => 'Gerenciar horários'],
+                        ['name' => 'manage-site-events', 'display' => 'Gerenciar eventos(agenda)'],
+                    ],
                 ],
             ],
 
