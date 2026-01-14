@@ -11,63 +11,44 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // ===== ROLES =====
-        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
-        $admin      = Role::firstOrCreate(['name' => 'Admin']);
-        $tesoureiro = Role::firstOrCreate(['name' => 'Tesoureiro']);
-        $secretario = Role::firstOrCreate(['name' => 'Secretario']);
-        $auxiliar   = Role::firstOrCreate(['name' => 'Auxiliar']);
-        $member     = Role::firstOrCreate(['name' => 'Membro']);
+        $superAdmin = Role::firstOrCreate(['name' => 'superadmin']);
+        $admin      = Role::firstOrCreate(['name' => 'admin']);
+        $tesoureiro = Role::firstOrCreate(['name' => 'tesoureiro']);
+        $auxiliar   = Role::firstOrCreate(['name' => 'auxiliar']);
+        $member     = Role::firstOrCreate(['name' => 'membro']);
 
         // ===== SUPER ADMIN =====
-        // TODAS as permissões
+        // Poder total
         $superAdmin->syncPermissions(Permission::all());
 
         // ===== ADMIN =====
         $admin->syncPermissions([
+            // Acesso a módulos
+            'access-dashboard',
+            'access-users',
+            'access-members',
+            'access-donations',
+            'access-expenses',
+            'access-reports',
 
-            // Usuários (admin pode TUDO)
+            // Usuários
             'index-user',
             'show-user',
-            'create-user',
-            'edit-user',
-            'edit-password-user',
-            'destroy-user',
-            'edit-roles-user',
 
-            // Status
-            'index-user-status',
-            'show-user-status',
-            'create-user-status',
-            'edit-user-status',
-            'destroy-user-status',
-
-            // Members
+            // Membros
             'index-member',
             'show-member',
             'create-member',
             'edit-member',
-            'destroy-member',
 
-            // Financeiro
+            // Doações
             'index-donation',
             'show-donation',
             'create-donation',
-            'edit-donation',
-            'destroy-donation',
 
+            // Despesas
             'index-expense',
             'show-expense',
-            'create-expense',
-            'edit-expense',
-            'destroy-expense',
-
-            // Categorias
-            'index-category',
-
-            // Dashboards
-            'view-dashboard-admin',
-            'view-dashboard-member',
-            'view-dashboard-dizimo',
 
             // Perfil
             'show-profile',
@@ -75,53 +56,25 @@ class RoleSeeder extends Seeder
             'edit-profile-password',
         ]);
 
-        // ===== TESOURERIO =====
+        // ===== TESOUR EIRO =====
         $tesoureiro->syncPermissions([
+            // Acesso a módulos
+            'access-dashboard',
+            'access-donations',
+            'access-expenses',
+            'access-reports',
 
-            // Financeiro
+            // Doações
             'index-donation',
             'show-donation',
             'create-donation',
-            'edit-donation',
+            'confirm-donation',
 
+            // Despesas
             'index-expense',
             'show-expense',
             'create-expense',
             'edit-expense',
-
-            // Categorias
-            'index-category',
-
-            // Dashboards
-            'view-dashboard-admin',
-            'view-dashboard-dizimo',
-
-            // Perfil
-            'show-profile',
-            'edit-profile',
-            'edit-profile-password',
-        ]);
-
-        // ===== SECRETARIO =====
-        $secretario->syncPermissions([
-
-            // Usuários (sem deletar)
-            'index-user',
-            'show-user',
-            'create-user',
-            'edit-user',
-            'edit-password-user',
-
-            // Members
-            'index-member',
-            'show-member',
-            'create-member',
-            'edit-member',
-
-            // Dashboards
-            'view-dashboard-admin',
-            'view-dashboard-member',
-            'view-dashboard-dizimo',
 
             // Perfil
             'show-profile',
@@ -131,16 +84,35 @@ class RoleSeeder extends Seeder
 
         // ===== AUXILIAR =====
         $auxiliar->syncPermissions([
+            // Acesso a módulos
+            'access-dashboard',
+            'access-users',
+            'access-members',
+            'access-donations',
+            'access-cms',
 
-            // Visualização
+            // Usuários
             'index-user',
             'show-user',
+            'edit-user',
+
+            // Membros
             'index-member',
             'show-member',
+            'create-member',
+            'edit-member',
 
-            // Dashboards
-            'view-dashboard-member',
-            'view-dashboard-dizimo',
+            // Doações
+            'index-donation',
+            'show-donation',
+            'create-donation',
+            'edit-donation',
+
+            // CMS
+            'view-cms',
+            'create-cms',
+            'edit-cms',
+            'publish-cms',
 
             // Perfil
             'show-profile',
@@ -150,19 +122,20 @@ class RoleSeeder extends Seeder
 
         // ===== MEMBRO =====
         $member->syncPermissions([
+            // Acesso a módulos
+            'access-dashboard',
+            'access-donations',
+            'access-transparency',
 
-            // Perfil próprio
+            // Doações (próprias)
+            'create-donation',
+            'show-donation',
+            'update-tithe',
+
+            // Perfil
             'show-profile',
             'edit-profile',
             'edit-profile-password',
-
-            // Membro
-            'show-member',
-            'edit-member',
-            'update-tithe',
-
-            // Dashboard
-            'view-dashboard-member',
         ]);
     }
 }

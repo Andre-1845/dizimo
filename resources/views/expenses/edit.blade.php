@@ -29,15 +29,12 @@
             <div class="content-box-btn">
 
                 <!-- Botao LISTAR (com icone)  -->
-                <a href="{{ route('expenses.index') }}" class="btn-primary align-icon-btn" title="Listar">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                    </svg>
-
-                    <span class="hide-name-btn">Listar</span>
-                </a>
+                @can('index-expense')
+                    <a href="{{ route('expenses.index') }}" class="btn-primary align-icon-btn" title="Listar">
+                        @include('components.icons.list')
+                        <span class="hide-name-btn">Listar</span>
+                    </a>
+                @endcan
                 <!-- Fim - Botao LISTAR  -->
 
             </div>
@@ -47,95 +44,96 @@
 
         <x-alert />
 
+        @can('edit-expense')
+            <form method="POST" action="{{ route('expenses.update', $expense) }}"
+                class="bg-white rounded-xl shadow p-6 space-y-4">
 
-        <form method="POST" action="{{ route('expenses.update', $expense) }}"
-            class="bg-white rounded-xl shadow p-6 space-y-4">
+                @csrf
+                @method('PUT')
 
-            @csrf
-            @method('PUT')
-
-            <div>
-                <label class="form-label">Categoria</label>
-                <select name="category_id" class="form-input">
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" @selected($expense->category_id == $category->id)>
-                            {{ $category->name }}
-                        </option>
+                <div>
+                    <label class="form-label">Categoria</label>
+                    <select name="category_id" class="form-input">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected($expense->category_id == $category->id)>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
                         @error('category_id')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
-                    @endforeach
-                </select>
-            </div>
+                    </select>
+                </div>
 
-            <div>
-                <label class="form-label">Forma de Pagamento</label>
-                <select name="payment_method_id" class="form-input">
-                    @foreach ($paymentMethods as $method)
-                        <option value="{{ $method->id }}" @selected($expense->payment_method_id == $method->id)>
-                            {{ $method->name }}
-                        </option>
+                <div>
+                    <label class="form-label">Forma de Pagamento</label>
+                    <select name="payment_method_id" class="form-input">
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->id }}" @selected($expense->payment_method_id == $method->id)>
+                                {{ $method->name }}
+                            </option>
+                        @endforeach
                         @error('payment_method_id')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
-                    @endforeach
-                </select>
-            </div>
+                    </select>
+                </div>
 
-            <div>
-                <label class="form-label">Data</label>
-                <input type="date" name="expense_date" value="{{ $expense->expense_date->format('Y-m-d') }}"
-                    class="form-input">
-                @error('expense_date')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label class="form-label">Data</label>
+                    <input type="date" name="expense_date" value="{{ $expense->expense_date->format('Y-m-d') }}"
+                        class="form-input">
+                    @error('expense_date')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label class="form-label">Valor</label>
-                <input type="number" step="0.01" name="amount" value="{{ $expense->amount }}" class="form-input">
-                @error('amount')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <label class="form-label">Valor</label>
+                    <input type="number" step="0.01" name="amount" value="{{ $expense->amount }}" class="form-input">
+                    @error('amount')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div>
-                <label class="form-label">Descrição</label>
-                <input type="text" name="description" value="{{ $expense->description }}" class="form-input">
-            </div>
+                <div>
+                    <label class="form-label">Descrição</label>
+                    <input type="text" name="description" value="{{ $expense->description }}" class="form-input">
+                </div>
 
-            <div>
-                <label class="form-label">Observações</label>
-                <textarea name="notes" class="form-input">{{ $expense->notes }}</textarea>
-            </div>
-            <div>
-                <label class="form-label">Comprovante</label>
-                <input type="file" name="receipt" value={{ $expense->receipt }} accept=".pdf,.jpg,.jpeg,.png"
-                    class="block w-full text-sm text-gray-600
+                <div>
+                    <label class="form-label">Observações</label>
+                    <textarea name="notes" class="form-input">{{ $expense->notes }}</textarea>
+                </div>
+                <div>
+                    <label class="form-label">Comprovante</label>
+                    <input type="file" name="receipt" value={{ $expense->receipt }} accept=".pdf,.jpg,.jpeg,.png"
+                        class="block w-full text-sm text-gray-600
                       file:mr-4 file:py-2 file:px-4
                       file:rounded file:border-0
                       file:text-sm file:font-semibold
                       file:bg-blue-50 file:text-blue-700
                       hover:file:bg-blue-100">
-                <p class="text-xs text-gray-400 mt-1">
-                    Tamanho máximo: 2MB
-                </p>
-                @error('receipt')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                    <p class="text-xs text-gray-400 mt-1">
+                        Tamanho máximo: 2MB
+                    </p>
+                    @error('receipt')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="btn-md-div">
-                <button type="submit" class="btn-success-md">
-                    @include('components.icons.save')
-                    Atualizar
-                </button>
+                <div class="btn-md-div gap-2">
+                    <button type="submit" class="btn-success-md">
+                        @include('components.icons.save')
+                        Atualizar
+                    </button>
 
-                <a href="{{ route('expenses.index') }}" class="btn-danger-md">
-                    Cancelar
-                </a>
-            </div>
+                    <a href="{{ route('expenses.index') }}" class="btn-danger-md">
+                        Cancelar
+                    </a>
+                </div>
 
-        </form>
+            </form>
+        @endcan
     </div> {{-- FIM Content Box --}}
 @endsection

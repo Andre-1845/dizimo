@@ -80,15 +80,19 @@
 
 
                             <td class="table-body text-center">
-                                <form method="POST" action="{{ route('donations.confirm', $donation) }}"
-                                    onsubmit="return confirm('Confirmar esta doação?')">
-                                    @csrf
-                                    @method('PATCH')
+                                @can('confirm-donation')
+                                    <form method="POST" action="{{ route('donations.confirm', $donation) }}"
+                                        onsubmit="return confirm('Confirmar esta doação?')">
+                                        @csrf
+                                        @method('PATCH')
 
-                                    <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                                        Confirmar
-                                    </button>
-                                </form>
+                                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                            Confirmar
+                                        </button>
+                                    </form>
+                                @else
+                                    —
+                                @endcan
                             </td>
                         </tr>
                     @empty

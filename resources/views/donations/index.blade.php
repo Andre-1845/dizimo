@@ -32,14 +32,16 @@
                 <!-- Fim - Botao PAINEL  -->
 
                 <!-- Botao NOVA DOACAO (com icone)  -->
-                <div class="content-box-btn">
-                    <a href="{{ route('donations.create') }}" class="btn-success flex items-center space-x-1"
-                        title="Cadastrar">
-                        @include('components.icons.plus')
+                @can('create-donation')
+                    <div class="content-box-btn">
+                        <a href="{{ route('donations.create') }}" class="btn-success flex items-center space-x-1"
+                            title="Cadastrar">
+                            @include('components.icons.plus')
 
-                        <span>Nova Doacao</span>
-                    </a>
-                </div>
+                            <span>Nova Doacao</span>
+                        </a>
+                    </div>
+                @endcan
                 <!--FIM  Botao NOVA DOACAO (com icone)  -->
 
             </div>
@@ -50,9 +52,6 @@
 
 
         <x-filters.generic :filters="$filters" :route="route('donations.index')" />
-
-
-
 
         <div class="table-container">
             <table class="table">
@@ -102,6 +101,7 @@
                             </td> {{-- FIM Link do Recibo --}}
 
                             <x-table-actions-icons :show="route('donations.show', $donation)" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)"
+                                can-show="show-donation" can-edit="edit-donation" can-delete="destroy-donation"
                                 confirm="Deseja excluir esta receita/doação?" />
                         </tr>
                     @empty

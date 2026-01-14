@@ -24,8 +24,7 @@
             <h3 class="content-box-title">Detalhes</h3>
 
             <!-- Botoes (com icones)  -->
-            <x-action-buttons :list="route('users.index')" :edit="route('users.edit', $user)" :password="route('users.password.edit', $user)" :delete="route('users.destroy', $user)" can-list="index-user"
-                can-edit="edit-user" can-password="edit-user" can-delete="destroy-user"
+            <x-action-buttons :list="Gate::allows('viewAny', \App\Models\User::class) ? route('users.index') : null" :edit="Gate::allows('update', $user) ? route('users.edit', $user) : null" :password="Gate::allows('editPassword', $user) ? route('users.password.edit', $user) : null" :delete="Gate::allows('delete', $user) ? route('users.destroy', $user) : null"
                 delete-confirm="Deseja excluir o usuário {{ $user->name }}?" />
             <!-- Botoes (com icones)  -->
         </div>

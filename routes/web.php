@@ -106,7 +106,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 | CMS DO SITE (ADMIN)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified', 'permission:manage-site-content'])
+Route::middleware(['auth', 'verified', 'permission:access-cms'])
     ->prefix('admin/site')
     ->name('admin.site.')
     ->group(function () {
@@ -119,42 +119,35 @@ Route::middleware(['auth', 'verified', 'permission:manage-site-content'])
         Route::resource(
             'site-activities',
             SiteActivityController::class
-        )
-            ->middleware('permission:manage-site-activities');;
+        );
 
         // Equipe da Igreja
         Route::resource(
             'people',
             SitePersonController::class
-        )
-            ->middleware('permission:manage-site-notices');
+        );
+
 
         // Avisos do site
         Route::resource(
             'notices',
             SiteNoticeController::class
-        )
-            ->middleware('permission:manage-site-notices');
+        );
 
         Route::resource(
             'events',
             SiteEventController::class
-        )
-            ->middleware('permission:manage-site-events');
-
+        );
 
         Route::resource('sections', SiteSectionController::class)
-            ->only(['index', 'edit', 'update'])
-            ->middleware('permission:manage-site-sections');;
+            ->only(['index', 'edit', 'update']);
 
 
         Route::get('settings', [SiteSettingController::class, 'edit'])
-            ->name('settings.edit')
-            ->middleware('permission:manage-site-settings');;
+            ->name('settings.edit');
 
         Route::put('settings', [SiteSettingController::class, 'update'])
-            ->name('settings.update')
-            ->middleware('permission:manage-site-settings');;
+            ->name('settings.update');
 
         Route::get('sections/{section}/images', [SiteImageController::class, 'index'])
             ->name('images.index');
@@ -230,58 +223,30 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
 
         Route::patch('{donation}/confirm', [DonationController::class, 'confirm'])
             ->name('donations.confirm')
-            ->middleware('permission:index-donation');
+            ->middleware('permission:confirm-donation');
     });
 
     Route::resource('donations', DonationController::class)
-        ->middleware([
-            'index'   => 'permission:index-donation',
-            'show'    => 'permission:show-donation',
-            'create'  => 'permission:create-donation',
-            'store'   => 'permission:create-donation',
-            'edit'    => 'permission:edit-donation',
-            'update'  => 'permission:edit-donation',
-            'destroy' => 'permission:destroy-donation',
-        ]);
+        ->middleware('permission:access-donations');
 
     Route::resource('expenses', ExpenseController::class)
-        ->middleware([
-            'index'   => 'permission:index-expense',
-            'show'    => 'permission:show-expense',
-            'create'  => 'permission:create-expense',
-            'store'   => 'permission:create-expense',
-            'edit'    => 'permission:edit-expense',
-            'update'  => 'permission:edit-expense',
-            'destroy' => 'permission:destroy-expense',
-        ]);
+        ->middleware('permission:access-expenses');
 
     /*
     | Cadastros
     */
     Route::resource('users', UserController::class)
-        ->middleware([
-            'index'   => 'permission:index-user',
-            'show'    => 'permission:show-user',
-            'create'  => 'permission:create-user',
-            'store'   => 'permission:create-user',
-            'edit'    => 'permission:edit-user',
-            'update'  => 'permission:edit-user',
-            'destroy' => 'permission:destroy-user',
-        ]);
-    Route::resource('roles', RoleController::class)->middleware('permission:index-role');
-    Route::resource('statuses', StatusController::class)->middleware('permission:index-user-status');
+        ->middleware('permission:access-users');
+
+    Route::get('/{user}/edit-password', [UserController::class, 'editPassword'])->name('users.password.edit')->middleware('permission:access-users');
+    Route::put('/{user}/update-password', [UserController::class, 'updatePassword'])->name('users.password.update')->middleware('permission:access-users');
+
+    Route::resource('roles', RoleController::class)->middleware('permission:access-roles');
+    Route::resource('statuses', StatusController::class)->middleware('permission:access-users');
     Route::resource('categories', CategoryController::class)
-        ->middleware([
-            'index'   => 'permission:index-category',
-            'show'    => 'permission:show-category',
-            'create'  => 'permission:create-category',
-            'store'   => 'permission:create-category',
-            'edit'    => 'permission:edit-category',
-            'update'  => 'permission:edit-category',
-            'destroy' => 'permission:destroy-category',
-        ]);
+        ->middleware('access-categories');
     Route::resource('payment-methods', PaymentMethodController::class);
-    Route::resource('members', MemberController::class)->middleware('permission:index-member');
+    Route::resource('members', MemberController::class)->middleware('permission:access-members');
 
     /*
     | Permissoes

@@ -5,10 +5,17 @@
             <span class="sidebar-title">Dízimo</span>
         </div>
 
+        {{-- @auth
+            <div class="sidebar-user">
+                {{ Auth::user()->name }}
+            </div>
+        @endauth --}}
+
+
         <nav class="sidebar-nav">
 
-            {{-- ================= CMS DO SITE ================= --}}
-            @can('access-cms')
+            {{-- ================= SITE ================= --}}
+            @can('manage-site-content')
                 <a @class([
                     'sidebar-link',
                     'active' => request()->routeIs('admin.site.*'),
@@ -19,31 +26,52 @@
             @endcan
 
 
-            {{-- ================= DASHBOARD ================= --}}
-            @can('access-dashboard')
+            {{-- ================= DASHBOARDS ================= --}}
+
+            @can('view-dashboard-admin')
                 <a @class([
                     'sidebar-link',
-                    'active' => request()->routeIs('dashboard.*'),
+                    'active' => request()->routeIs('dashboard.index'),
                 ]) href="{{ route('dashboard.index') }}">
                     <span class="sidebar-icon">@include('components.icons.painel_icon')</span>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
             @endcan
 
+            @can('view-dashboard-dizimo')
+                <a @class([
+                    'sidebar-link',
+                    'active' => request()->routeIs('dashboard.dizimo'),
+                ]) href="{{ route('dashboard.dizimo') }}">
+                    <span class="sidebar-icon">@include('components.icons.chartpie')</span>
+                    <span class="sidebar-text">Dízimo</span>
+                </a>
+            @endcan
 
-            {{-- ================= PESSOAS ================= --}}
-            @canany(['access-members', 'access-users'])
+            @can('view-dashboard-member')
+                <a @class([
+                    'sidebar-link',
+                    'active' => request()->routeIs('dashboard.member*'),
+                ]) href="{{ route('dashboard.member') }}">
+                    <span class="sidebar-icon">@include('components.icons.dolar')</span>
+                    <span class="sidebar-text">Meu Dízimo</span>
+                </a>
+            @endcan
+
+            {{-- ================= USUÁRIOS / MEMBROS ================= --}}
+
+            @canany(['index-user', 'index-member'])
                 <div class="sidebar-group">
                     <span class="sidebar-group-title">Pessoas</span>
 
-                    @can('access-members')
+                    @can('index-member')
                         <a @class(['sidebar-link', 'active' => $menu === 'members']) href="{{ route('members.index') }}">
                             <span class="sidebar-icon">@include('components.icons.usercircle')</span>
                             <span class="sidebar-text">Membros</span>
                         </a>
                     @endcan
 
-                    @can('access-users')
+                    @can('index-user')
                         <a @class(['sidebar-link', 'active' => $menu === 'users']) href="{{ route('users.index') }}">
                             <span class="sidebar-icon">@include('components.icons.usersgroup')</span>
                             <span class="sidebar-text">Usuários</span>
@@ -52,28 +80,27 @@
                 </div>
             @endcanany
 
-
             {{-- ================= FINANCEIRO ================= --}}
-            @canany(['access-donations', 'access-expenses'])
+
+            @canany(['index-donation', 'index-expense'])
                 <div class="sidebar-group">
                     <span class="sidebar-group-title">Financeiro</span>
 
-                    @can('access-donations')
+                    @can('index-donation')
                         <a @class(['sidebar-link', 'active' => $menu === 'donations']) href="{{ route('donations.index') }}">
                             <span class="sidebar-icon">@include('components.icons.plus')</span>
                             <span class="sidebar-text">Receitas</span>
                         </a>
                     @endcan
 
-                    @can('access-expenses')
+                    @can('index-expense')
                         <a @class(['sidebar-link', 'active' => $menu === 'expenses']) href="{{ route('expenses.index') }}">
                             <span class="sidebar-icon">@include('components.icons.minus')</span>
                             <span class="sidebar-text">Despesas</span>
                         </a>
                     @endcan
 
-                    {{-- Confirmações continuam DENTRO do módulo --}}
-                    @can('access-donations')
+                    @can('index-donation')
                         <a @class(['sidebar-link', 'active' => $menu === 'confirm']) href="{{ route('donations.pending') }}">
                             <span class="sidebar-icon">@include('components.icons.question')</span>
                             <span class="sidebar-text">Confirmações</span>
@@ -82,17 +109,25 @@
                 </div>
             @endcanany
 
-
             {{-- ================= CONFIGURAÇÕES ================= --}}
-            @can('manage-roles')
+
+            @can('index-category')
+                <a @class(['sidebar-link', 'active' => $menu === 'categories']) href="{{ route('categories.index') }}">
+                    <span class="sidebar-icon">@include('components.icons.docdolar')</span>
+                    <span class="sidebar-text">Categorias</span>
+                </a>
+            @endcan
+
+
+            @can('index-role')
                 <a @class(['sidebar-link', 'active' => $menu === 'roles']) href="{{ route('roles.index') }}">
                     <span class="sidebar-icon">@include('components.icons.config')</span>
                     <span class="sidebar-text">Papéis</span>
                 </a>
             @endcan
 
-
             {{-- ================= PERFIL ================= --}}
+
             <a @class(['sidebar-link', 'active' => $menu === 'profile']) href="{{ route('profile.show') }}">
                 <span class="sidebar-icon">@include('components.icons.user')</span>
                 <span class="sidebar-text">Perfil</span>

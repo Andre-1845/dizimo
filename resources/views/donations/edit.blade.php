@@ -47,72 +47,74 @@
 
         <x-alert />
 
-        <form method="POST" action="{{ route('donations.update', $donation) }}"
-            class="bg-white rounded-xl shadow p-6 space-y-4">
+        @can('edit-donation')
+            <form method="POST" action="{{ route('donations.update', $donation) }}"
+                class="bg-white rounded-xl shadow p-6 space-y-4">
 
-            @csrf
-            @method('PATCH')
+                @csrf
+                @method('PATCH')
 
-            <div>
-                <label class="form-label">Membro</label>
-                <select name="member_id" class="form-input">
-                    <option value="">Administração</option>
-                    @foreach ($members as $member)
-                        <option value="{{ $member->id }}" @selected($donation->member_id == $member->id)>
-                            {{ $member->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                <div>
+                    <label class="form-label">Membro</label>
+                    <select name="member_id" class="form-input">
+                        <option value="">Administração</option>
+                        @foreach ($members as $member)
+                            <option value="{{ $member->id }}" @selected($donation->member_id == $member->id)>
+                                {{ $member->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div>
-                <label class="form-label">Categoria</label>
-                <select name="category_id" class="form-input">
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" @selected($donation->category_id == $category->id)>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                <div>
+                    <label class="form-label">Categoria</label>
+                    <select name="category_id" class="form-input">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" @selected($donation->category_id == $category->id)>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div>
-                <label class="form-label">Forma de Pagamento</label>
-                <select name="payment_method_id" class="form-input">
-                    @foreach ($paymentMethods as $method)
-                        <option value="{{ $method->id }}" @selected($donation->payment_method_id == $method->id)>
-                            {{ $method->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                <div>
+                    <label class="form-label">Forma de Pagamento</label>
+                    <select name="payment_method_id" class="form-input">
+                        @foreach ($paymentMethods as $method)
+                            <option value="{{ $method->id }}" @selected($donation->payment_method_id == $method->id)>
+                                {{ $method->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div>
-                <label class="form-label">Data</label>
-                <input type="date" name="donation_date" value="{{ $donation->donation_date->format('Y-m-d') }}"
-                    class="form-input">
-            </div>
+                <div>
+                    <label class="form-label">Data</label>
+                    <input type="date" name="donation_date" value="{{ $donation->donation_date->format('Y-m-d') }}"
+                        class="form-input">
+                </div>
 
-            <div>
-                <label class="form-label">Valor</label>
-                <input type="number" step="0.01" name="amount" value="{{ $donation->amount }}" class="form-input">
-            </div>
+                <div>
+                    <label class="form-label">Valor</label>
+                    <input type="number" step="0.01" name="amount" value="{{ $donation->amount }}" class="form-input">
+                </div>
 
-            <div>
-                <label class="form-label">Observações</label>
-                <textarea name="notes" class="form-input">{{ $donation->notes }}</textarea>
-            </div>
+                <div>
+                    <label class="form-label">Observações</label>
+                    <textarea name="notes" class="form-input">{{ $donation->notes }}</textarea>
+                </div>
 
-            <div class="flex gap-4">
-                <button class="btn-primary-md">
-                    Atualizar
-                </button>
+                <div class="btn-md-div gap-2">
+                    <button class="btn-primary-md">
+                        Atualizar
+                    </button>
 
-                <a href="{{ route('donations.index') }}" class="btn-danger-md">
-                    Cancelar
-                </a>
-            </div>
+                    <a href="{{ route('donations.index') }}" class="btn-danger-md">
+                        Cancelar
+                    </a>
+                </div>
 
-        </form>
+            </form>
+        @endcan
 
     @endsection

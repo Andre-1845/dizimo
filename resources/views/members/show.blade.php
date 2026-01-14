@@ -9,7 +9,7 @@
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('users.index') }}" class="breadcrumb-link">Membros</a>
+                <a href="{{ route('members.index') }}" class="breadcrumb-link">Membros</a>
                 <span>/</span>
                 <span>Visualizar</span>
             </nav>
@@ -24,8 +24,7 @@
             <h3 class="content-box-title">Detalhes</h3>
 
             <!-- Botoes (com icones)  -->
-            <x-action-buttons :list="route('members.index')" :edit="route('members.edit', $member)" :delete="route('members.destroy', $member)" can-list="index-member"
-                can-edit="edit-member" can-delete="destroy-member"
+            <x-action-buttons :list="Gate::allows('viewAny', \App\Models\Member::class) ? route('members.index') : null" :edit="Gate::allows('update', $member) ? route('members.edit', $member) : null" :delete="Gate::allows('delete', $member) ? route('members.destroy', $member) : null"
                 delete-confirm="Deseja excluir o membro {{ $member->name }} ?" />
             <!-- Botoes (com icones)  -->
         </div>
