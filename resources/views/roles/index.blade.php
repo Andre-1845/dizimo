@@ -7,7 +7,7 @@
         <div class="content-header">
             <h2 class="content-title">Papéis</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <span>Papéis</span>
             </nav>
@@ -61,7 +61,7 @@
                     @empty
                         <tr>
                             <td colspan="5" class="py-4 text-center text-gray-500">
-                                Nenhuma papel registrado.
+                                Nenhum papel registrado.
                             </td>
                         </tr>
                     @endforelse

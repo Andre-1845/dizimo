@@ -19,11 +19,6 @@ return new class extends Migration
                 ->constrained()
                 ->restrictOnDelete();
 
-            // Metodo de pagamento
-            $table->foreignId('payment_method_id')
-                ->after('category_id')
-                ->constrained()
-                ->cascadeOnDelete();
 
             // usuário que lançou a despesa
             $table->foreignId('user_id')
@@ -41,7 +36,6 @@ return new class extends Migration
              * Auditoria / anexos
              */
             $table->text('notes')->nullable();
-            $table->string('receipt_path')->nullable();
 
             /**
              * Controle

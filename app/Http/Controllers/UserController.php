@@ -15,52 +15,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Stmt\TryCatch;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        // Protege todas as ações do controller
+        $this->middleware('permission:users.view')->only(['index', 'show']);
+        $this->middleware('permission:users.create')->only(['create', 'store']);
+        $this->middleware('permission:users.edit')->only(['edit', 'update']);
+        $this->middleware('permission:users.delete')->only(['destroy']);
+        $this->middleware('permission:users.reset-password')->only(['editPassword', 'updatePassword']);
+    }
     // Carrega a view
     public function index(Request $request)
     {
-        // $users = User::orderBy('name', 'asc')->paginate(10);
-        // $users = User::with('member')
-        //     ->when(
-        //         $request->filled('name'),
-        //         fn($query) =>
-        //         $query->whereLike('name', '%' . $request->name . '%')
-        //     )
-        //     ->when(
-        //         $request->filled('email'),
-        //         fn($query) =>
-        //         $query->whereLike('email', '%' . $request->email . '%')
-        //     )
-        //     ->when(
-        //         $request->filled('start_date_registration'),
-        //         fn($query) =>
-        //         $query->where('created_at', '>=', $request->start_date_registration)
-        //     )
-        //     ->when(
-        //         $request->filled('end_date_registration'),
-        //         fn($query) =>
-        //         $query->where('created_at', '<=', $request->end_date_registration)
-        //     )
-        //     ->orderBy('name', 'asc')
-        //     ->paginate(10)
-        //     ->withQueryString();
-
-        // return view('users.index', [
-        //     'menu' => 'users',
-        //     'users' => $users,
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'start_date_registration' => $request->start_date_registration,
-        //     'end_date_registration' => $request->end_date_registration,
-        // ]);
-
-        // Nova abordagem
-
-
         $users = User::query()
             ->when(
                 $request->filled('name'),
@@ -89,15 +60,6 @@ class UserController extends Controller
         ]);
     }
 
-    // public function list(User $user)
-    // {
-    //     // dd($user);
-    //     $users = User::orderBy('name', 'asc')
-    //         ->where('status_id', $user->id);
-    //     // ->paginate(3);
-
-    //     return view('users.index', ['users' => $users]);
-    // }
 
     public function list(Status $status)
     {

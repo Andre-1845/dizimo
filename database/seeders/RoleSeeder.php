@@ -10,132 +10,262 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        // ===== ROLES =====
-        $superAdmin = Role::firstOrCreate(['name' => 'superadmin']);
-        $admin      = Role::firstOrCreate(['name' => 'admin']);
-        $tesoureiro = Role::firstOrCreate(['name' => 'tesoureiro']);
-        $auxiliar   = Role::firstOrCreate(['name' => 'auxiliar']);
-        $member     = Role::firstOrCreate(['name' => 'membro']);
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // ===== SUPER ADMIN =====
-        // Poder total
-        $superAdmin->syncPermissions(Permission::all());
+        $roles = [
+            'superadmin' => [
+                'display_name' => 'Super Administrador',
+                'description' => 'Acesso total ao sistema. Papel para pastor principal ou administrador geral.',
+                'permissions' => '*', // Todos
+                'protected' => true,
+                'hierarchy' => 100,
+            ],
+            'admin' => [
+                'display_name' => 'Administrador',
+                'description' => 'Administrador da igreja com acesso amplo, exceto configurações críticas do sistema.',
+                'permissions' => [
+                    // Módulos
+                    'dashboard.access',
+                    'users.access',
+                    'members.access',
+                    'donations.access',
+                    'expenses.access',
+                    'reports.access',
+                    'categories.access',
+                    'settings.access',
 
-        // ===== ADMIN =====
-        $admin->syncPermissions([
-            // Acesso a módulos
-            'access-dashboard',
-            'access-users',
-            'access-members',
-            'access-donations',
-            'access-expenses',
-            'access-reports',
+                    // Usuários
+                    'users.view',
+                    'users.create',
+                    'users.edit',
+                    'users.change-status',
+                    'users.reset-password',
 
-            // Usuários
-            'index-user',
-            'show-user',
+                    // Membros
+                    'members.view',
+                    'members.create',
+                    'members.edit',
+                    'members.delete',
+                    'members.tithe-manage',
 
-            // Membros
-            'index-member',
-            'show-member',
-            'create-member',
-            'edit-member',
+                    // Dízimos
+                    'donations.view',
+                    'donations.create',
+                    'donations.edit',
+                    'donations.confirm',
+                    'donations.export',
 
-            // Doações
-            'index-donation',
-            'show-donation',
-            'create-donation',
+                    // Despesas
+                    'expenses.view',
+                    'expenses.create',
+                    'expenses.edit',
+                    'expenses.approve',
 
-            // Despesas
-            'index-expense',
-            'show-expense',
+                    // Relatórios
+                    'reports.financial',
+                    'reports.tithes',
+                    'reports.donations',
+                    'reports.members',
+                    'reports.export',
 
-            // Perfil
-            'show-profile',
-            'edit-profile',
-            'edit-profile-password',
-        ]);
+                    // Categorias
+                    'categories.view',
+                    'categories.create',
+                    'categories.edit',
 
-        // ===== TESOUR EIRO =====
-        $tesoureiro->syncPermissions([
-            // Acesso a módulos
-            'access-dashboard',
-            'access-donations',
-            'access-expenses',
-            'access-reports',
+                    // Configurações
+                    'settings.view',
+                    'roles.view',
+                    'roles.assign',
 
-            // Doações
-            'index-donation',
-            'show-donation',
-            'create-donation',
-            'confirm-donation',
+                    // Dashboards
+                    'dashboard.admin',
+                    'dashboard.treasury',
 
-            // Despesas
-            'index-expense',
-            'show-expense',
-            'create-expense',
-            'edit-expense',
+                    // Perfil (CORRIGIDO: sem wildcard)
+                    'profile.view',
+                    'profile.edit',
+                    'profile.password',
+                ],
+                'protected' => true,
+                'hierarchy' => 90,
+            ],
+            'tesoureiro' => [
+                'display_name' => 'Tesoureiro',
+                'description' => 'Responsável pelas finanças da igreja. Gerencia dízimos, doações e despesas.',
+                'permissions' => [
+                    // Módulos
+                    'dashboard.access',
+                    'donations.access',
+                    'expenses.access',
+                    'reports.access',
+                    'categories.access',
 
-            // Perfil
-            'show-profile',
-            'edit-profile',
-            'edit-profile-password',
-        ]);
+                    // Dízimos
+                    'donations.view',
+                    'donations.create',
+                    'donations.edit',
+                    'donations.confirm',
+                    'donations.cancel',
+                    'donations.export',
+                    'donations.bulk',
+                    'donations.reconcile',
 
-        // ===== AUXILIAR =====
-        $auxiliar->syncPermissions([
-            // Acesso a módulos
-            'access-dashboard',
-            'access-users',
-            'access-members',
-            'access-donations',
-            'access-cms',
+                    // Despesas
+                    'expenses.view',
+                    'expenses.create',
+                    'expenses.edit',
+                    'expenses.approve',
+                    'expenses.export',
 
-            // Usuários
-            'index-user',
-            'show-user',
-            'edit-user',
+                    // Relatórios
+                    'reports.financial',
+                    'reports.tithes',
+                    'reports.donations',
+                    'reports.expenses',
+                    'reports.export',
 
-            // Membros
-            'index-member',
-            'show-member',
-            'create-member',
-            'edit-member',
+                    // Categorias
+                    'categories.view',
 
-            // Doações
-            'index-donation',
-            'show-donation',
-            'create-donation',
-            'edit-donation',
+                    // Membros
+                    'members.view',
+                    'members.tithe-manage',
 
-            // CMS
-            'view-cms',
-            'create-cms',
-            'edit-cms',
-            'publish-cms',
+                    // Dashboards
+                    'dashboard.treasury',
 
-            // Perfil
-            'show-profile',
-            'edit-profile',
-            'edit-profile-password',
-        ]);
+                    // Perfil (CORRIGIDO)
+                    'profile.view',
+                    'profile.edit',
+                    'profile.password',
+                ],
+                'protected' => true,
+                'hierarchy' => 80,
+            ],
+            'secretario' => [
+                'display_name' => 'Secretário',
+                'description' => 'Responsável pelo cadastro de membros e usuários. Suporte administrativo.',
+                'permissions' => [
+                    // Módulos
+                    'dashboard.access',
+                    'users.access',
+                    'members.access',
+                    'donations.access',
 
-        // ===== MEMBRO =====
-        $member->syncPermissions([
-            // Acesso a módulos
-            'access-dashboard',
-            'access-donations',
-            'access-transparency',
+                    // Usuários
+                    'users.view',
+                    'users.create',
+                    'users.edit',
 
-            // Doações (próprias)
-            'create-donation',
-            'show-donation',
-            'update-tithe',
+                    // Membros
+                    'members.view',
+                    'members.create',
+                    'members.edit',
+                    'members.export',
 
-            // Perfil
-            'show-profile',
-            'edit-profile',
-            'edit-profile-password',
-        ]);
+                    // Dízimos
+                    'donations.view',
+                    'donations.create',
+
+                    // Relatórios
+                    'reports.members',
+
+                    // Dashboard
+                    'dashboard.admin',
+
+                    // Perfil (CORRIGIDO)
+                    'profile.view',
+                    'profile.edit',
+                    'profile.password',
+                ],
+                'protected' => false,
+                'hierarchy' => 70,
+            ],
+            'auxiliar' => [
+                'display_name' => 'Auxiliar',
+                'description' => 'Auxiliar administrativo com permissões limitadas.',
+                'permissions' => [
+                    // Módulos
+                    'dashboard.access',
+                    'members.access',
+                    'donations.access',
+
+                    // Membros
+                    'members.view',
+
+                    // Dízimos
+                    'donations.view',
+
+                    // CMS
+                    'cms.access',
+                    'cms.view',
+                    'cms.events',
+                    'cms.notices',
+
+                    // Perfil (CORRIGIDO)
+                    'profile.view',
+                    'profile.edit',
+                    'profile.password',
+                ],
+                'protected' => false,
+                'hierarchy' => 60,
+            ],
+            'membro' => [
+                'display_name' => 'Membro',
+                'description' => 'Membro da igreja com acesso ao próprio perfil e registro de dízimos.',
+                'permissions' => [
+                    // Módulos
+                    'dashboard.access',
+                    'transparency.access',
+
+                    // Dashboard
+                    'dashboard.member',
+
+                    // Dízimos
+                    'donations.create',
+                    'members.tithe-manage',
+
+                    // Transparência
+                    'transparency.view',
+
+                    // Perfil (CORRIGIDO)
+                    'profile.view',
+                    'profile.edit',
+                    'profile.password',
+                ],
+                'protected' => true,
+                'hierarchy' => 50,
+            ],
+        ];
+
+        foreach ($roles as $name => $data) {
+            $role = Role::updateOrCreate(
+                ['name' => $name],
+                [
+                    'display_name' => $data['display_name'],
+                    'description' => $data['description'],
+                    'guard_name' => 'web',
+                    'is_protected' => $data['protected'] ?? false,
+                ]
+            );
+
+            // Atribuir hierarquia se existir coluna
+            if (isset($data['hierarchy'])) {
+                $role->update(['hierarchy_level' => $data['hierarchy']]);
+            }
+
+            // Atribuir permissões
+            if ($data['permissions'] === '*') {
+                $role->syncPermissions(Permission::all());
+            } else {
+                $role->syncPermissions($data['permissions']);
+            }
+
+            $this->command->info("✓ Papel '{$data['display_name']}' criado com " .
+                count($data['permissions'] === '*' ? Permission::all() : $data['permissions']) . " permissões");
+        }
+
+        $this->command->info('✓ Papéis criados com sucesso!');
     }
 }

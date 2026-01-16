@@ -14,7 +14,7 @@ class SitePersonController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', SitePerson::class);
+        $this->authorize('viewAny', SitePerson::class);
 
         $people = SitePerson::orderBy('order')->get();
 

@@ -10,7 +10,7 @@ class SiteEventController extends Controller
 {
     public function index()
     {
-        $this->authorize('view', SiteEvent::class);
+        $this->authorize('viewAny', SiteEvent::class);
 
         $events = SiteEvent::orderBy('event_date')
             ->paginate(10);

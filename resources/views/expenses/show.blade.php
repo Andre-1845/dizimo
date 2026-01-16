@@ -7,7 +7,7 @@
         <div class="content-header">
             <h2 class="content-title">Despesas</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <a href="{{ route('expenses.index') }}" class="breadcrumb-link">Despesas</a>
                 <span>/</span>
@@ -26,8 +26,8 @@
             <!-- Botoes (com icones)  -->
 
             <div class="content-box-btn">
-                <x-action-buttons :list="route('expenses.index')" :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)" can-list="index-expense"
-                    can-edit="edit-expense" can-delete="destroy-expense"
+                <x-action-buttons :list="route('expenses.index')" :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)" can-list="expenses.view"
+                    can-edit="expenses.edit" can-delete="expenses.delete"
                     delete-confirm="Tem certeza que deseja excluir esta despesa?" />
             </div>
             <!-- Botoes (com icones)  -->

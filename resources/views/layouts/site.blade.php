@@ -63,10 +63,17 @@
                         </a>
                     @else
                         {{-- ADMIN / OUTROS --}}
-                        <a href="{{ route('dashboard.index') }}" class="px-4 py-2 bg-gray-800 text-white rounded">
+                        <a href="{{ route('dashboard.admin') }}" class="px-4 py-2 bg-gray-800 text-white rounded">
                             Dashboard
                         </a>
                     @endif
+                    {{-- LOGOUT --}}
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="site-link">
+                            Sair
+                        </button>
+                    </form>
                 @endauth
 
             </nav>
@@ -92,7 +99,7 @@
                     {{ \App\Models\SiteSetting::get('address') }}
                 </p>
                 <p class="text-sm mt-1">
-                    {{ \App\Models\SiteSetting::get('phone') }}
+                    {{ format_phone(\App\Models\SiteSetting::get('phone')) }}
                 </p>
             </div>
 

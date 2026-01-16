@@ -10,7 +10,7 @@
         <div class="content-header">
             <h2 class="content-title">Membros</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.member') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <span>Membros</span>
             </nav>

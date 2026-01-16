@@ -10,7 +10,7 @@ class SiteActivityController extends Controller
 {
     public function index()
     {
-        $this->authorize('view', SiteActivity::class);
+        $this->authorize('viewAny', SiteActivity::class);
 
         $activities = SiteActivity::orderBy('order')->get();
         return view('admin.site.site-activities.index', compact('activities'));

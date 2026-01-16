@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\{
     SitePersonController
 };
 use App\Http\Controllers\Site\TeamController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,7 +107,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 | CMS DO SITE (ADMIN)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified', 'permission:access-cms'])
+Route::middleware(['auth', 'verified', 'permission:cms.access'])
     ->prefix('admin/site')
     ->name('admin.site.')
     ->group(function () {
@@ -116,39 +117,29 @@ Route::middleware(['auth', 'verified', 'permission:access-cms'])
         })->name('index');
 
         // Atividades do site (horarios)
-        Route::resource(
-            'site-activities',
-            SiteActivityController::class
-        );
+        Route::resource('site-activities', SiteActivityController::class);
 
         // Equipe da Igreja
-        Route::resource(
-            'people',
-            SitePersonController::class
-        );
-
+        Route::resource('people', SitePersonController::class);
 
         // Avisos do site
-        Route::resource(
-            'notices',
-            SiteNoticeController::class
-        );
+        Route::resource('notices', SiteNoticeController::class);
 
-        Route::resource(
-            'events',
-            SiteEventController::class
-        );
+        // Eventos
+        Route::resource('events', SiteEventController::class);
 
+        // Seções
         Route::resource('sections', SiteSectionController::class)
             ->only(['index', 'edit', 'update']);
 
-
+        // Configurações
         Route::get('settings', [SiteSettingController::class, 'edit'])
             ->name('settings.edit');
 
         Route::put('settings', [SiteSettingController::class, 'update'])
             ->name('settings.update');
 
+        // Imagens
         Route::get('sections/{section}/images', [SiteImageController::class, 'index'])
             ->name('images.index');
 
@@ -170,121 +161,215 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
     /*
     | Dashboards
     */
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('dashboard.index')
-        ->middleware('permission:view-dashboard-admin');
+    Route::get('/dashboard/admin', [DashboardController::class, 'index'])
+        ->name('dashboard.admin')
+        ->middleware('permission:dashboard.admin');
 
-    Route::get('/dashboard-dizimo', [DizimoDashboardController::class, 'index'])
-        ->name('dashboard.dizimo')
-        ->middleware('permission:view-dashboard-dizimo');
+    Route::get('/dashboard/tesouraria', [DizimoDashboardController::class, 'index'])
+        ->name('dashboard.treasury')
+        ->middleware('permission:dashboard.treasury');
 
-    Route::get('/meu-painel', [MemberDashboardController::class, 'index'])
+    Route::get('/dashboard/membro', [MemberDashboardController::class, 'index'])
         ->name('dashboard.member')
-        ->middleware('permission:view-dashboard-member');
+        ->middleware('permission:dashboard.member');
 
-    Route::put('/meu-painel/dizimo', [MemberDashboardController::class, 'updateTithe'])
+    Route::put('/dashboard/membro/dizimo', [MemberDashboardController::class, 'updateTithe'])
         ->name('dashboard.member.update-tithe')
-        ->middleware('permission:edit-member');
+        ->middleware('permission:members.tithe-manage');
 
-    Route::get('/meu-painel-antigo', [DashboardController::class, 'member'])
-        ->name('dashboard.member.old')
-        ->middleware([
-            'auth',
-            'verified',
-            'user.status',
-            'permission:view-dashboard-member'
-        ]);
-    /*
-    | Relatórios
-    */
-    Route::prefix('dashboard/dizimos')->group(function () {
-        Route::get('pagaram', [DizimoReportController::class, 'paid'])->name('dizimos.paid');
-        Route::get('pendentes', [DizimoReportController::class, 'pending'])->name('dizimos.pending');
-        Route::get('anonimos', [DizimoReportController::class, 'anonymous'])->name('dizimos.anonymous');
-    });
+    // Rota de fallback para dashboard (redireciona para o dashboard apropriado)
+    Route::get('/dashboard', function () {
+        $user = Auth::user();
 
-    Route::prefix('dashboard/dizimos/export')->group(function () {
-        Route::get('pagaram/csv', [DizimoReportController::class, 'exportPaidCsv'])->name('dizimos.export.paid.csv');
-        Route::get('pendentes/csv', [DizimoReportController::class, 'exportPendingCsv'])->name('dizimos.export.pending.csv');
-        Route::get('anonimos/csv', [DizimoReportController::class, 'exportAnonymousCsv'])->name('dizimos.export.anonymous.csv');
+        if ($user->can('dashboard.admin')) {
+            return redirect()->route('dashboard.admin');
+        } elseif ($user->can('dashboard.treasury')) {
+            return redirect()->route('dashboard.treasury');
+        } elseif ($user->can('dashboard.member')) {
+            return redirect()->route('dashboard.member');
+        }
 
-        Route::get('pagaram/pdf', [DizimoReportController::class, 'exportPaidPdf'])->name('dizimos.export.paid.pdf');
-        Route::get('pendentes/pdf', [DizimoReportController::class, 'exportPendingPdf'])->name('dizimos.export.pending.pdf');
-        Route::get('anonimos/pdf', [DizimoReportController::class, 'exportAnonymousPdf'])->name('dizimos.export.anonymous.pdf');
-    });
+        return redirect()->route('profile.show');
+    })->name('dashboard');
 
     /*
-    | Financeiro
+    | Relatórios (apenas para quem tem acesso a relatórios)
     */
-    Route::prefix('donations')->group(function () {
-        Route::get('pendentes', [DonationController::class, 'pending'])
-            ->name('donations.pending')
-            ->middleware('permission:index-donation');
+    Route::middleware('permission:reports.access')->group(function () {
+        Route::prefix('relatorios/dizimos')->group(function () {
+            Route::get('pagaram', [DizimoReportController::class, 'paid'])
+                ->name('reports.dizimos.paid')
+                ->middleware('permission:reports.tithes');
 
-        Route::patch('{donation}/confirm', [DonationController::class, 'confirm'])
-            ->name('donations.confirm')
-            ->middleware('permission:confirm-donation');
-    });
+            Route::get('pendentes', [DizimoReportController::class, 'pending'])
+                ->name('reports.dizimos.pending')
+                ->middleware('permission:reports.tithes');
 
-    Route::resource('donations', DonationController::class)
-        ->middleware('permission:access-donations');
+            Route::get('anonimos', [DizimoReportController::class, 'anonymous'])
+                ->name('reports.dizimos.anonymous')
+                ->middleware('permission:reports.tithes');
+        });
 
-    Route::resource('expenses', ExpenseController::class)
-        ->middleware('permission:access-expenses');
+        Route::prefix('relatorios/dizimos/export')->group(function () {
+            Route::get('pagaram/csv', [DizimoReportController::class, 'exportPaidCsv'])
+                ->name('reports.dizimos.export.paid.csv')
+                ->middleware('permission:reports.export');
 
-    /*
-    | Cadastros
-    */
-    Route::resource('users', UserController::class)
-        ->middleware('permission:access-users');
+            Route::get('pendentes/csv', [DizimoReportController::class, 'exportPendingCsv'])
+                ->name('reports.dizimos.export.pending.csv')
+                ->middleware('permission:reports.export');
 
-    Route::get('/{user}/edit-password', [UserController::class, 'editPassword'])->name('users.password.edit')->middleware('permission:access-users');
-    Route::put('/{user}/update-password', [UserController::class, 'updatePassword'])->name('users.password.update')->middleware('permission:access-users');
+            Route::get('anonimos/csv', [DizimoReportController::class, 'exportAnonymousCsv'])
+                ->name('reports.dizimos.export.anonymous.csv')
+                ->middleware('permission:reports.export');
 
-    Route::resource('roles', RoleController::class)->middleware('permission:access-roles');
-    Route::resource('statuses', StatusController::class)->middleware('permission:access-users');
-    Route::resource('categories', CategoryController::class)
-        ->middleware('access-categories');
-    Route::resource('payment-methods', PaymentMethodController::class);
-    Route::resource('members', MemberController::class)->middleware('permission:access-members');
+            Route::get('pagaram/pdf', [DizimoReportController::class, 'exportPaidPdf'])
+                ->name('reports.dizimos.export.paid.pdf')
+                ->middleware('permission:reports.export');
 
-    /*
-    | Permissoes
-    */
+            Route::get('pendentes/pdf', [DizimoReportController::class, 'exportPendingPdf'])
+                ->name('reports.dizimos.export.pending.pdf')
+                ->middleware('permission:reports.export');
 
-    Route::prefix('role-permissions')->group(function () {
-        Route::get('/{role}', [RolePermissionController::class, 'index'])
-            ->name('role-permissions.index')
-            ->middleware('permission:index-role-permission');
-
-        // Route::put('/{role}/{permission}', [RolePermissionController::class, 'update'])
-        //     ->name('role-permissions.update')
-        //     ->middleware('permission:update-role-permission');
-        Route::put(
-            '/{role}/{permission}',
-            [RolePermissionController::class, 'toggle']
-        )->name('role-permissions.toggle')
-            ->middleware('permission:update-role-permission');
-    });
-    /*
-    | Área do Membro
-    */
-    Route::prefix('meu-dizimo')->middleware('permission:view-dashboard-member')->group(function () {
-        Route::get('doacoes/create', [MemberDonationController::class, 'create'])
-            ->name('member.donation.create');
-
-        Route::post('doacoes', [MemberDonationController::class, 'store'])
-            ->name('member.donation.store');
+            Route::get('anonimos/pdf', [DizimoReportController::class, 'exportAnonymousPdf'])
+                ->name('reports.dizimos.export.anonymous.pdf')
+                ->middleware('permission:reports.export');
+        });
     });
 
     /*
-    | Perfil
+    | Financeiro - Doações
+    */
+    Route::middleware('permission:donations.access')->group(function () {
+        Route::prefix('donations')->group(function () {
+            Route::get('pendentes', [DonationController::class, 'pending'])
+                ->name('donations.pending')
+                ->middleware('permission:donations.view');
+
+            Route::patch('{donation}/confirm', [DonationController::class, 'confirm'])
+                ->name('donations.confirm')
+                ->middleware('permission:donations.confirm');
+        });
+
+        Route::resource('donations', DonationController::class);
+    });
+
+    /*
+    | Financeiro - Despesas
+    */
+    Route::middleware('permission:expenses.access')->group(function () {
+        Route::resource('expenses', ExpenseController::class);
+    });
+
+    /*
+    | Cadastros - Usuários
+    */
+    Route::middleware('permission:users.access')->group(function () {
+        Route::resource('users', UserController::class);
+
+        Route::get('/users/{user}/password', [UserController::class, 'editPassword'])
+            ->name('users.password.edit')
+            ->middleware('permission:users.reset-password');
+
+        Route::put('/users/{user}/password', [UserController::class, 'updatePassword'])
+            ->name('users.password.update')
+            ->middleware('permission:users.reset-password');
+    });
+
+    /*
+    | Cadastros - Membros
+    */
+    Route::middleware('permission:members.access')->group(function () {
+        Route::resource('members', MemberController::class);
+    });
+
+    /*
+    | Cadastros - Categorias
+    */
+    Route::middleware('permission:categories.access')->group(function () {
+        Route::resource('categories', CategoryController::class);
+    });
+
+    /*
+    | Cadastros - Status (apenas admin)
+    */
+    Route::middleware('permission:settings.access')->group(function () {
+        Route::resource('statuses', StatusController::class)
+            ->middleware('permission:settings.view');
+    });
+
+    /*
+    | Métodos de Pagamento (acesso geral para quem usa doações)
+    */
+    Route::middleware('permission:donations.create')->group(function () {
+        Route::resource('payment-methods', PaymentMethodController::class)
+            ->only(['index']); // Apenas visualização
+    });
+
+    /*
+    | Segurança - Papéis e Permissões
+    */
+    Route::middleware('permission:settings.access')->group(function () {
+        // Papéis
+        Route::resource('roles', RoleController::class)
+            ->middleware('permission:roles.view');
+
+        // Gerenciamento de Permissões por Papel
+        Route::prefix('role-permissions')->group(function () {
+            Route::get('/{role}', [RolePermissionController::class, 'index'])
+                ->name('role-permissions.index')
+                ->middleware('permission:permissions.view');
+
+            Route::put('/{role}/{permission}', [RolePermissionController::class, 'toggle'])
+                ->name('role-permissions.toggle')
+                ->middleware('permission:permissions.manage');
+        });
+    });
+
+    /*
+    | Área do Membro (doações pessoais)
+    */
+    Route::prefix('minhas-doacoes')->middleware('permission:dashboard.member')->group(function () {
+        Route::get('create', [MemberDonationController::class, 'create'])
+            ->name('member.donations.create')
+            ->middleware('permission:donations.create');
+
+        Route::post('/', [MemberDonationController::class, 'store'])
+            ->name('member.donations.store')
+            ->middleware('permission:donations.create');
+    });
+
+    /*
+    | Perfil (acesso livre para todos autenticados)
     */
     Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
-        Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
-        Route::put('/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+        Route::get('/', [ProfileController::class, 'show'])
+            ->name('profile.show')
+            ->middleware('permission:profile.view');
+
+        Route::get('/edit', [ProfileController::class, 'edit'])
+            ->name('profile.edit')
+            ->middleware('permission:profile.edit');
+
+        Route::put('/', [ProfileController::class, 'update'])
+            ->name('profile.update')
+            ->middleware('permission:profile.edit');
+
+        Route::get('/password', [ProfileController::class, 'editPassword'])
+            ->name('profile.password.edit')
+            ->middleware('permission:profile.password');
+
+        Route::put('/password', [ProfileController::class, 'updatePassword'])
+            ->name('profile.password.update')
+            ->middleware('permission:profile.password');
+    });
+
+    /*
+    | Transparência (acesso público autenticado)
+    */
+    Route::middleware('permission:transparency.access')->group(function () {
+        Route::get('/transparencia', function () {
+            return view('transparency.index');
+        })->name('transparency.index');
     });
 });

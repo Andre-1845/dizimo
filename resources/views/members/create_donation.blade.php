@@ -34,8 +34,8 @@
 
         <x-alert />
 
-        @can('view-dashboard-member')
-            <form method="POST" enctype="multipart/form-data" action="{{ route('member.donation.store') }}"
+        @can('dashboard.member.view')
+            <form method="POST" enctype="multipart/form-data" action="{{ route('member.donations.store') }}"
                 class="bg-white rounded-xl shadow p-6 space-y-4">
 
                 @csrf

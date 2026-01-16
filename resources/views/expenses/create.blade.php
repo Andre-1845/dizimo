@@ -10,7 +10,7 @@
         <div class="content-header">
             <h2 class="content-title">Despesas</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <a href="{{ route('expenses.index') }}" class="breadcrumb-link">Despesas</a>
                 <span>/</span>
@@ -28,7 +28,7 @@
             <div class="content-box-btn">
 
                 <!-- Botao LISTAR (com icone)  -->
-                @can('index-expense')
+                @can('expenses.view')
                     <a href="{{ route('expenses.index') }}" class="btn-primary align-icon-btn" title="Listar">
                         @include('components.icons.list')
                         <span class="hide-name-btn">Listar</span>
@@ -42,7 +42,7 @@
 
         <x-alert />
 
-        @can('create-expense')
+        @can('expenses.create')
             <form method="POST" enctype="multipart/form-data" action="{{ route('expenses.store') }}"
                 class="bg-white rounded-xl shadow p-6 space-y-4">
 

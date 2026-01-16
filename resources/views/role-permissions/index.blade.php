@@ -2,12 +2,16 @@
 
 @section('content')
     <!-- Titulo e trilha de navegacao -->
-
+    @if (isset($isSuperAdmin) && $isSuperAdmin)
+        <div class="alert alert-info">
+            <strong>Modo Super Admin:</strong> Você pode modificar todas as permissões.
+        </div>
+    @endif
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Permissões</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <span>Permissões</span>
             </nav>
@@ -21,7 +25,7 @@
         <div class="content-box-header">
             <h3 class="content-box-title text-2xl"> Permissões do papel: {{ $role->name }}</h3>
             <!-- Botoes (com icones)  -->
-            <x-action-buttons :list="route('roles.index')" list-label="Papeis" can-list="index-role" />
+            <x-action-buttons :list="route('roles.index')" list-label="Papeis" can-list="roles.view" />
             <!-- Botoes (com icones)  -->
         </div>
 
@@ -80,31 +84,4 @@
                 </tbody>
             </table>
         @endforeach
-
-
-        {{-- @forelse ($permissions as $permission)
-        <div class="flex items-center justify-between border-b py-2">
-
-            <div>
-                <span class="text-sm text-gray-500">ID {{ $permission->id }}</span><br>
-                <strong>{{ $permission->name }}</strong>
-            </div>
-
-            @can('managePermissions', $role)
-                <form method="POST" action="{{ route('role-permissions.toggle', [$role, $permission]) }}">
-                    @csrf
-                    @method('PUT')
-
-                    <button type="submit"
-                        class="btn-sm {{ $role->hasPermissionTo($permission) ? 'btn-danger' : 'btn-success' }}">
-                        {{ $role->hasPermissionTo($permission) ? 'Remover' : 'Adicionar' }}
-                    </button>
-                </form>
-            @endcan
-
-        </div>
-
-    @empty
-        <p class="text-gray-500">Nenhuma permissão cadastrada.</p>
-    @endforelse --}}
     @endsection

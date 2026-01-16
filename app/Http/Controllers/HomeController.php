@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -15,21 +16,21 @@ class HomeController extends Controller
 
     public function index()
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return view('home.index'); // landing pública
         }
 
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if ($user->can('view-dashboard-admin')) {
-            return redirect()->route('dashboard.index');
+        if ($user->can('dashboard.admin')) {
+            return redirect()->route('dashboard.admin');
         }
 
-        if ($user->can('view-dashboard-dizimo')) {
-            return redirect()->route('dashboard.dizimo');
+        if ($user->can('dashboard.treasury')) {
+            return redirect()->route('dashboard.treasury');
         }
 
-        if ($user->can('view-dashboard-member') && $user->member) {
+        if ($user->can('dashboard.member') && $user->member) {
             return redirect()->route('dashboard.member');
         }
 

@@ -8,11 +8,11 @@
         <h1 class="content-title">Minhas Doações</h1>
 
 
-        <a href="{{ route('member.donation.create') }}" class="btn-primary">
+        <a href="{{ route('member.donations.create') }}" class="btn-primary">
             Nova Doação
         </a>
         <div class="mt-6 text-right">
-            <a href="{{ route('dashboard.member.old') }}" class="text-sm text-blue-600 hover:underline">
+            <a href="{{ route('dashboard.member') }}" class="text-sm text-blue-600 hover:underline">
                 Visualizar dashboard antigo (comparação)
             </a>
         </div>

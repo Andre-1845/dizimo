@@ -22,19 +22,19 @@
             <p class="text-center my-2 font-semibold"> EXPORTAR</p>
 
             <div class="flex gap-3 mb-4">
-                <a href="{{ route('dizimos.export.paid.pdf', request()->query()) }}" class="btn-info">
+                <a href="{{ route('reports.dizimos.export.paid.pdf', request()->query()) }}" class="btn-info">
                     PDF
                 </a>
 
-                <a href="{{ route('dizimos.export.paid.csv', request()->query()) }}" class="btn-warning">
+                <a href="{{ route('reports.dizimos.export.paid.csv', request()->query()) }}" class="btn-warning">
                     CSV
                 </a>
             </div>
         </div>
     </div> --}}
 
-    <x-report.actions pdfRoute="dizimos.export.paid.pdf" csvRoute="dizimos.export.paid.csv" backRoute="dashboard.dizimo"
-        :params="[
+    <x-report.actions pdfRoute="reports.dizimos.export.paid.pdf" csvRoute="reports.dizimos.export.paid.csv"
+        backRoute="dashboard.treasury" :params="[
             'month' => request('month'),
             'year' => request('year'),
         ]">

@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class SiteImageController extends Controller
 {
-    public function index(SiteImage $section)
+    public function index(SiteSection $section)
     {
-        $this->authorize('view', SiteImage::class);
+        $this->authorize('viewAny', SiteImage::class);
 
         $images = SiteImage::where('section_key', $section->key)
             ->orderBy('order')

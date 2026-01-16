@@ -1,3 +1,14 @@
+@props([
+    'show' => null,
+    'edit' => null,
+    'delete' => null,
+    'confirm' => 'Tem certeza que deseja excluir este registro?',
+    'canShow' => 'show',
+    'canEdit' => 'edit',
+    'canDelete' => 'delete',
+])
+
+
 <td {{ $attributes->merge(['class' => 'table-body align-middle']) }}>
     <div class="flex items-center justify-center gap-2">
 

@@ -72,7 +72,7 @@
                 R$ {{ money($membersPaidTotal) }}
             </p>
 
-            <a href="{{ route('dizimos.paid', request()->query()) }}"
+            <a href="{{ route('reports.dizimos.paid', request()->query()) }}"
                 class="btn-success mt-4 inline-flex items-center justify-center">
                 Ver lista
             </a>
@@ -86,7 +86,7 @@
                 R$ {{ money($membersPendingTotal) }}
             </p>
 
-            <a href="{{ route('dizimos.pending', request()->query()) }}"
+            <a href="{{ route('reports.dizimos.pending', request()->query()) }}"
                 class="btn-danger mt-4 inline-flex items-center justify-center">
                 Ver lista
             </a>
@@ -100,7 +100,7 @@
                 R$ {{ money($anonymousTotal) }}
             </p>
 
-            <a href="{{ route('dizimos.anonymous', request()->query()) }}"
+            <a href="{{ route('reports.dizimos.anonymous', request()->query()) }}"
                 class="btn-info mt-4 inline-flex items-center justify-center">
                 Ver lançamentos
             </a>

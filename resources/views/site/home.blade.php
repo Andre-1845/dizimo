@@ -280,7 +280,7 @@
 
                 <p class="text-sm text-gray-400">
                     {{ \App\Models\SiteSetting::get('address') }} <br>
-                    {{ \App\Models\SiteSetting::get('phone') }}
+                    {{ format_phone(\App\Models\SiteSetting::get('phone')) }}
                 </p>
 
             </div>

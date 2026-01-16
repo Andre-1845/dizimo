@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
                 UserSeeder::class,
                 CategorySeeder::class,
                 PaymentMethodSeeder::class,
+                SiteSeeder::class,
+
             ]);
         }
     }

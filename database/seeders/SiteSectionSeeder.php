@@ -34,9 +34,24 @@ class SiteSectionSeeder extends Seeder
                 'order' => 4,
             ],
             [
+                'key'   => 'activities',
+                'title' => 'Horários e Informações',
+                'order' => 5,
+            ],
+            [
+                'key'   => 'notices',
+                'title' => 'Avisos da Igreja',
+                'order' => 6,
+            ],
+            [
+                'key'   => 'agenda',
+                'title' => 'Eventos',
+                'order' => 7,
+            ],
+            [
                 'key'   => 'contact',
                 'title' => 'Contato',
-                'order' => 5,
+                'order' => 8,
             ],
         ];
 

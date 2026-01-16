@@ -80,7 +80,7 @@
 
 
                             <td class="table-body text-center">
-                                @can('confirm-donation')
+                                @can('donations.confirm')
                                     <form method="POST" action="{{ route('donations.confirm', $donation) }}"
                                         onsubmit="return confirm('Confirmar esta doação?')">
                                         @csrf

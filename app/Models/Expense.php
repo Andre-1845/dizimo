@@ -16,10 +16,15 @@ class Expense extends Model
         'description',
         'notes',
         'receipt_path',
+        'is_approved',
+        'approved_at',
+        'approved_by',
     ];
 
     protected $casts = [
         'expense_date' => 'date',
+        'is_approved' => 'boolean',
+        'approved_at' => 'datetime',
     ];
 
     public function category()
@@ -35,5 +40,20 @@ class Expense extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('is_approved', true);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('is_approved', false);
     }
 }

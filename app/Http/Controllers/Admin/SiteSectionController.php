@@ -10,7 +10,7 @@ class SiteSectionController extends Controller
 {
     public function index()
     {
-        $this->authorize('view', SiteSection::class);
+        $this->authorize('viewAny', SiteSection::class);
 
         $sections = SiteSection::orderBy('order')->get();
 

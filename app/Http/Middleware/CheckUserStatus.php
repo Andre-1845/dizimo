@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckUserStatus
@@ -17,7 +18,7 @@ class CheckUserStatus
 
     public function handle($request, Closure $next)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if (!$user) {
             return redirect()->route('login');
@@ -25,7 +26,7 @@ class CheckUserStatus
 
         // Usuário pendente
         if ($user->status_id == 1) { // PENDENTE
-            auth()->logout();
+            Auth::logout();
 
             return redirect()
                 ->route('login')
@@ -34,7 +35,7 @@ class CheckUserStatus
 
         // Usuário suspenso
         if ($user->status_id == 3) { // SUSPENSO
-            auth()->logout();
+            Auth::logout();
 
             return redirect()
                 ->route('login')

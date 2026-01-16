@@ -13,7 +13,7 @@ class SiteNoticeController extends Controller
      */
     public function index()
     {
-        $this->authorize('view', SiteNotice::class);
+        $this->authorize('viewAny', SiteNotice::class);
 
         $notices = SiteNotice::orderBy('created_at', 'desc')->paginate(10);
 

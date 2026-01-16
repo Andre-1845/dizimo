@@ -8,7 +8,7 @@
         <div class="content-header">
             <h2 class="content-title">Receitas e Doações</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <span>Receitas</span>
             </nav>
@@ -25,14 +25,14 @@
             <div class="content-box-btn">
 
                 <!-- Botao PAINEL (com icone)  -->
-                <a href="{{ route('dashboard.index') }}" class="btn-primary align-icon-btn" title="Painel">
+                <a href="{{ route('dashboard.admin') }}" class="btn-primary align-icon-btn" title="Painel">
                     @include('components.icons.painel_icon')
                     <span class="hide-name-btn">Painel</span>
                 </a>
                 <!-- Fim - Botao PAINEL  -->
 
                 <!-- Botao NOVA DOACAO (com icone)  -->
-                @can('create-donation')
+                @can('donations.create')
                     <div class="content-box-btn">
                         <a href="{{ route('donations.create') }}" class="btn-success flex items-center space-x-1"
                             title="Cadastrar">
@@ -101,7 +101,7 @@
                             </td> {{-- FIM Link do Recibo --}}
 
                             <x-table-actions-icons :show="route('donations.show', $donation)" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)"
-                                can-show="show-donation" can-edit="edit-donation" can-delete="destroy-donation"
+                                can-show="donations.view" can-edit="donations.edit" can-delete="donations.delete"
                                 confirm="Deseja excluir esta receita/doação?" />
                         </tr>
                     @empty

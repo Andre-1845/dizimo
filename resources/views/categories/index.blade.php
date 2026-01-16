@@ -5,6 +5,15 @@
 @section('content')
 
     <div class="content-box"> <!-- Content-Box  -->
+
+        <div style="background: #e3f2fd; padding: 15px; margin: 15px 0; border-radius: 5px;">
+            <h4>🔍 Diagnóstico de Permissões:</h4>
+            <p>Usuário: {{ Auth::user()->name }}</p>
+            <p>Pode ver categorias? {{ Auth::user()->can('categories.view') ? '✅ SIM' : '❌ NÃO' }}</p>
+            <p>Pode editar categorias? {{ Auth::user()->can('categories.edit') ? '✅ SIM' : '❌ NÃO' }}</p>
+            <p>Pode excluir categorias? {{ Auth::user()->can('categories.delete') ? '✅ SIM' : '❌ NÃO' }}</p>
+            <p>É superadmin? {{ Auth::user()->hasRole('superadmin') ? '✅ SIM' : '❌ NÃO' }}</p>
+        </div>
         <div class="content-box-header">
             <h3 class="content-box-title">Listar</h3>
 
@@ -47,7 +56,10 @@
                             <td class="table-body">{{ $category->name ?? '—' }}</td>
 
                             <td class="table-body text-center">
-                                {{ $category->type_label }}
+                                <span
+                                    class="font-bold @if ($category->type_label == 'Receita') text-blue-600 @else text-red-600 @endif">
+                                    {{ $category->type_label }}
+                                </span>
                             </td>
 
 
@@ -56,12 +68,13 @@
                             </td>
 
                             <x-table-actions-icons :show="route('categories.show', $category)" :edit="route('categories.edit', $category)" :delete="route('categories.destroy', $category)"
-                                confirm="Deseja excluir esta categoria?" />
+                                confirm="Deseja excluir esta categoria?" canShow="categories.view" canEdit="categories.edit"
+                                canDelete="categories.delete" />
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5" class="py-4 text-center text-gray-600">
-                                Nenhuma doação registrada.
+                                Nenhuma categoria registrada.
                             </td>
                         </tr>
                     @endforelse

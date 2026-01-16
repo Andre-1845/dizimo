@@ -10,120 +10,239 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-
             /*
-            |------------------------------------------------------------------
-            | ACESSO A MÓDULOS (USAR EM ROTAS E SIDEBAR)
-            |------------------------------------------------------------------
+            |--------------------------------------------------------------------------
+            | PERMISSÕES DE MÓDULO (Sidebar)
+            |--------------------------------------------------------------------------
             */
             [
-                'group' => 'Acesso aos Módulos',
+                'group' => 'Módulos',
+                'description' => 'Acesso aos módulos principais do sistema',
                 'items' => [
-                    ['name' => 'access-dashboard',   'display' => 'Acessar dashboards'],
-                    ['name' => 'access-users',       'display' => 'Acessar usuários'],
-                    ['name' => 'access-members',     'display' => 'Acessar membros'],
-                    ['name' => 'access-donations',   'display' => 'Acessar doações'],
-                    ['name' => 'access-expenses',    'display' => 'Acessar despesas'],
-                    ['name' => 'access-cms',         'display' => 'Acessar CMS do site'],
-                    ['name' => 'access-reports',     'display' => 'Acessar relatórios'],
-                    ['name' => 'access-transparency', 'display' => 'Acessar transparência'],
-                    ['name' => 'access-categories', 'display' => 'Acessar categorias'],
+                    ['name' => 'dashboard.access', 'display' => 'Acessar Dashboard'],
+                    ['name' => 'users.access', 'display' => 'Acessar Usuários'],
+                    ['name' => 'members.access', 'display' => 'Acessar Membros'],
+                    ['name' => 'donations.access', 'display' => 'Acessar Doações'],
+                    ['name' => 'expenses.access', 'display' => 'Acessar Despesas'],
+                    ['name' => 'reports.access', 'display' => 'Acessar Relatórios'],
+                    ['name' => 'cms.access', 'display' => 'Acessar CMS'],
+                    ['name' => 'transparency.access', 'display' => 'Acessar Transparência'],
+                    ['name' => 'categories.access', 'display' => 'Acessar Categorias'],
+                    ['name' => 'settings.access', 'display' => 'Acessar Configurações'],
                 ],
             ],
 
             /*
-            |------------------------------------------------------------------
+            |--------------------------------------------------------------------------
             | USUÁRIOS
-            |------------------------------------------------------------------
+            |--------------------------------------------------------------------------
             */
             [
                 'group' => 'Usuários',
+                'description' => 'Permissões para gerenciamento de usuários',
                 'items' => [
-                    ['name' => 'index-user',        'display' => 'Listar usuários'],
-                    ['name' => 'show-user',         'display' => 'Visualizar usuário'],
-                    ['name' => 'create-user',       'display' => 'Criar usuário'],
-                    ['name' => 'edit-user',         'display' => 'Editar usuário'],
-                    ['name' => 'edit-user-password', 'display' => 'Alterar senha de usuário'],
-                    ['name' => 'destroy-user',      'display' => 'Excluir usuário'],
+                    ['name' => 'users.view', 'display' => 'Ver usuários'],
+                    ['name' => 'users.create', 'display' => 'Criar usuários'],
+                    ['name' => 'users.edit', 'display' => 'Editar usuários'],
+                    ['name' => 'users.delete', 'display' => 'Excluir usuários'],
+                    ['name' => 'users.import', 'display' => 'Importar usuários'],
+                    ['name' => 'users.export', 'display' => 'Exportar usuários'],
+                    ['name' => 'users.change-status', 'display' => 'Alterar status de usuários'],
+                    ['name' => 'users.reset-password', 'display' => 'Redefinir senha de usuários'],
                 ],
             ],
 
             /*
-            |-------------------------------------------------------------------
+            |--------------------------------------------------------------------------
             | MEMBROS
-            |--------------------------------------------------------------------
+            |--------------------------------------------------------------------------
             */
             [
                 'group' => 'Membros',
+                'description' => 'Permissões para gerenciamento de membros da igreja',
                 'items' => [
-                    ['name' => 'index-member',   'display' => 'Listar membros'],
-                    ['name' => 'show-member',    'display' => 'Visualizar membro'],
-                    ['name' => 'create-member',  'display' => 'Criar membro'],
-                    ['name' => 'edit-member',    'display' => 'Editar membro'],
-                    ['name' => 'destroy-member', 'display' => 'Excluir membro'],
-                    ['name' => 'update-tithe', 'display' => 'Editar Dízimo'],
+                    ['name' => 'members.view', 'display' => 'Ver membros'],
+                    ['name' => 'members.create', 'display' => 'Cadastrar membros'],
+                    ['name' => 'members.edit', 'display' => 'Editar membros'],
+                    ['name' => 'members.delete', 'display' => 'Excluir membros'],
+                    ['name' => 'members.import', 'display' => 'Importar membros'],
+                    ['name' => 'members.export', 'display' => 'Exportar membros'],
+                    ['name' => 'members.history', 'display' => 'Ver histórico de membros'],
+                    ['name' => 'members.tithe-manage', 'display' => 'Gerenciar dízimo de membros'],
                 ],
             ],
 
             /*
-            |--------------------------------------------------------------------
-            | DOAÇÕES / RECEITAS
-            |--------------------------------------------------------------------
+            |--------------------------------------------------------------------------
+            | RECEITAS , DÍZIMOS E DOAÇÕES
+            |--------------------------------------------------------------------------
             */
             [
-                'group' => 'Doações',
+                'group' => 'Receitas',
+                'description' => 'Permissões para registro e gestão de dízimos',
                 'items' => [
-                    ['name' => 'index-donation',   'display' => 'Listar doações'],
-                    ['name' => 'show-donation',    'display' => 'Visualizar doação'],
-                    ['name' => 'create-donation',  'display' => 'Registrar doação'],
-                    ['name' => 'edit-donation',    'display' => 'Editar doação'],
-                    ['name' => 'confirm-donation', 'display' => 'Confirmar doação'],
-                    ['name' => 'destroy-donation', 'display' => 'Excluir doação'],
+                    ['name' => 'donations.view', 'display' => 'Ver doações'],
+                    ['name' => 'donations.create', 'display' => 'Registrar doação'],
+                    ['name' => 'donations.edit', 'display' => 'Editar doação'],
+                    ['name' => 'donations.delete', 'display' => 'Excluir doação'],
+                    ['name' => 'donations.confirm', 'display' => 'Confirmar doação'],
+                    ['name' => 'donations.cancel', 'display' => 'Cancelar doação'],
+                    ['name' => 'donations.import', 'display' => 'Importar doações'],
+                    ['name' => 'donations.export', 'display' => 'Exportar doações'],
+                    ['name' => 'donations.bulk', 'display' => 'Lançamentos em lote'],
+                    ['name' => 'donations.reconcile', 'display' => 'Reconciliar lançamentos'],
+                    ['name' => 'donations.anonymize', 'display' => 'Anonimizar doações'],
                 ],
             ],
 
             /*
-            |-------------------------------------------------------------------
+            |--------------------------------------------------------------------------
             | DESPESAS
-            |-------------------------------------------------------------------
+            |--------------------------------------------------------------------------
             */
             [
                 'group' => 'Despesas',
+                'description' => 'Permissões para gestão de despesas',
                 'items' => [
-                    ['name' => 'index-expense',   'display' => 'Listar despesas'],
-                    ['name' => 'show-expense',    'display' => 'Visualizar despesa'],
-                    ['name' => 'create-expense',  'display' => 'Registrar despesa'],
-                    ['name' => 'edit-expense',    'display' => 'Editar despesa'],
-                    ['name' => 'destroy-expense', 'display' => 'Excluir despesa'],
+                    ['name' => 'expenses.view', 'display' => 'Ver despesas'],
+                    ['name' => 'expenses.create', 'display' => 'Registrar despesa'],
+                    ['name' => 'expenses.edit', 'display' => 'Editar despesa'],
+                    ['name' => 'expenses.delete', 'display' => 'Excluir despesa'],
+                    ['name' => 'expenses.approve', 'display' => 'Aprovar despesas'],
+                    ['name' => 'expenses.import', 'display' => 'Importar despesas'],
+                    ['name' => 'expenses.export', 'display' => 'Exportar despesas'],
                 ],
             ],
 
             /*
-            |------------------------------------------------------------------
-            | CMS DO SITE
-            |------------------------------------------------------------------
+            |--------------------------------------------------------------------------
+            | RELATÓRIOS
+            |--------------------------------------------------------------------------
             */
             [
-                'group' => 'CMS',
+                'group' => 'Relatórios',
+                'description' => 'Permissões para acesso a relatórios',
                 'items' => [
-                    ['name' => 'view-cms',    'display' => 'Visualizar CMS'],
-                    ['name' => 'create-cms',  'display' => 'Criar conteúdo do site'],
-                    ['name' => 'edit-cms',    'display' => 'Editar conteúdo do site'],
-                    ['name' => 'delete-cms',  'display' => 'Excluir conteúdo do site'],
-                    ['name' => 'publish-cms', 'display' => 'Publicar conteúdo do site'],
+                    ['name' => 'reports.financial', 'display' => 'Relatórios financeiros'],
+                    ['name' => 'reports.tithes', 'display' => 'Relatórios de dízimos'],
+                    ['name' => 'reports.donations', 'display' => 'Relatórios de doações'],
+                    ['name' => 'reports.expenses', 'display' => 'Relatórios de despesas'],
+                    ['name' => 'reports.members', 'display' => 'Relatórios de membros'],
+                    ['name' => 'reports.annual', 'display' => 'Relatório anual'],
+                    ['name' => 'reports.comparative', 'display' => 'Relatório comparativo'],
+                    ['name' => 'reports.export', 'display' => 'Exportar relatórios'],
                 ],
             ],
 
             /*
-            |--------------------------------------------------------------------
-            | PAPÉIS E PERMISSÕES (HARD RULE)
-            |--------------------------------------------------------------------
+            |--------------------------------------------------------------------------
+            | CATEGORIAS
+            |--------------------------------------------------------------------------
             */
             [
-                'group' => 'Segurança',
+                'group' => 'Categorias',
+                'description' => 'Permissões para gerenciamento de categorias',
                 'items' => [
-                    ['name' => 'manage-roles',        'display' => 'Gerenciar papéis'],
-                    ['name' => 'manage-permissions',  'display' => 'Gerenciar permissões'],
+                    ['name' => 'categories.view', 'display' => 'Ver categorias'],
+                    ['name' => 'categories.create', 'display' => 'Criar categorias'],
+                    ['name' => 'categories.edit', 'display' => 'Editar categorias'],
+                    ['name' => 'categories.delete', 'display' => 'Excluir categorias'],
+                ],
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | CMS (CONTEÚDO DO SITE)
+            |--------------------------------------------------------------------------
+            */
+            [
+                'group' => 'CMS - Site',
+                'description' => 'Permissões para gerenciamento do conteúdo do site',
+                'items' => [
+                    ['name' => 'cms.view', 'display' => 'Ver conteúdo do site'],
+                    ['name' => 'cms.create', 'display' => 'Criar conteúdo'],
+                    ['name' => 'cms.edit', 'display' => 'Editar conteúdo'],
+                    ['name' => 'cms.delete', 'display' => 'Excluir conteúdo'],
+                    ['name' => 'cms.publish', 'display' => 'Publicar conteúdo'],
+                    ['name' => 'cms.activities', 'display' => 'Gerenciar atividades'],
+                    ['name' => 'cms.events', 'display' => 'Gerenciar eventos'],
+                    ['name' => 'cms.notices', 'display' => 'Gerenciar avisos'],
+                    ['name' => 'cms.team', 'display' => 'Gerenciar equipe'],
+                ],
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | TRANSPARÊNCIA
+            |--------------------------------------------------------------------------
+            */
+            [
+                'group' => 'Transparência',
+                'description' => 'Permissões para módulo de transparência financeira',
+                'items' => [
+                    ['name' => 'transparency.view', 'display' => 'Ver transparência'],
+                    ['name' => 'transparency.publish', 'display' => 'Publicar dados'],
+                    ['name' => 'transparency.manage', 'display' => 'Gerenciar transparência'],
+                ],
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | CONFIGURAÇÕES E SEGURANÇA
+            |--------------------------------------------------------------------------
+            */
+            [
+                'group' => 'Configurações',
+                'description' => 'Permissões para configurações do sistema',
+                'items' => [
+                    ['name' => 'settings.view', 'display' => 'Ver configurações'],
+                    ['name' => 'settings.edit', 'display' => 'Editar configurações'],
+
+                    // Segurança
+                    ['name' => 'roles.view', 'display' => 'Ver papéis'],
+                    ['name' => 'roles.create', 'display' => 'Criar papéis'],
+                    ['name' => 'roles.edit', 'display' => 'Editar papéis'],
+                    ['name' => 'roles.delete', 'display' => 'Excluir papéis'],
+                    ['name' => 'roles.assign', 'display' => 'Atribuir papéis'],
+
+                    ['name' => 'permissions.view', 'display' => 'Ver permissões'],
+                    ['name' => 'permissions.manage', 'display' => 'Gerenciar permissões'],
+
+                    // Sistema
+                    ['name' => 'system.logs', 'display' => 'Ver logs do sistema'],
+                    ['name' => 'system.backup', 'display' => 'Backup do sistema'],
+                    ['name' => 'system.maintenance', 'display' => 'Modo manutenção'],
+                ],
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | PERFIL
+            |--------------------------------------------------------------------------
+            */
+            [
+                'group' => 'Perfil',
+                'description' => 'Permissões para gerenciamento do próprio perfil',
+                'items' => [
+                    ['name' => 'profile.view', 'display' => 'Ver próprio perfil'],
+                    ['name' => 'profile.edit', 'display' => 'Editar próprio perfil'],
+                    ['name' => 'profile.password', 'display' => 'Alterar própria senha'],
+                ],
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | DASHBOARDS ESPECÍFICOS
+            |--------------------------------------------------------------------------
+            */
+            [
+                'group' => 'Dashboards',
+                'description' => 'Permissões para dashboards específicos',
+                'items' => [
+                    ['name' => 'dashboard.admin', 'display' => 'Dashboard Administrativo'],
+                    ['name' => 'dashboard.treasury', 'display' => 'Dashboard Tesouraria'],
+                    ['name' => 'dashboard.member', 'display' => 'Dashboard Membro'],
+                    ['name' => 'dashboard.dizimo', 'display' => 'Dashboard Dízimo'],
                 ],
             ],
         ];
@@ -133,15 +252,18 @@ class PermissionSeeder extends Seeder
 
             foreach ($groupData['items'] as $item) {
                 Permission::updateOrCreate(
-                    ['name' => $item['name'], 'guard_name' => 'web'],
+                    ['name' => $item['name']],
                     [
                         'display_name' => $item['display'],
-                        'description'  => $item['desc'] ?? null,
-                        'group'        => $groupData['group'],
-                        'order'        => $order++,
+                        'group' => $groupData['group'],
+                        'description' => $groupData['description'] ?? null,
+                        'guard_name' => 'web',
+                        'order' => $order++,
                     ]
                 );
             }
         }
+
+        $this->command->info('✓ Permissões criadas/atualizadas com sucesso!');
     }
 }

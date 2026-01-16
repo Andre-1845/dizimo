@@ -8,7 +8,15 @@ use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\Member;
 use App\Models\Role;
+use App\Models\SiteActivity;
+use App\Models\SiteEvent;
+use App\Models\SiteImage;
+use App\Models\SiteNotice;
+use App\Models\SitePerson;
+use App\Models\SiteSection;
+use App\Models\SiteSetting;
 use App\Models\User;
+use App\Policies\CmsPolicy;
 use App\Policies\DonationPolicy;
 use App\Policies\ExpensePolicy;
 use App\Policies\MemberPolicy;
@@ -30,6 +38,13 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Donation::class => DonationPolicy::class,
         Expense::class => ExpensePolicy::class,
+        SiteSection::class => CmsPolicy::class,
+        SiteEvent::class => CmsPolicy::class,
+        SiteActivity::class => CmsPolicy::class,
+        SiteNotice::class => CmsPolicy::class,
+        SitePerson::class => CmsPolicy::class,
+        SiteImage::class => CmsPolicy::class,
+        SiteSetting::class => CmsPolicy::class,
     ];
 
 

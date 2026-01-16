@@ -14,8 +14,8 @@
     </p>
 
     {{-- AÇÕES --}}
-    <x-report.actions pdfRoute="dizimos.export.anonymous.pdf" csvRoute="dizimos.export.anonymous.csv"
-        backRoute="dashboard.dizimo" :params="[
+    <x-report.actions pdfRoute="reports.dizimos.export.anonymous.pdf" csvRoute="reports.dizimos.export.anonymous.csv"
+        backRoute="dashboard.treasury" :params="[
             'month' => request('month'),
             'year' => request('year'),
         ]">

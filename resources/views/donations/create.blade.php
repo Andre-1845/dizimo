@@ -10,7 +10,7 @@
         <div class="content-header">
             <h2 class="content-title">Receitas</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <a href="{{ route('donations.index') }}" class="breadcrumb-link">Receitas</a>
                 <span>/</span>
@@ -28,7 +28,7 @@
             <div class="content-box-btn">
 
                 <!-- Botao LISTAR (com icone)  -->
-                @can('index-donation')
+                @can('donations.view')
                     <a href="{{ route('donations.index') }}" class="btn-primary align-icon-btn" title="Listar">
                         @include('components.icons.list')
 
@@ -43,10 +43,9 @@
 
         <x-alert />
 
-        @can('create-donation')
+        @can('donations.create')
             <form method="POST" action="{{ route('donations.store') }}" enctype="multipart/form-data"
                 class="bg-white rounded-xl shadow p-6 space-y-4">
-
 
                 @csrf
                 @method('POST')

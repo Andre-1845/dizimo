@@ -21,61 +21,37 @@ class AuthController extends Controller
     public function index()
     {
         // Se já estiver logado, não mostra login
-        if (auth()->check()) {
-
+        if (Auth::check()) {
+            $user = Auth::user();
             // Admin
-            if (auth()->user()->can('view-dashboard-admin')) {
-                return redirect()->route('dashboard.index');
+            if ($user->can('dashboard.admin')) {
+                return redirect()->route('dashboard.admin');
             }
 
             // Tesouraria / dízimo
-            if (auth()->user()->can('view-dashboard-dizimo')) {
-                return redirect()->route('dashboard.dizimo');
+            if ($user->can('dashboard.treasury')) {
+                return redirect()->route('dashboard.treasury');
             }
 
             // Membro
-            if (auth()->user()->can('view-dashboard-member')) {
+            if ($user->can('dashboard.member')) {
                 return redirect()->route('dashboard.member');
             }
 
+            // Se não tem nenhum dashboard específico, verifica permissões de módulo
+            if (
+                $user->can('users.access') || $user->can('members.access') ||
+                $user->can('donations.access') || $user->can('reports.access')
+            ) {
+                return redirect()->route('dashboard.admin');
+            }
+
             // Fallback seguro
-            return redirect()->route('dashboard.index');
+            return redirect()->route('site.home');
         }
 
         return view('auth.login');
     }
-
-
-    // public function processlogin(LoginRequest $request)
-    // {
-    //     try {
-    //         $auhenticated = Auth::attempt(['email' => $request->email, 'password' => $request->password]);
-    //         if (!$auhenticated) {
-    //             Log::notice('Erro de login.', ['email' => $request->email]);
-
-    //             return back()->withInput()->with('error', 'Usuário ou senha incorretos');
-    //         }
-    //         Log::info('Login', ['action_user_id' => Auth::id()]);
-
-    //         $user = Auth::user();
-
-    //         if ($user->hasRole('Membro')) {
-    //             return redirect()
-    //                 ->route('dashboard.member')
-    //                 ->with('success', 'Bem-vindo(a), ' . $user->name . '!');
-    //         }
-
-    //         // Admin, SuperAdmin, Tesoureiro etc
-    //         return redirect()
-    //             ->route('dashboard')
-    //             ->with('success', 'Bem-vindo(a), ' . $user->name . '!');
-    //     } catch (Exception $e) {
-    //         Log::notice('Erro de login.', ['error' => $e->getMessage()]);
-
-    //         return back()->withInput()->with('error', 'Usuário ou senha incorretos');
-    //     }
-    //     // return view('login.index');
-    // }
 
     public function loginProcess(LoginRequest $request)
     {
@@ -84,20 +60,31 @@ class AuthController extends Controller
             Log::notice('Erro de login.', ['email' => $request->email]);
             return back()->withInput()->with('error', 'Usuário ou senha incorretos');
         }
-        // VALIDACAO DE STATUS DO USUARIO
 
-        // if ($user->status_id !== 2) {
+        // Verificar se o usuário está ativo
+        $user = Auth::user();
+        // if ($user->status_id != 2) { // ID 2 = Ativo
         //     Auth::logout();
-
-        //     return back()->withErrors([
-        //         'email' => 'Seu cadastro ainda não está ativo. Verifique seu e-mail.'
-        //     ]);
+        //     Log::warning('Tentativa de login de usuário inativo', ['user_id' => $user->id]);
+        //     return back()->withInput()->with('error', 'Usuário inativo ou suspenso.');
         // }
 
-        Log::info('Login', ['action_user_id' => Auth::id()]);
+        Log::info('Login realizado', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'roles' => $user->getRoleNames()->toArray()
+        ]);
 
-        // NÃO decida dashboard aqui
-        return redirect()->intended('/');
+        // Redirecionar com base nas permissões (mesma lógica do método index)
+        if ($user->can('dashboard.admin')) {
+            return redirect()->intended(route('dashboard.admin'));
+        } elseif ($user->can('dashboard.treasury')) {
+            return redirect()->intended(route('dashboard.treasury'));
+        } elseif ($user->can('dashboard.member')) {
+            return redirect()->intended(route('dashboard.member'));
+        }
+
+        return redirect()->intended(route('profile.show'));
     }
 
     // LOGOUT
@@ -128,8 +115,8 @@ class AuthController extends Controller
             ]);
 
             // Role padrão: MEMBRO
-            if (Role::where('name', 'Membro')->exists()) {
-                $user->assignRole('Membro');
+            if (Role::where('name', 'membro')->exists()) {
+                $user->assignRole('membro');
             }
 
             // Criar MEMBER automaticamente

@@ -14,8 +14,8 @@
     </p>
 
     {{-- AÇÕES --}}
-    <x-report.actions pdfRoute="dizimos.export.pending.pdf" csvRoute="dizimos.export.pending.csv" backRoute="dashboard.dizimo"
-        :params="[
+    <x-report.actions pdfRoute="reports.dizimos.export.pending.pdf" csvRoute="reports.dizimos.export.pending.csv"
+        backRoute="dashboard.treasury" :params="[
             'month' => request('month'),
             'year' => request('year'),
         ]">

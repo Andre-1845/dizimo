@@ -6,7 +6,7 @@
         <div class="content-header">
             <h2 class="content-title">Receitas</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <a href="{{ route('donations.index') }}" class="breadcrumb-link">Receitas</a>
                 <span>/</span>
@@ -24,8 +24,8 @@
 
             <!-- Botoes (com icones)  -->
             <!-- Botoes (com icones)  -->
-            <x-action-buttons :list="route('donations.index')" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-list="index-donation"
-                can-edit="edit-donation" can-delete="destroy-donation" delete-confirm="Deseja excluir esta doação ?" />
+            <x-action-buttons :list="route('donations.index')" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-list="donations-view"
+                can-edit="donations.edit" can-delete="donations.delete" delete-confirm="Deseja excluir esta doação ?" />
             <!-- Botoes (com icones)  -->
             <!-- Botoes (com icones)  -->
         </div>

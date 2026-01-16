@@ -10,7 +10,7 @@
         <div class="content-header">
             <h2 class="content-title">Receitas</h2>
             <nav class="breadcrumb">
-                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <a href="{{ route('donations.index') }}" class="breadcrumb-link">Receitas</a>
                 <span>/</span>
@@ -28,13 +28,9 @@
             <div class="content-box-btn">
 
                 <!-- Botao LISTAR (com icone)  -->
-                @can('index-donation')
+                @can('donations.view')
                     <a href="{{ route('donations.index') }}" class="btn-primary align-icon-btn" title="Listar">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                        </svg>
+                        @include('components.icons.list')
 
                         <span class="hide-name-btn">Listar</span>
                     </a>
@@ -47,7 +43,7 @@
 
         <x-alert />
 
-        @can('edit-donation')
+        @can('donations.edit')
             <form method="POST" action="{{ route('donations.update', $donation) }}"
                 class="bg-white rounded-xl shadow p-6 space-y-4">
 
