@@ -6,13 +6,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Perfil</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <a href="{{ route('profile.show') }}" class="breadcrumb-link">Perfil</a>
-                <span>/</span>
-                <span>Editar</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => $user->name, 'url' => route('profile.show', $user)], ['label' => 'Editar']]" />
         </div>
     </div>
 
@@ -25,8 +19,7 @@
             <div class="content-box-btn">
                 <!-- Botoes (com icones)  -->
                 <x-action-buttons :list="route('profile.show')" :list="route('profile.show', $user)" list-label="Perfil" :password="route('profile.password.edit', $user)"
-                    :delete="route('users.destroy', $user)" can-list="show-profile" can-edit="edit-profile" can-password="edit-profile-password"
-                    can-delete="destroy-user" delete-confirm="Deseja excluir o usuário {{ $user->name }}?" />
+                    can-list="profile.view" can-edit="profile.edit" can-password="profile.password" />
                 <!-- Botoes (com icones)  -->
             </div>
         </div>

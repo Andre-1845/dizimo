@@ -330,6 +330,7 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
     | Área do Membro (doações pessoais)
     */
     Route::prefix('minhas-doacoes')->middleware('permission:dashboard.member')->group(function () {
+
         Route::get('create', [MemberDonationController::class, 'create'])
             ->name('member.donations.create')
             ->middleware('permission:donations.create');
@@ -337,6 +338,17 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
         Route::post('/', [MemberDonationController::class, 'store'])
             ->name('member.donations.store')
             ->middleware('permission:donations.create');
+
+        Route::get('/{donation}', [MemberDonationController::class, 'show'])->name('member.donations.show');
+
+        Route::get('/{donation}/edit', [MemberDonationController::class, 'edit'])->name('member.donations.edit'); // NOVA
+
+        Route::put('/{donation}', [MemberDonationController::class, 'update'])->name('member.donations.update'); // NOVA
+
+        Route::get('/{donation}/download-receipt', [MemberDonationController::class, 'downloadReceipt'])
+            ->name('member.donations.download-receipt');
+
+        Route::delete('/{donation}', [MemberDonationController::class, 'destroy'])->name('member.donations.destroy');
     });
 
     /*

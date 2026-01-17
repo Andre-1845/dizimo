@@ -5,18 +5,45 @@
 @section('content')
 
     <div class="content-header">
-        <h1 class="content-title">Minhas Doações</h1>
-
-
-        <a href="{{ route('member.donations.create') }}" class="btn-primary">
-            Nova Doação
-        </a>
-        <div class="mt-6 text-right">
-            <a href="{{ route('dashboard.member') }}" class="text-sm text-blue-600 hover:underline">
-                Visualizar dashboard antigo (comparação)
-            </a>
+        {{-- Título centralizado acima --}}
+        <div class="text-center mb-6">
+            <h1 class="content-title">Minhas Doações</h1>
         </div>
+        <x-smart-breadcrumb :items="[['label' => 'Minhas Doações']]" />
+    </div>
 
+
+    <div class="content-box-header">
+        <h3 class="content-box-title">Listar Doações</h3>
+
+        <!-- Botoes (com icones)  -->
+        <div class="content-box-btn">
+
+            <!-- Botao PAINEL ANTIGO (com icone)  -->
+            <div class="content-box-btn">
+                <span class="btn-warning">
+                    <a href="{{ route('dashboard.member') }}">
+                        Visualizar dashboard antigo
+                    </a>
+                </span>
+            </div>
+            <!-- Fim - Botao PAINEL  -->
+
+            <!-- Botao NOVA DOACAO (com icone)  -->
+            @can('donations.create')
+                <div class="content-box-btn">
+                    <a href="{{ route('member.donations.create') }}" class="btn-success flex items-center space-x-1"
+                        title="Cadastrar">
+                        @include('components.icons.plus')
+
+                        <span>Nova Doacao</span>
+                    </a>
+                </div>
+            @endcan
+            <!--FIM  Botao NOVA DOACAO (com icone)  -->
+
+        </div>
+        <!-- Botoes (com icones)  -->
     </div>
 
     <x-alert />
@@ -82,6 +109,7 @@
                     <th class="table-header text-center">Valor</th>
                     <th class="table-header text-center">Comprovante</th>
                     <th class="table-header text-center">Confirmação</th>
+                    <th class="table-header text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -131,7 +159,9 @@
                                 @endif
                             </div>
                         </td>
-
+                        <x-table-actions-icons :show="route('member.donations.show', $donation)" :edit="!$donation->is_confirmed ? route('member.donations.edit', $donation) : null" :delete="route('member.donations.destroy', $donation)"
+                            can-show="donations.view" can-edit="donations.edit" can-delete="member.donations.delete"
+                            confirm="Deseja excluir esta doação?" />
                     </tr>
                 @empty
                     <tr>

@@ -24,11 +24,9 @@
             <h3 class="content-box-title">Editar Senha</h3>
 
             <!-- Botoes (com icones)  -->
-            <x-action-buttons :list="route('profile.show')" :password="route('profile.password.edit', $user)" can-list="show-profile"
-                can-password="edit-profile-password" />
+            <x-action-buttons :list="route('profile.show')" :password="route('profile.password.edit', $user)" can-list="profile.view" can-password="profile.password" />
             <!-- Botoes (com icones)  -->
         </div>
-
 
         <x-alert />
 

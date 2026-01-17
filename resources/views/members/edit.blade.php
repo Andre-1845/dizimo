@@ -7,11 +7,12 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Membros</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <span>Membros</span>
-            </nav>
+            {{-- Em members/edit.blade.php --}}
+            <x-smart-breadcrumb :items="[
+                ['label' => 'Membros', 'url' => route('members.index')],
+                ['label' => $member->name, 'url' => route('members.show', $member)],
+                ['label' => 'Editar'],
+            ]" />
         </div>
     </div>
 

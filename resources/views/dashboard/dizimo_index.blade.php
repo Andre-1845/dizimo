@@ -4,11 +4,18 @@
 
 @section('content')
 
-    <h1 class="text-2xl font-bold mb-6">Dashboard de Dízimos</h1>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h1 class="content-title mb-4">Dashboard de Dízimos</h1>
+
+            <x-smart-breadcrumb :items="[['label' => 'Painel Dizimos']]" />
+        </div>
+    </div>
 
     {{-- FILTROS --}}
     <form method="GET" class="flex flex-wrap gap-3 mb-6 items-end">
         <select name="month" class="border rounded p-2">
+            <option value="">Todos os meses</option>
             @for ($m = 1; $m <= 12; $m++)
                 <option value="{{ $m }}" @selected($month == $m)>
                     {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}

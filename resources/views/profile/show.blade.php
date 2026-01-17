@@ -6,12 +6,7 @@
         <div class="content-wrapper-full">
             <div class="content-header">
                 <h2 class="content-title">Perfil</h2>
-                <nav class="breadcrumb">
-                    <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                    <span>/</span>
-                    <a href="{{ route('profile.show') }}" class="breadcrumb-link">Perfil</a>
-                    <span>/</span>
-                    <span>Detalhes</span>
+                <x-smart-breadcrumb :items="[['label' => $user->name, 'url' => route('profile.show', $user)], ['label' => 'Perfil']]" />
                 </nav>
             </div>
         </div>
@@ -27,9 +22,8 @@
                 <h3 class="content-box-title">Perfil</h3>
 
                 <!-- Botoes (com icones)  -->
-                <x-action-buttons :edit="route('profile.edit', $user)" :password="route('profile.password.edit', $user)" :delete="route('users.destroy', $user)" can-edit="edit-profile"
-                    can-password="edit-profile-password" can-delete="destroy-user"
-                    delete-confirm="Deseja excluir o usuário {{ $user->name }}?" />
+                <x-action-buttons :edit="route('profile.edit', $user)" :password="route('profile.password.edit', $user)" can-edit="profile.edit"
+                    can-password="profile.password" />
                 <!-- Botoes (com icones)  -->
 
             </div>
@@ -37,8 +31,7 @@
             {{-- Listar registro --}}
             <div class="detail-box">
                 <div class="mb-1">
-                    <span class="title-detail-content">ID: </span>
-                    <span class="detail-content">{{ $user->id }}</span>
+                    <span class="hidden">{{ $user->id }}</span>
                 </div>
                 <div class="mb-1">
                     <span class="title-detail-content">Usuário: </span>
@@ -51,6 +44,10 @@
                 <div class="mb-1">
                     <span class="title-detail-content">E-mail: </span>
                     <span class="detail-content">{{ $user->email }}</span>
+                </div>
+                <div class="mb-1">
+                    <span class="title-detail-content">Telefone: </span>
+                    <span class="detail-content">{{ format_phone($user->member->phone) }}</span>
                 </div>
                 <div class="mb-1">
                     <span class="title-detail-content">Status: </span>

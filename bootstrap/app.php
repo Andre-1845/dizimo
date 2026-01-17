@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'user.status' => \App\Http\Middleware\CheckUserStatus::class,
+            'dashboard.redirect' => \App\Http\Middleware\RedirectToDashboard::class,
         ]);
     })
 

@@ -60,17 +60,6 @@ class UserController extends Controller
         ]);
     }
 
-
-    public function list(Status $status)
-    {
-        $users = User::where('status_id', $status->id)
-            ->orderBy('name', 'asc')
-            ->paginate(10);
-
-        return view('users.index', ['users' => $users, 'menu' => 'users']);
-    }
-
-
     public function create()
     {
         // Recuperar os papeis do BD
@@ -197,6 +186,20 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        // 1. Verifica auto-exclusão
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Você não pode excluir sua própria conta.');
+        }
+
+        // 2. Verifica se é o último superadmin (opcional)
+        if ($user->hasRole('superadmin') && User::role('superadmin')->count() <= 1) {
+            return back()->with('error', 'Não é possível excluir o único superadministrador do sistema.');
+        }
+
+        // 3. Autorização simples (sem policy)
+        if (!Auth::user()->can('users.delete')) {
+            abort(403, 'Acesso não autorizado.');
+        }
 
         $user->delete();
         return redirect()->route('users.index', ['menu' => 'users'])->with('success', 'Usuário apagado!');

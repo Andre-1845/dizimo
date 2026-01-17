@@ -44,7 +44,7 @@
         <x-alert />
 
         @can('donations.edit')
-            <form method="POST" action="{{ route('donations.update', $donation) }}"
+            <form method="POST" action="{{ route('donations.update', $donation) }}" enctype="multipart/form-data"
                 class="bg-white rounded-xl shadow p-6 space-y-4">
 
                 @csrf
@@ -93,6 +93,18 @@
                 <div>
                     <label class="form-label">Valor</label>
                     <input type="number" step="0.01" name="amount" value="{{ $donation->amount }}" class="form-input">
+                </div>
+
+                <div>
+                    <label class="form-label">Comprovante</label>
+                    <input type="file" name="receipt" value={{ $donation->receipt }} accept=".pdf,.jpg,.jpeg,.png"
+                        class="file-input">
+                    <p class="text-xs text-gray-400 mt-1">
+                        Tamanho máximo: 2MB
+                    </p>
+                    @error('receipt')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>

@@ -118,5 +118,6 @@
                 {{ $donations->links() }}
             </div>
         </div>
+    </div> <!-- Content-Box FIM -->
 
-    @endsection
+@endsection

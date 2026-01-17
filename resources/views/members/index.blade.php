@@ -9,11 +9,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Membros</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.member') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <span>Membros</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Membros']]" />
         </div>
     </div>
 
@@ -63,9 +59,10 @@
                                 @endif
                             </td>
                             <td class="table-body text-right">{{ $member->monthly_tithe ?? '—' }}</td>
-                            <x-table-actions-icons :show="Gate::allows('view', $member) ? route('members.show', $member) : null" :edit="Gate::allows('update', $member) ? route('members.edit', $member) : null" :delete="Gate::allows('delete', $member) && auth()->id() !== $member->user_id
-                                ? route('members.destroy', $member)
-                                : null" />
+
+                            <x-table-actions-icons :show="route('members.show', $member)" :edit="route('members.edit', $member)" :delete="route('members.destroy', $member)"
+                                can-show="members.view" can-edit="members.edit" can-delete="members.delete"
+                                confirm="Deseja excluir o membro * {{ $member->name }} * ?" />
                         </tr>
                     @empty
                         <tr>

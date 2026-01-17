@@ -5,6 +5,11 @@
         </div>
 
         <nav class="sidebar-nav">
+
+            <a @class(['sidebar-link', 'active' => request()->routeIs('site.home')]) href="{{ route('site.home') }}">
+                <span class="sidebar-icon">@include('components.icons.home')</span>
+                <span class="sidebar-text">Home Page</span>
+            </a>
             {{-- ================= DASHBOARDS ================= --}}
             @canany(['dashboard.admin', 'dashboard.treasury', 'dashboard.member'])
                 <div class="sidebar-group">
@@ -16,7 +21,7 @@
                             'active' => request()->routeIs('dashboard.admin'),
                         ]) href="{{ route('dashboard.admin') }}">
                             <span class="sidebar-icon">@include('components.icons.painel_icon')</span>
-                            <span class="sidebar-text">Dashboard Admin</span>
+                            <span class="sidebar-text">Administração</span>
                         </a>
                     @endcan
 
@@ -26,7 +31,7 @@
                             'active' => request()->routeIs('dashboard.treasury'),
                         ]) href="{{ route('dashboard.treasury') }}">
                             <span class="sidebar-icon">@include('components.icons.chartpie')</span>
-                            <span class="sidebar-text">Dashboard Tesouraria</span>
+                            <span class="sidebar-text">Painel Dízimos</span>
                         </a>
                     @endcan
 

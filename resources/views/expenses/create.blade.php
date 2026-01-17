@@ -114,13 +114,7 @@
                 {{-- Comprovante --}}
                 <div>
                     <label class="form-label">Comprovante</label>
-                    <input type="file" name="receipt" accept=".pdf,.jpg,.jpeg,.png"
-                        class="block w-full text-sm text-gray-600
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded file:border-0
-                      file:text-sm file:font-semibold
-                      file:bg-blue-50 file:text-blue-700
-                      hover:file:bg-blue-100">
+                    <input type="file" name="receipt" accept=".pdf,.jpg,.jpeg,.png" class="file-input">
                     <p class="text-xs text-gray-400 mt-1">Tamanho máximo: 2MB</p>
                     @error('receipt')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>

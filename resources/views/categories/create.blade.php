@@ -28,7 +28,7 @@
             <div class="content-box-btn">
 
                 <!-- Botao LISTAR (com icone)  -->
-                @can('index-category')
+                @can('categories.view')
                     <a href="{{ route('categories.index') }}" class="btn-primary align-icon-btn" title="Listar">
                         @include('components.icons.list')
 

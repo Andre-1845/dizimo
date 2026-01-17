@@ -6,11 +6,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Usuários</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <span>Usuários</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Usuários']]" />
         </div>
     </div>
 
@@ -61,10 +57,11 @@
                             <td class="table-body table-cell-lg-hidden">{{ $user->status->name }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $user->getRoleNames()->implode(', ') ?: '-' }}
                             </td>
-                            <x-table-actions-icons :show="Gate::allows('view', $user) ? route('users.show', $user) : null" :edit="Gate::allows('update', $user) ? route('users.edit', $user) : null" :delete="Gate::allows('delete', $user) && auth()->id() !== $user->id
-                                ? route('users.destroy', $user)
-                                : null"
-                                confirm="Deseja excluir {{ $user->name }}?" />
+
+                            <x-table-actions-icons :show="route('users.show', $user)" :edit="route('users.edit', $user)" :delete="$user->id !== auth()->id() ? route('users.destroy', $user) : null"
+                                can-show="users.view" can-edit="users.edit" :can-delete="$user->id !== auth()->id() ? 'users.delete' : null"
+                                confirm="Deseja excluir o usuário * {{ $user->name }} * ?" />
+
                         </tr>
                     @empty
                         <span class="alert-warning">Não existem usuários cadastrados.</span>

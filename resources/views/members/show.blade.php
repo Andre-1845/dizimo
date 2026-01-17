@@ -6,13 +6,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Membros</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <a href="{{ route('members.index') }}" class="breadcrumb-link">Membros</a>
-                <span>/</span>
-                <span>Visualizar</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Membros', 'url' => route('members.index')], ['label' => 'Detalhes']]" />
         </div>
     </div>
 

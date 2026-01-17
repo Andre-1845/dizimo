@@ -13,6 +13,11 @@
                 <span>/</span>
                 <span>Editar</span>
             </nav>
+            <x-smart-breadcrumb :items="[
+                ['label' => 'Usuários', 'url' => route('users.index')],
+                ['label' => $user->name, 'url' => route('users.show', $user)],
+                ['label' => 'Editar'],
+            ]" />
         </div>
     </div>
 
