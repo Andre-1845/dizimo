@@ -44,6 +44,16 @@
                             <span class="sidebar-text">Meu Dízimo</span>
                         </a>
                     @endcan
+
+
+                    <a @class([
+                        'sidebar-link',
+                        'active' => request()->routeIs('dashboard.transparency'),
+                    ]) href="{{ route('dashboard.transparency') }}">
+                        <span class="sidebar-icon">@include('components.icons.graph')</span>
+                        <span class="sidebar-text">Transparência</span>
+                    </a>
+
                 </div>
             @endcanany
 
@@ -134,14 +144,6 @@
                 </div>
             @endcan
 
-            {{-- ================= TRANSPARÊNCIA ================= --}}
-            @can('transparency.access')
-                <a @class(['sidebar-link', 'active' => $menu === 'transparency']) href="{{ route('transparency.index') }}">
-                    <span class="sidebar-icon">@include('components.icons.eye')</span>
-                    <span class="sidebar-text">Transparência</span>
-                </a>
-            @endcan
-
             {{-- ================= CATEGORIAS ================= --}}
             @can('categories.access')
                 <a @class(['sidebar-link', 'active' => $menu === 'categories']) href="{{ route('categories.index') }}">
@@ -159,13 +161,6 @@
                         <a @class(['sidebar-link', 'active' => $menu === 'statuses']) href="{{ route('statuses.index') }}">
                             <span class="sidebar-icon">@include('components.icons.newspaper')</span>
                             <span class="sidebar-text">Status</span>
-                        </a>
-                    @endcan
-
-                    @can('categories.access')
-                        <a @class(['sidebar-link', 'active' => $menu === 'payment-methods']) href="{{ route('payment-methods.index') }}">
-                            <span class="sidebar-icon">@include('components.icons.docdolar')</span>
-                            <span class="sidebar-text">Métodos de Pagamento</span>
                         </a>
                     @endcan
 

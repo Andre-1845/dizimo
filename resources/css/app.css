@@ -461,6 +461,135 @@
     }
 }
 
+/********** TRANSPARENCIA DASHBOARD **********/
+
+ .transparency-grid-3 {
+        @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+    }
+
+    .transparency-grid-2 {
+        @apply grid grid-cols-1 lg:grid-cols-2 gap-4;
+    }
+
+     .transparency-summary {
+          @apply bg-white rounded-lg p-4
+               border border-gray-300
+               flex justify-between items-start;
+    }
+
+    .transparency-summary:hover {
+        @apply -translate-y-0.5 shadow-md;
+    }
+
+    .transparency-summary-title {
+        @apply text-xs uppercase text-gray-500 mb-1;
+    }
+
+    .transparency-summary-value {
+        @apply text-2xl font-semibold;
+    }
+
+    .transparency-summary-meta {
+        @apply text-sm text-gray-500 mt-1;
+    }
+
+    .transparency-income {
+         @apply border-2 border-green-500;
+    }
+
+    .transparency-expense {
+        @apply border-2 border-blue-500;
+    }
+
+    .transparency-balance-positive {
+        @apply border-2 border-green-600;
+    }
+
+    .transparency-balance-negative {
+        @apply border-2 border-red-500;
+    }
+
+      /* Header destacado para tabelas da transparência */
+    .transparency-section-header {
+        @apply px-4 py-3 rounded-t-lg
+               text-white font-semibold;
+    }
+
+    .transparency-section-income {
+        @apply bg-green-600;
+    }
+
+    .transparency-section-expense {
+        @apply bg-blue-600;
+    }
+
+    /* Remove a borda inferior padrão quando usar header colorido */
+    .content-box-header.transparency-colored {
+        @apply border-b-0 mb-0;
+    }
+
+    .table-transparency {
+    @apply w-full rounded-b-lg overflow-hidden;
+}
+
+ .content-box.p-0 {
+        @apply overflow-hidden;
+    }
+
+     .table-transparency tbody tr {
+        @apply border-b border-gray-300;
+    }
+
+    .table-transparency tbody tr:nth-child(even) {
+        @apply bg-gray-100;
+    }
+
+    .table-transparency tbody tr:hover {
+        @apply bg-gray-200;
+    }
+
+    .table-transparency td,
+    .table-transparency th {
+        @apply py-2.5;
+    }
+
+/* grafico */
+     .transparency-chart-card {
+        @apply bg-white rounded-lg shadow-sm p-4;
+    }
+
+    .transparency-chart-title {
+        @apply text-sm font-semibold text-blue-900 mb-3;
+    }
+   .table-transparency td {
+        @apply py-2;
+    }
+
+    .table-transparency .percent-badge {
+        @apply inline-block px-2 py-0.5 text-xs rounded
+               bg-gray-200 text-gray-700;
+    }
+
+      .empty-state {
+        @apply text-center text-gray-500 py-8;
+    }
+
+    .empty-state i {
+        @apply text-3xl mb-3 opacity-50;
+    }
+
+     .report-card {
+        @apply bg-white border rounded-lg p-4 shadow-sm
+               flex flex-col
+               hover:shadow-md transition;
+    }
+
+    .report-footer {
+        @apply flex justify-between items-center mt-4 text-sm text-gray-500;
+    }
+
+    /*******  FIM Transparencia  ********/
+
 /* **** SITE *****/
 
 .site-link{
@@ -549,4 +678,116 @@
            transition-colors duration-200;
 }
 
+/* transparency.css - Estilos mínimos */
+.transparency-card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.transparency-card .card-header {
+    border-bottom: none;
+    padding: 1rem 1.25rem;
+}
+
+.transparency-card .card-body {
+    padding: 1.25rem;
+}
+
+/* Cores para os cards */
+.card-income {
+    border-left: 4px solid #28a745;
+}
+
+.card-expense {
+    border-left: 4px solid #007bff;
+}
+
+.card-balance-positive {
+    border-left: 4px solid #28a745;
+}
+
+.card-balance-negative {
+    border-left: 4px solid #dc3545;
+}
+
+/* Tabelas compactas */
+.table-transparency {
+    font-size: 0.875rem;
+}
+
+.table-transparency th {
+    border-top: none;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+/* Filtros */
+.filter-box {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+/* transparency.css */
+.transparency-dashboard .card {
+    transition: transform 0.2s;
+}
+
+.transparency-dashboard .card:hover {
+    transform: translateY(-2px);
+}
+
+.color-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 8px;
+}
+
+.icon-shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
+.empty-state {
+    opacity: 0.6;
+}
+
+/* Para o gráfico */
+#evolutionChart {
+    max-height: 300px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .transparency-dashboard .col-md-4 {
+        margin-bottom: 1rem;
+    }
+
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Adicione ao resources/css/app.css */
+.navbar a,
+.sidebar a,
+.x-dashboard.card a,
+.dropdown-content a,
+.dropdown-item,
+.sidebar-link {
+    color: white !important;
+    text-decoration: none !important;
+}
+
+
+
+
+/* FIM */
 }

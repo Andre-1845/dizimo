@@ -26,7 +26,9 @@ use App\Http\Controllers\{
     MemberController,
     DonationController,
     ExpenseController,
-    SiteController
+    ReportController,
+    SiteController,
+    TransparencyDashboardController
 };
 
 use App\Http\Controllers\MemberDonationController;
@@ -191,6 +193,24 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
 
         return redirect()->route('profile.show');
     })->name('dashboard');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard/transparencia', [TransparencyDashboardController::class, 'index'])
+            ->name('dashboard.transparency');
+    });
+
+    // Dashboard de Transparência (para todos logados)
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/transparencia', [TransparencyDashboardController::class, 'index'])
+            ->name('transparency.dashboard');
+    });
+
+    // CRUD de Relatórios TRANSPARENCIA
+    Route::middleware(['auth'])->prefix('admin')->group(function () {
+        Route::resource('reports', ReportController::class);
+        Route::post('/reports/{report}/toggle-status', [ReportController::class, 'toggleStatus'])
+            ->name('reports.toggle-status');
+    });
 
     /*
     | Relatórios (apenas para quem tem acesso a relatórios)
@@ -379,9 +399,9 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
     /*
     | Transparência (acesso público autenticado)
     */
-    Route::middleware('permission:transparency.access')->group(function () {
-        Route::get('/transparencia', function () {
-            return view('transparency.index');
-        })->name('transparency.index');
-    });
+    // Route::middleware('permission:transparency.access')->group(function () {
+    //     Route::get('/transparencia', function () {
+    //         return view('transparency.index');
+    //     })->name('transparency.index');
+    // });
 });

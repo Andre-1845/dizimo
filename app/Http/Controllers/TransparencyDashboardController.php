@@ -1,0 +1,175 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Donation;
+use App\Models\Expense;
+use App\Models\Category;
+use App\Models\Report;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class TransparencyDashboardController extends Controller
+{
+    public function index(Request $request)
+    {
+        // Apenas usuários logados
+        // if (!Auth::check()) {
+        //     abort(403, 'Acesso não autorizado.');
+        // }
+
+        // dd('TranparencyDashboardController');
+
+        // Filtros
+        $year = $request->get('year', now()->year);
+        $month = $request->get('month'); // null = todos os meses
+
+        // =====================
+        // 1. TOTAIS GERAIS
+        // =====================
+
+        // Receitas totais do ano
+        $totalIncome = Donation::confirmed()
+            ->whereYear('donation_date', $year)
+            ->when($month, function ($query) use ($month) {
+                return $query->whereMonth('donation_date', $month);
+            })
+            ->sum('amount');
+
+        // Despesas totais do ano
+        $totalExpenses = Expense::approved()
+            ->whereYear('expense_date', $year)
+            ->when($month, function ($query) use ($month) {
+                return $query->whereMonth('expense_date', $month);
+            })
+            ->sum('amount');
+
+        // Saldo
+        $balance = $totalIncome - $totalExpenses;
+
+        // =====================
+        // 2. RECEITAS POR CATEGORIA
+        // =====================
+        $incomeByCategory = Category::where('type', 'income')
+            ->withSum(['donations as total' => function ($query) use ($year, $month) {
+                $query->confirmed()
+                    ->whereYear('donation_date', $year)
+                    ->when($month, function ($q) use ($month) {
+                        return $q->whereMonth('donation_date', $month);
+                    });
+            }], 'amount')
+            ->having('total', '>', 0)
+            ->orderByDesc('total')
+            ->get();
+
+        // =====================
+        // 3. DESPESAS POR CATEGORIA
+        // =====================
+        $expensesByCategory = Category::where('type', 'expense')
+            ->withSum(['expenses as total' => function ($query) use ($year, $month) {
+                $query->approved()
+                    ->whereYear('expense_date', $year)
+                    ->when($month, function ($q) use ($month) {
+                        return $q->whereMonth('expense_date', $month);
+                    });
+            }], 'amount')
+            ->having('total', '>', 0)
+            ->orderByDesc('total')
+            ->get();
+
+        // =====================
+        // 4. EVOLUÇÃO MENSAL
+        // =====================
+        $monthlyData = [];
+        $monthNames = [
+            1 => 'Jan',
+            2 => 'Fev',
+            3 => 'Mar',
+            4 => 'Abr',
+            5 => 'Mai',
+            6 => 'Jun',
+            7 => 'Jul',
+            8 => 'Ago',
+            9 => 'Set',
+            10 => 'Out',
+            11 => 'Nov',
+            12 => 'Dez'
+        ];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $monthIncome = Donation::confirmed()
+                ->whereYear('donation_date', $year)
+                ->whereMonth('donation_date', $m)
+                ->sum('amount');
+
+            $monthExpense = Expense::approved()
+                ->whereYear('expense_date', $year)
+                ->whereMonth('expense_date', $m)
+                ->sum('amount');
+
+            $monthlyData[] = [
+                'month' => $monthNames[$m],
+                'income' => $monthIncome,
+                'expenses' => $monthExpense,
+                'balance' => $monthIncome - $monthExpense,
+            ];
+        }
+
+        // =====================
+        // 5. RELATÓRIOS ATIVOS
+        // =====================
+        $reports = Report::active()
+            ->orderByDesc('created_at')
+            ->limit(6) // Mostra até 6 relatórios
+            ->get();
+
+        // =====================
+        // 6. ANOS DISPONÍVEIS
+        // =====================
+        $availableYears = Donation::selectRaw('YEAR(donation_date) as year')
+            ->union(Expense::selectRaw('YEAR(expense_date) as year'))
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year');
+
+        // ANTES do return view, adicione:
+        // dd([
+        //     'Controller acessado' => 'OK',
+        //     'Year' => $year,
+        //     'Month' => $month,
+        //     'Total Income' => $totalIncome,
+        //     'Total Expenses' => $totalExpenses,
+        //     'Balance' => $balance,
+        //     'Income Categories Count' => $incomeByCategory->count(),
+        //     'Expense Categories Count' => $expensesByCategory->count(),
+        //     'Reports Count' => $reports->count(),
+        //     'View a ser carregada' => 'dashboard.transparency',
+        //     'Menu' => 'dashboard-transparency',
+        // ]);
+
+
+        return view('dashboard.transparency', [
+            'year' => $year,
+            'month' => $month,
+            'availableYears' => $availableYears,
+
+            // Totais
+            'totalIncome' => $totalIncome,
+            'totalExpenses' => $totalExpenses,
+            'balance' => $balance,
+
+            // Categorias
+            'incomeByCategory' => $incomeByCategory,
+            'expensesByCategory' => $expensesByCategory,
+
+            // Gráfico
+            'monthlyData' => $monthlyData,
+
+            // Relatórios
+            'reports' => $reports,
+
+            // Menu
+            'menu' => 'transparency',
+        ]);
+    }
+}
