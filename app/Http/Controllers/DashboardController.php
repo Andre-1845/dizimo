@@ -20,6 +20,14 @@ class DashboardController extends Controller
 
         $month = $request->filled('month') ? $request->month : null;
 
+
+        // dd(
+        //     [
+        //         'dashboard.admin' => auth()->user()->can('dashboard.admin'),
+        //         'dashboard.treasury' => auth()->user()->can('dashboard.treasury'),
+        //         'dashboard.member' => auth()->user()->can('dashboard.member')
+        //     ]
+        // );
         /* =====================
      |  TOTAIS (CARDS)
      ===================== */

@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             if (!$user) {
                 return null;
             }
-            return $user->hasRole('Super Admin') ? true : null;
+            return $user->hasRole('superadmin') ? true : null;
         });
 
         Paginator::useTailwind();

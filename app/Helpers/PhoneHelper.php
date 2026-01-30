@@ -4,9 +4,13 @@ if (!function_exists('format_phone')) {
 
     function format_phone(?string $phone): string
     {
-        if (empty($phone)) {
-            return '';
+        if (!$phone) {
+            return '-';
         }
+
+        // if (empty($phone)) {
+        //     return '';
+        // }
 
         // Remove tudo que não for número
         $numbers = preg_replace('/\D/', '', $phone);

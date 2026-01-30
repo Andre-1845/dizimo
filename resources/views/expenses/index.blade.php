@@ -77,8 +77,13 @@
                             <td class="table-body">{{ $expense->description ?? '—' }}</td>
                             <td class="table-body">{{ $expense->user->name ?? '—' }}</td>
                             <td class="table-body">{{ $expense->updated_at->format('d/m/Y') }}</td>
-                            <td class="table-body text-right">
-                                R$ {{ number_format($expense->amount, 2, ',', '.') }}
+                            <td @class([
+                                'table-body text-right font-semibold',
+                                'text-green-600' => $expense->is_confirmed,
+                                'text-orange-500' => !$expense->is_confirmed,
+                            ])
+                                title="{{ $expense->is_confirmed ? 'Despesa aprovada' : 'Aguardando validação' }}">
+                                R$ {{ money($expense->amount) }}
                             </td>
                             {{-- Link do Recibo --}}
                             <td class="table-body">

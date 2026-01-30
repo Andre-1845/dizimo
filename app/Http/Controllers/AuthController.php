@@ -63,6 +63,11 @@ class AuthController extends Controller
 
         // Verificar se o usuário está ativo
         $user = Auth::user();
+
+        if ($user->roles->isEmpty()) {
+            Auth::logout();
+            return back()->withErrors('Usuário sem papel atribuído.');
+        }
         // if ($user->status_id != 2) { // ID 2 = Ativo
         //     Auth::logout();
         //     Log::warning('Tentativa de login de usuário inativo', ['user_id' => $user->id]);

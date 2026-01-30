@@ -1,4 +1,3 @@
-// app/Policies/RolePolicy.php
 <?php
 
 namespace App\Policies;

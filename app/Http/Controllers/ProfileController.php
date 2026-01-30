@@ -15,6 +15,12 @@ class ProfileController extends Controller
 {
     public function show()
     {
+
+        // dd(
+        //     app(\App\Policies\UserPolicy::class)
+        //         ->view(auth()->user(), auth()->user())
+        // );
+
         /** @var User $user */
         $user = Auth::user()->load('member');
 

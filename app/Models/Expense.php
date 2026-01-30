@@ -56,4 +56,9 @@ class Expense extends Model
     {
         return $query->where('is_approved', false);
     }
+
+    public function getIsConfirmedAttribute(): bool
+    {
+        return $this->is_approved;
+    }
 }

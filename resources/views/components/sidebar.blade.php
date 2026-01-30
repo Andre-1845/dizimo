@@ -116,6 +116,16 @@
                             <span class="sidebar-icon">@include('components.icons.minus')</span>
                             <span class="sidebar-text">Despesas</span>
                         </a>
+
+                        @can('expenses.approve')
+                            <a @class([
+                                'sidebar-link',
+                                'active' => request()->routeIs('expenses.pending'),
+                            ]) href="{{ route('expenses.pending') }}">
+                                <span class="sidebar-icon">@include('components.icons.question')</span>
+                                <span class="sidebar-text">Confirmações de Despesas</span>
+                            </a>
+                        @endcan
                     @endcan
                 </div>
             @endcanany

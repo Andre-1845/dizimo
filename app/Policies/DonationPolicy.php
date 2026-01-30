@@ -12,100 +12,91 @@ class DonationPolicy
      */
     public function before(User $user, string $ability): ?bool
     {
-        // ✅ Superadmin pode tudo
         if ($user->hasRole('superadmin')) {
             return true;
         }
 
-        return null; // Continua para outras verificações
+        return null;
     }
 
     /**
-     * Determina se o usuário pode visualizar qualquer doação
+     * Listar doações
      */
     public function viewAny(User $user): bool
     {
-        // ✅ Permissão para ver todas as doações
         return $user->can('donations.view');
     }
 
     /**
-     * Determina se o usuário pode visualizar uma doação específica
+     * Visualizar doação específica
      */
     public function view(User $user, Donation $donation): bool
     {
-        // ✅ Permissão para ver todas
         if ($user->can('donations.view')) {
             return true;
         }
 
-        // ✅ Pode ver apenas as próprias doações
-        if ($user->can('donations.view-own')) {
-            return $donation->user_id === $user->id;
-        }
-
-        return false;
+        // Próprias doações
+        return $donation->user_id === $user->id
+            && $user->can('donations.view-own');
     }
 
     /**
-     * Determina se o usuário pode criar doações
+     * Criar doações (gestão)
      */
     public function create(User $user): bool
     {
-        // ✅ Permissão para criar doações (próprias ou de outros)
         return $user->can('donations.create');
     }
 
     /**
-     * Determina se o usuário pode criar doações em nome próprio
+     * Criar doação própria (membros)
      */
     public function createOwn(User $user): bool
     {
-        // ✅ Qualquer usuário autenticado pode criar doação própria
-        // (membros comuns)
-        return $user->hasRole('membro') || $user->can('donations.create');
+        return $user->can('donations.create-own')
+            || $user->can('donations.create');
     }
 
     /**
-     * Determina se o usuário pode atualizar uma doação
+     * Atualizar doação
      */
     public function update(User $user, Donation $donation): bool
     {
-        // ✅ Permissão para editar qualquer doação
+        // Gestão
         if ($user->can('donations.edit')) {
-            // Não pode editar doações confirmadas (a menos que cancele primeiro)
-            return $donation->status !== 'confirmada';
+            return !$donation->is_confirmed;
         }
 
-        // ✅ Pode editar apenas própria doação (se não confirmada)
-        if ($donation->user_id === $user->id && $user->can('donations.edit-own')) {
-            return $donation->status !== 'confirmada';
+        // Própria doação
+        if (
+            $donation->user_id === $user->id
+            && $user->can('donations.edit-own')
+        ) {
+            return !$donation->is_confirmed;
         }
 
         return false;
     }
 
     /**
-     * Determina se o usuário pode excluir uma doação
+     * Excluir doação
      */
     public function delete(User $user, Donation $donation): bool
     {
-        // ✅ Permissão para excluir qualquer doação
         if ($user->can('donations.delete')) {
-            // Não pode excluir doações confirmadas
-            return $donation->status !== 'confirmada';
+            return !$donation->is_confirmed;
         }
 
-        // ✅ Pode excluir apenas própria doação (se não confirmada)
         if ($donation->user_id === $user->id) {
-            return $donation->status !== 'confirmada';
+            return !$donation->is_confirmed;
         }
 
         return false;
     }
 
     /**
-     * Determina se o usuário pode restaurar uma doação excluída
+     * Restaurar doação
      */
     public function restore(User $user, Donation $donation): bool
     {
@@ -113,34 +104,33 @@ class DonationPolicy
     }
 
     /**
-     * Determina se o usuário pode excluir permanentemente
+     * Exclusão permanente
      */
     public function forceDelete(User $user, Donation $donation): bool
     {
-        // Apenas superadmin para exclusão permanente
         return $user->hasRole('superadmin');
     }
 
     /**
-     * Determina se o usuário pode confirmar uma doação
+     * Confirmar doação
      */
     public function confirm(User $user, Donation $donation): bool
     {
-        // ✅ Permissão específica
-        return $user->can('donations.confirm');
+        return $user->can('donations.confirm')
+            && !$donation->is_confirmed;
     }
 
     /**
-     * Determina se o usuário pode cancelar uma doação confirmada
+     * Cancelar doação confirmada
      */
     public function cancel(User $user, Donation $donation): bool
     {
-        // ✅ Permissão específica
-        return $user->can('donations.cancel');
+        return $user->can('donations.cancel')
+            && $donation->is_confirmed;
     }
 
     /**
-     * Determina se o usuário pode anonimizar uma doação
+     * Anonimizar doação
      */
     public function anonymize(User $user, Donation $donation): bool
     {
@@ -148,7 +138,7 @@ class DonationPolicy
     }
 
     /**
-     * Determina se o usuário pode importar doações
+     * Importar doações
      */
     public function import(User $user): bool
     {
@@ -156,7 +146,7 @@ class DonationPolicy
     }
 
     /**
-     * Determina se o usuário pode exportar doações
+     * Exportar doações
      */
     public function export(User $user): bool
     {
@@ -164,7 +154,7 @@ class DonationPolicy
     }
 
     /**
-     * Determina se o usuário pode fazer lançamentos em lote
+     * Lançamentos em lote
      */
     public function bulk(User $user): bool
     {
@@ -172,7 +162,7 @@ class DonationPolicy
     }
 
     /**
-     * Determina se o usuário pode reconciliar doações
+     * Reconciliar doações
      */
     public function reconcile(User $user): bool
     {

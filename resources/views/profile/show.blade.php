@@ -47,7 +47,8 @@
                 </div>
                 <div class="mb-1">
                     <span class="title-detail-content">Telefone: </span>
-                    <span class="detail-content">{{ format_phone($user->member->phone) }}</span>
+                    <span
+                        class="detail-content">{{ $user->member && $user->member->phone ? format_phone($user->member->phone) : '-' }}</span>
                 </div>
                 <div class="mb-1">
                     <span class="title-detail-content">Status: </span>

@@ -230,4 +230,25 @@ class ExpenseController extends Controller
 
         return view('expenses.show', ['expense' => $expense, 'menu' => 'expenses']);
     }
+
+    public function pending()
+    {
+        $expenses = Expense::where('is_approved', 'pending')
+            ->with(['category', 'user'])
+            ->latest()
+            ->paginate(10);
+
+        return view('expenses.pending', compact('expenses'));
+    }
+
+    public function confirm(Expense $expense)
+    {
+        $expense->update([
+            'is_approved' => true,
+            'approved_at' => now(),
+            'approved_by' => Auth::id(),
+        ]);
+
+        return back()->with('success', 'Despesa confirmada com sucesso.');
+    }
 }

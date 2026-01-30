@@ -295,7 +295,7 @@
 
 /* *****  Novo layout
 
-/* 🔑 BOTÃO DE AÇÃO PADRÃO (conceitual, NÃO reutilizado via @apply) */
+/* 🔑 BOTÃO DE AÇÃO PADRÃO */
 .btn-action {
     @apply inline-flex items-center justify-center
            gap-1 px-3 h-10 leading-none align-middle;
@@ -775,8 +775,8 @@
     }
 }
 
-/* Adicione ao resources/css/app.css */
-.navbar a,
+
+/* .navbar a,
 .sidebar a,
 .x-dashboard.card a,
 .dropdown-content a,
@@ -784,7 +784,7 @@
 .sidebar-link {
     color: white !important;
     text-decoration: none !important;
-}
+} */
 
 
 

@@ -158,7 +158,7 @@ Route::middleware(['auth', 'verified', 'permission:cms.access'])
 | SISTEMA (USUÁRIOS AUTENTICADOS)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
+Route::middleware(['auth', 'user.status'])->group(function () {
 
     /*
     | Dashboards
@@ -278,7 +278,18 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
     | Financeiro - Despesas
     */
     Route::middleware('permission:expenses.access')->group(function () {
-        Route::resource('expenses', ExpenseController::class);
+
+        Route::prefix('expenses')->group(function () {
+            Route::get('pendentes', [ExpenseController::class, 'pending'])
+                ->name('expenses.pending')
+                ->middleware('permission:expenses.view');
+
+            Route::patch('/{expense}/confirm', [ExpenseController::class, 'confirm'])
+                ->name('expenses.confirm')
+                ->middleware('permission:expenses.approve');
+
+            Route::resource('expenses', ExpenseController::class);
+        });
     });
 
     /*

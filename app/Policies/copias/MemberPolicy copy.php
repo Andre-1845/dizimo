@@ -12,71 +12,77 @@ class MemberPolicy
      */
     public function before(User $user, string $ability): ?bool
     {
+        // ✅ Superadmin pode tudo
         if ($user->hasRole('superadmin')) {
             return true;
         }
 
-        return null;
+        return null; // Continua para outras verificações
     }
 
     /**
-     * Listar membros (gestão)
+     * Determina se o usuário pode visualizar qualquer membro
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('members.view');
+        // ✅ Atualizado para nova nomenclatura
+        return true;
     }
 
     /**
-     * Visualizar um membro específico
+     * Determina se o usuário pode visualizar um membro específico
      */
     public function view(User $user, Member $member): bool
     {
-        // Gestão
+        // Pode ver qualquer membro (gestão)
         if ($user->can('members.view')) {
             return true;
         }
 
-        // Próprio cadastro
+        // Pode ver o próprio cadastro de membro
         return $member->user_id === $user->id;
     }
 
     /**
-     * Criar membro
+     * Determina se o usuário pode criar membros
      */
     public function create(User $user): bool
     {
+        // ✅ Atualizado
         return $user->can('members.create');
     }
 
     /**
-     * Atualizar membro
+     * Determina se o usuário pode atualizar um membro
      */
     public function update(User $user, Member $member): bool
     {
-        // Gestão completa
+        // ✅ Permissão específica
         if ($user->can('members.edit')) {
             return true;
         }
 
-        // Próprio cadastro (edição limitada)
-        if ($member->user_id === $user->id) {
-            return $user->can('profile.edit');
+        // ✅ O próprio membro pode editar seus dados
+        if ($member->user_id && $member->user_id === $user->id) {
+            // Membro pode editar apenas informações básicas, não tudo
+            // Você pode adicionar lógica específica aqui
+            return true;
         }
 
         return false;
     }
 
     /**
-     * Excluir membro
+     * Determina se o usuário pode excluir um membro
      */
     public function delete(User $user, Member $member): bool
     {
+        // ✅ Atualizado
         return $user->can('members.delete');
     }
 
     /**
-     * Restaurar membro
+     * Determina se o usuário pode restaurar um membro excluído
      */
     public function restore(User $user, Member $member): bool
     {
@@ -84,23 +90,25 @@ class MemberPolicy
     }
 
     /**
-     * Exclusão permanente
+     * Determina se o usuário pode excluir permanentemente
      */
     public function forceDelete(User $user, Member $member): bool
     {
+        // Apenas superadmin para exclusão permanente
         return $user->hasRole('superadmin');
     }
 
     /**
-     * Gerenciar dízimo do membro
+     * Determina se o usuário pode gerenciar dízimo do membro
      */
     public function manageTithe(User $user, Member $member): bool
     {
+        // ✅ Permissão específica para gerenciar dízimo
         return $user->can('members.tithe-manage');
     }
 
     /**
-     * Importar membros
+     * Determina se o usuário pode importar membros
      */
     public function import(User $user): bool
     {
@@ -108,7 +116,7 @@ class MemberPolicy
     }
 
     /**
-     * Exportar membros
+     * Determina se o usuário pode exportar membros
      */
     public function export(User $user): bool
     {
