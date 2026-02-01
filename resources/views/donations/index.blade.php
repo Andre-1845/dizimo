@@ -7,11 +7,7 @@
     <div class="content-wrapper-full">
         <div class="content-header">
             <h2 class="content-title">Receitas e Doações</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <span>Receitas</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Receitas']]" />
         </div>
     </div>
 

@@ -92,6 +92,8 @@ class UserController extends Controller
                 'active'  => true,
             ]);
 
+            $user->sendEmailVerificationNotification();
+
             DB::commit();
 
 

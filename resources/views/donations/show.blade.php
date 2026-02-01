@@ -5,13 +5,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Receitas</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <a href="{{ route('donations.index') }}" class="breadcrumb-link">Receitas</a>
-                <span>/</span>
-                <span>Visualizar</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Receitas', 'url' => route('donations.index')], ['label' => 'Detalhes']]" />
         </div>
     </div>
 
@@ -23,11 +17,10 @@
             <h3 class="content-box-title">Detalhes da Receita</h3>
 
             <!-- Botoes (com icones)  -->
-            <!-- Botoes (com icones)  -->
             <x-action-buttons :list="route('donations.index')" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-list="donations-view"
                 can-edit="donations.edit" can-delete="donations.delete" delete-confirm="Deseja excluir esta doação ?" />
             <!-- Botoes (com icones)  -->
-            <!-- Botoes (com icones)  -->
+
         </div>
 
         <x-alert />

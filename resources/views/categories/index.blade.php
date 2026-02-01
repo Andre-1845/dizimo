@@ -6,14 +6,15 @@
 
     <div class="content-box"> <!-- Content-Box  -->
 
-        <div style="background: #e3f2fd; padding: 15px; margin: 15px 0; border-radius: 5px;">
+        {{-- <div style="background: #e3f2fd; padding: 15px; margin: 15px 0; border-radius: 5px;">
             <h4>🔍 Diagnóstico de Permissões:</h4>
             <p>Usuário: {{ Auth::user()->name }}</p>
             <p>Pode ver categorias? {{ Auth::user()->can('categories.view') ? '✅ SIM' : '❌ NÃO' }}</p>
             <p>Pode editar categorias? {{ Auth::user()->can('categories.edit') ? '✅ SIM' : '❌ NÃO' }}</p>
             <p>Pode excluir categorias? {{ Auth::user()->can('categories.delete') ? '✅ SIM' : '❌ NÃO' }}</p>
             <p>É superadmin? {{ Auth::user()->hasRole('superadmin') ? '✅ SIM' : '❌ NÃO' }}</p>
-        </div>
+        </div> --}}
+
         <div class="content-box-header">
             <h3 class="content-box-title">Listar</h3>
 

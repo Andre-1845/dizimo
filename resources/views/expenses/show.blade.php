@@ -6,13 +6,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Despesas</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <a href="{{ route('expenses.index') }}" class="breadcrumb-link">Despesas</a>
-                <span>/</span>
-                <span>Visualizar</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Despesas', 'url' => route('expenses.index')], ['label' => 'Detalhes']]" />
         </div>
     </div>
 
@@ -54,6 +48,19 @@
                 <span class="title-detail-content">Valor: </span>
                 <span class="detail-content">{{ $expense->amount }}</span>
             </div>
+            <span class="inline-flex items-center gap-2">
+                @if ($expense->is_confirmed)
+                    <span class="text-green-600 font-semibold">Aprovada</span>
+                    <span class="text-sm text-gray-600">
+                        ({{ $expense->approved_at->format('d/m/Y H:i') }}
+                        – {{ $expense->approver->name }})
+                    </span>
+                @else
+                    <span class="text-orange-500 font-semibold">
+                        Aguardando confirmação
+                    </span>
+                @endif
+            </span>
             <div class="mb-1">
                 <span class="title-detail-content">Lançado por: </span>
                 <span class="detail-content">{{ $expense->user->name }}</span>
@@ -67,8 +74,22 @@
                 <span class="detail-content">{{ $expense->notes }}</span>
             </div>
             <div class="mb-1">
+                <span class="title-detail-content">Comprovante (doc): </span>
+                <span class="detail-content">
+                    @if ($expense->receipt_path)
+                        <a href="{{ asset('storage/' . $expense->receipt_path) }}" target="_blank"
+                            class="text-blue-600 font-bold hover:underline">
+                            @include('components.icons.doc_view')
+                        </a>
+                    @else
+                        —
+                    @endif
+                </span>
+            </div>
+            <div class="mb-1">
                 <span class="title-detail-content">Criado em:</span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y H:i:s') }}</span>
+                <span
+                    class="detail-content">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y H:i:s') }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Modificado em: </span>

@@ -167,12 +167,12 @@
                 <div class="sidebar-group">
                     <span class="sidebar-group-title">Configurações</span>
 
-                    @can('settings.access')
+                    {{-- @can('settings.access')
                         <a @class(['sidebar-link', 'active' => $menu === 'statuses']) href="{{ route('statuses.index') }}">
                             <span class="sidebar-icon">@include('components.icons.newspaper')</span>
                             <span class="sidebar-text">Status</span>
                         </a>
-                    @endcan
+                    @endcan --}}
 
                     @can('roles.view')
                         <a @class(['sidebar-link', 'active' => $menu === 'roles']) href="{{ route('roles.index') }}">

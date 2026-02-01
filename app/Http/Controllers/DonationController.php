@@ -20,7 +20,9 @@ class DonationController extends Controller
 
         $this->authorize('viewAny', Donation::class);
 
-        $registrars = User::whereDoesntHave('roles', fn($q) => $q->where('name', 'Membro'))
+        $registrars = User::whereHas('roles', function ($q) {
+            $q->where('name', '!=', 'Membro');
+        })
             // ->whereHas('donations')
             ->orderBy('name')
             ->get();

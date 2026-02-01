@@ -123,7 +123,7 @@
                         @foreach ($lastDonations as $donation)
                             <tr class="border-b last:border-0">
                                 <td class="py-2">
-                                    {{ $donation->member->name ?? '—' }}
+                                    {{ $donation->member->name ?? 'Administração' }}
                                 </td>
                                 <td class="py-2">
                                     {{ \Carbon\Carbon::parse($donation->donation_date)->format('d/m/Y') }}

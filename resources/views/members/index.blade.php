@@ -33,7 +33,7 @@
 
         <x-alert />
 
-        <x-filters.generic :filters="$filters" route="members.index" />
+        <x-filters.generic :filters="$filters" :route="route('members.index')" />
 
         <div class="content-box">
             <table class="table">

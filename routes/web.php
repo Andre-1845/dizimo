@@ -95,6 +95,12 @@ Route::get('/email/verify', fn() => view('auth.verify-email'))
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
+
+    //  ATIVA O USUÁRIO APÓS VERIFICAÇÃO
+    $user = $request->user();
+    $user->update([
+        'status_id' => 2 // ATIVO
+    ]);
     return redirect('/login')
         ->with('success', 'E-mail confirmado com sucesso!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
@@ -158,7 +164,7 @@ Route::middleware(['auth', 'verified', 'permission:cms.access'])
 | SISTEMA (USUÁRIOS AUTENTICADOS)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'user.status'])->group(function () {
+Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
 
     /*
     | Dashboards
