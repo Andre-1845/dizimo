@@ -6,13 +6,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Usuários</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <a href="{{ route('users.index') }}" class="breadcrumb-link">Usuários</a>
-                <span>/</span>
-                <span>Editar</span>
-            </nav>
+
             <x-smart-breadcrumb :items="[
                 ['label' => 'Usuários', 'url' => route('users.index')],
                 ['label' => $user->name, 'url' => route('users.show', $user)],
@@ -65,17 +59,16 @@
                     </select>
                 </div>
 
-                @can('manage-roles')
+                @can('roles.edit')
                     <div class="mb-4">
                         <label for="papeis" class="form-label">Papel</label>
                         @forelse ($roles as $role)
-                            @if ($role != 'Super Admin' || Auth::user()->hasRole('Super Admin'))
-                                <input class="mt-2" type="checkbox" name="roles[]" id="role_{{ Str::slug($role) }}"
-                                    value="{{ $role }}"
-                                    {{ collect(old('roles', $userRoles))->contains($role) ? 'checked' : '' }}>
+                            <input class="mt-2" type="checkbox" name="roles[]" id="role_{{ Str::slug($role) }}"
+                                value="{{ $role }}"
+                                {{ collect(old('roles', $userRoles))->contains($role) ? 'checked' : '' }}>
 
-                                <label for="role_{{ Str::slug($role) }}">{{ $role }}</label>
-                            @endif
+                            <label for="role_{{ Str::slug($role) }}">{{ $role }}</label>
+
                         @empty
                             <span class="alert-warning">Nenhum papel disponível.</span>
                         @endforelse

@@ -121,7 +121,24 @@ class UserController extends Controller
     public function edit(User $user)
     {
         // Recuperar os papeis existentes no BD
-        $roles = Role::pluck('name')->all();
+        // $roles = Role::pluck('name')->all();
+        $currentUser = Auth::user();
+        $roles = Role::query()
+
+            //  Regra 1: quem NÃO é superadmin não vê superadmin
+            ->when(
+                !$currentUser->hasRole('superadmin'),
+                fn($q) => $q->where('name', '!=', 'superadmin')
+            )
+
+            //  Regra 2: quem NÃO é superadmin NEM admin não vê admin
+            ->when(
+                !$currentUser->hasRole('superadmin') && !$currentUser->hasRole('admin'),
+                fn($q) => $q->where('name', '!=', 'admin')
+            )
+
+            ->pluck('name')
+            ->all();
 
         // Recuperar os papeis atribuidos ao USUARIO
         $userRoles = $user->roles->pluck('name')->toArray();

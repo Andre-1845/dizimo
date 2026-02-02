@@ -133,8 +133,8 @@
     }
 
     .sidebar-title {
-        @apply text-lg font-bold text-blue-400;
-    }
+    @apply text-lg font-bold text-blue-400 opacity-0;
+}
 
     .sidebar-nav {
         @apply mt-4;
@@ -146,6 +146,12 @@
     .sidebar-link.active {
         @apply flex items-center space-x-3 px-2 py-2 mx-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
     }
+
+    @media (min-width: 1024px) {
+    .sidebar:hover .sidebar-title {
+        @apply opacity-100 block;
+    }
+}
     /****** Fim Sidebar ******/
 
 
@@ -776,15 +782,7 @@
 }
 
 
-/* .navbar a,
-.sidebar a,
-.x-dashboard.card a,
-.dropdown-content a,
-.dropdown-item,
-.sidebar-link {
-    color: white !important;
-    text-decoration: none !important;
-} */
+
 
 
 

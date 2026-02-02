@@ -1,6 +1,6 @@
 <aside id="sidebar" class="sidebar">
     <div class="sidebar-container">
-        <div class="sidebar-header">
+        <div class="sidebar-header ">
             <span class="sidebar-title">Dízimo</span>
         </div>
 
