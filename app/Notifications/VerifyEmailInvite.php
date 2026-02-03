@@ -18,8 +18,6 @@ class VerifyEmailInvite extends VerifyEmail
             ->line('Você foi cadastrado como membro e recebeu acesso ao sistema.')
             ->line('Para ativar seu acesso, confirme seu endereço de e-mail clicando no botão abaixo.')
             ->action('Confirmar e ativar acesso', $url)
-
-            ->line('Após o primeiro acesso, recomendamos que você altere sua senha.')
             ->line('Se você não esperava este convite, pode ignorar este e-mail.');
     }
 }

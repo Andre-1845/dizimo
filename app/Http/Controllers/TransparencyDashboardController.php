@@ -125,7 +125,7 @@ class TransparencyDashboardController extends Controller
         //     ->get();
 
         $reports = FinancialReport::public()
-            ->type('financial')
+            // ->type('financial')
             ->orderByDesc('reference_month')
             ->get();
 

@@ -48,6 +48,11 @@ class RoleSeeder extends Seeder
                     'members.delete',
                     'members.tithe-manage',
 
+                    // Papeis e permissoes
+                    'roles.view',
+                    'permissions.view',
+                    'permissions.manage',
+
                     // Dízimos
                     'donations.view',
                     'donations.create',
@@ -63,6 +68,9 @@ class RoleSeeder extends Seeder
 
                     // Relatórios
                     'reports.financial',
+                    'reports.create',
+                    'reports.edit',
+                    'reports.delete',
                     'reports.tithes',
                     'reports.donations',
                     'reports.members',
@@ -81,8 +89,14 @@ class RoleSeeder extends Seeder
                     // Dashboards
                     'dashboard.admin',
                     'dashboard.treasury',
+                    'dashboard.dizimo',
 
-                    // Perfil (CORRIGIDO: sem wildcard)
+                    // Transparencia
+                    'transparency.view',
+                    'transparency.publish',
+                    'transparency.manage',
+
+                    // Perfil
                     'profile.view',
                     'profile.edit',
                     'profile.password',
@@ -120,6 +134,9 @@ class RoleSeeder extends Seeder
 
                     // Relatórios
                     'reports.financial',
+                    'reports.create',
+                    'reports.edit',
+                    'reports.delete',
                     'reports.tithes',
                     'reports.donations',
                     'reports.expenses',
@@ -133,9 +150,16 @@ class RoleSeeder extends Seeder
                     'members.tithe-manage',
 
                     // Dashboards
+                    'dashboard.admin',
                     'dashboard.treasury',
+                    'dashboard.dizimo',
 
-                    // Perfil (CORRIGIDO)
+                    // Transparencia
+                    'transparency.view',
+                    'transparency.publish',
+                    'transparency.manage',
+
+                    // Perfil
                     'profile.view',
                     'profile.edit',
                     'profile.password',
@@ -173,8 +197,9 @@ class RoleSeeder extends Seeder
 
                     // Dashboard
                     'dashboard.admin',
+                    'dashboard.dizimo',
 
-                    // Perfil (CORRIGIDO)
+                    // Perfil
                     'profile.view',
                     'profile.edit',
                     'profile.password',
@@ -197,13 +222,17 @@ class RoleSeeder extends Seeder
                     // Dízimos
                     'donations.view',
 
+                    // Dashboard
+                    'dashboard.admin',
+                    'dashboard.dizimo',
+
                     // CMS
                     'cms.access',
                     'cms.view',
                     'cms.events',
                     'cms.notices',
 
-                    // Perfil (CORRIGIDO)
+                    // Perfil
                     'profile.view',
                     'profile.edit',
                     'profile.password',
@@ -229,7 +258,7 @@ class RoleSeeder extends Seeder
                     // Transparência
                     'transparency.view',
 
-                    // Perfil (CORRIGIDO)
+                    // Perfil
                     'profile.view',
                     'profile.edit',
                     'profile.password',

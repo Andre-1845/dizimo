@@ -7,13 +7,13 @@
     <div class="content-wrapper">
         <div class="content-header flex justify-between items-center">
             <div>
-                <h2 class="content-title">Relatórios Financeiros</h2>
+                <h2 class="content-title mb-2">Relatórios Financeiros</h2>
                 <p class="text-sm text-gray-500">
                     Gerencie os relatórios PDF utilizados na Transparência.
                 </p>
             </div>
 
-            @can('create', \App\Models\FinancialReport::class)
+            @can('reports.create')
                 <a href="{{ route('reports.create') }}" class="btn-success-md">
                     <i class="fas fa-plus"></i> Novo Relatório
                 </a>
@@ -25,23 +25,23 @@
         <x-alert />
 
         @if ($reports->count())
-            <div class="table-responsive">
+            <div class="table-container">
                 <table class="table w-full">
                     <thead>
-                        <tr>
-                            <th>Título</th>
-                            <th>Tipo</th>
-                            <th>Referência</th>
-                            <th>Publicado em</th>
-                            <th>Status</th>
-                            <th class="text-right">Ações</th>
+                        <tr class="table-row-header">
+                            <th class="table-header">Título</th>
+                            <th class="table-header">Tipo</th>
+                            <th class="table-header">Referência</th>
+                            <th class="table-header">Publicado em</th>
+                            <th class="table-header center">Status</th>
+                            <th class="table-header center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($reports as $report)
-                            <tr>
+                            <tr class="table-row-body">
                                 {{-- Título --}}
-                                <td>
+                                <td class="table-body">
                                     <div class="font-semibold">
                                         {{ $report->title }}
                                     </div>
@@ -54,24 +54,24 @@
                                 </td>
 
                                 {{-- Tipo --}}
-                                <td>
+                                <td class="table-body">
                                     <span class="badge badge-gray">
                                         {{ ucfirst($report->type) }}
                                     </span>
                                 </td>
 
                                 {{-- Referência --}}
-                                <td>
+                                <td class="table-body text-center">
                                     {{ $report->reference_month ? $report->reference_month->format('m/Y') : '—' }}
                                 </td>
 
                                 {{-- Publicação --}}
-                                <td>
+                                <td class="table-body text-center">
                                     {{ $report->published_at ? $report->published_at->format('d/m/Y') : '—' }}
                                 </td>
 
                                 {{-- Status --}}
-                                <td>
+                                <td class="table-body text-center">
                                     @if (!$report->is_published)
                                         <span class="badge badge-secondary">
                                             Rascunho
@@ -88,17 +88,19 @@
                                 </td>
 
                                 {{-- Ações --}}
-                                <td class="text-right">
+                                <td class="table-actions">
                                     <div class="inline-flex gap-1">
 
                                         {{-- Baixar PDF --}}
-                                        <a href="{{ $report->file_url }}" target="_blank" class="btn-primary btn-sm"
-                                            title="Baixar PDF">
-                                            <i class="fas fa-file-pdf"></i>
-                                        </a>
+                                        @can('reports.financial')
+                                            <a href="{{ $report->file_url }}" target="_blank" class="btn-primary btn-sm"
+                                                title="Baixar PDF">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        @endcan
 
                                         {{-- Editar --}}
-                                        @can('update', $report)
+                                        @can('reports.edit')
                                             <a href="{{ route('reports.edit', $report) }}" class="btn-warning btn-sm"
                                                 title="Editar">
                                                 <i class="fas fa-edit"></i>
@@ -106,7 +108,7 @@
                                         @endcan
 
                                         {{-- Excluir --}}
-                                        @can('delete', $report)
+                                        @can('reports.delete')
                                             <form action="{{ route('reports.destroy', $report) }}" method="POST"
                                                 onsubmit="return confirm('Tem certeza que deseja excluir este relatório?')">
                                                 @csrf

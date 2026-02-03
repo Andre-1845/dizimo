@@ -124,6 +124,9 @@ class PermissionSeeder extends Seeder
                 'description' => 'Permissões para acesso a relatórios',
                 'items' => [
                     ['name' => 'reports.financial', 'display' => 'Relatórios financeiros'],
+                    ['name' => 'reports.create', 'display' => 'Criar relatórios financeiros'],
+                    ['name' => 'reports.edit', 'display' => 'Editar relatórios financeiros'],
+                    ['name' => 'reports.delete', 'display' => 'Excluir relatórios financeiros'],
                     ['name' => 'reports.tithes', 'display' => 'Relatórios de dízimos'],
                     ['name' => 'reports.donations', 'display' => 'Relatórios de doações'],
                     ['name' => 'reports.expenses', 'display' => 'Relatórios de despesas'],

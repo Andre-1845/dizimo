@@ -49,9 +49,9 @@
                 <label class="form-label">Arquivo PDF</label>
                 <input type="file" name="file" accept="application/pdf" class="file-input">
 
-                <p class="text-xs text-gray-500 mt-1">
+                <p class="text-base text-gray-600 mt-1">
                     Arquivo atual:
-                    <a href="{{ $report->file_url }}" target="_blank" class="text-blue-600 underline">
+                    <a href="{{ $report->file_url }}" target="_blank" class="text-blue-700 font-bold underline">
                         visualizar PDF
                     </a>
                 </p>

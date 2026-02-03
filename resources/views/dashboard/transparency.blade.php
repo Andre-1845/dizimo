@@ -198,10 +198,13 @@
                     @foreach ($reports as $report)
                         <div class="report-card">
                             <div>
-                                <h4 class="report-title">{{ $report->title }}</h4>
+                                <h4 class="font-semibold">{{ $report->title }}</h4>
 
+                                <p class="text-base text-blue-700 my-2">
+                                    Tipo: {{ $report->type }}
+                                </p>
                                 @if ($report->reference_month)
-                                    <p class="text-sm text-gray-600">
+                                    <p class="text-sm text-gray-700">
                                         Referência:
                                         {{ $report->reference_month->format('m/Y') }}
                                     </p>

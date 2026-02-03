@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Member;
 use App\Models\User;
+use App\Notifications\InviteUserNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -25,11 +26,12 @@ class MemberUserService
             return;
         }
 
-        $initialPassword = config('auth.default_user_password');
+        // $initialPassword = config('auth.default_user_password');
         $user = User::create([
             'name'     => $userName ?? $member->name,
             'email'    => $email,
-            'password' => Hash::make($initialPassword), // senha temporária
+            'password' => Hash::make(Str::random(16)), // senha temporária
+            'email_verified_at' => null,
         ]);
 
         /**
@@ -42,6 +44,6 @@ class MemberUserService
         $member->save();
 
         // Envia e-mail de confirmação
-        $user->sendEmailVerificationNotification();
+        $user->notify(new InviteUserNotification());
     }
 }
