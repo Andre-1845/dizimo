@@ -16,6 +16,11 @@ class RolePermissionController extends Controller
      */
     public function index(Role $role)
     {
+        //  Bloqueia qualquer tentativa de gerenciar o superadmin
+        if ($role->name === 'superadmin') {
+            abort(403, 'As permissões do superadmin não podem ser alteradas.');
+        }
+
 
         // $this->authorize('viewPermissions', $role);
 
@@ -52,6 +57,10 @@ class RolePermissionController extends Controller
      */
     public function toggle(Role $role, Permission $permission)
     {
+
+        if ($role->name === 'superadmin') {
+            abort(403, 'As permissões do superadmin não podem ser alteradas.');
+        }
         // ✅ Usa a POLICY - superadmin passa automaticamente
         // $this->authorize('managePermissions', $role);
 

@@ -199,16 +199,29 @@
                         <div class="report-card">
                             <div>
                                 <h4 class="report-title">{{ $report->title }}</h4>
-                                <p class="report-desc">
-                                    {{ Str::limit($report->description, 120) }}
+
+                                @if ($report->reference_month)
+                                    <p class="text-sm text-gray-600">
+                                        Referência:
+                                        {{ $report->reference_month->format('m/Y') }}
+                                    </p>
+                                @endif
+
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Publicado em {{ $report->published_at->format('d/m/Y') }}
                                 </p>
+
+                                @if ($report->valid_until)
+                                    <p class="text-xs text-gray-500">
+                                        Válido até {{ $report->valid_until->format('d/m/Y') }}
+                                    </p>
+                                @endif
                             </div>
 
                             <div class="report-footer">
-                                <a href="{{ $report->file_url }}" target="_blank" class="btn-primary">
-                                    <i class="fas fa-file-pdf"></i> Abrir PDF
+                                <a href="{{ Storage::url($report->file_path) }}" target="_blank" class="btn-primary">
+                                    <i class="fas fa-file-pdf"></i> Baixar PDF
                                 </a>
-                                <span>{{ $report->created_at->format('d/m/Y') }}</span>
                             </div>
                         </div>
                     @endforeach

@@ -12,26 +12,6 @@
         {{ \Carbon\Carbon::create()->month($filters['month'])->translatedFormat('F') }}
         / {{ $filters['year'] }}
     </p>
-    {{--
-    <div class="inline-block">
-        <div>
-            <p class="text-center my-2 font-semibold"> ACOES</p>
-        </div>
-
-        <div>
-            <p class="text-center my-2 font-semibold"> EXPORTAR</p>
-
-            <div class="flex gap-3 mb-4">
-                <a href="{{ route('reports.dizimos.export.paid.pdf', request()->query()) }}" class="btn-info">
-                    PDF
-                </a>
-
-                <a href="{{ route('reports.dizimos.export.paid.csv', request()->query()) }}" class="btn-warning">
-                    CSV
-                </a>
-            </div>
-        </div>
-    </div> --}}
 
     <x-report.actions pdfRoute="reports.dizimos.export.paid.pdf" csvRoute="reports.dizimos.export.paid.csv"
         backRoute="dashboard.treasury" :params="[
@@ -39,8 +19,6 @@
             'year' => request('year'),
         ]">
 
-        {{-- Futuro --}}
-        {{-- <a class="btn-primary">Outro botão</a> --}}
     </x-report.actions>
 
 
@@ -77,10 +55,10 @@
                         </td>
                         <td @class([
                             'text-right font-semibold',
-                            'text-green-600' => $donation->is_confirmed,
-                            'text-orange-500' => !$donation->is_confirmed,
+                            'text-green-600' => $member->has_all_donations_confirmed,
+                            'text-orange-500' => !$member->has_all_donations_confirmed,
                         ])
-                            title="{{ $donation->is_confirmed ? 'Doação confirmada' : 'Aguardando validação' }}">
+                            title="{{ $member->has_all_donations_confirmed ? 'Confirmada' : 'Aguardando validação' }}">
                             R$ {{ money($member->donations->sum('amount')) }}
                         </td>
 

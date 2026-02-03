@@ -1,71 +1,95 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Publicar Relatório')
 
 @section('content')
-    <div class="container-fluid py-4">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold">Adicionar Relatório</h6>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
 
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Título *</label>
-                                <input type="text" class="form-control" id="title" name="title"
-                                    value="{{ old('title') }}" required maxlength="200">
-                                @error('title')
-                                    <div class="text-danger small">{{ $message }}</div>
-                                @enderror
-                            </div>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Publicar Relatório Financeiro</h2>
 
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Descrição</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" maxlength="500">{{ old('description') }}</textarea>
-                                <div class="form-text">Uma breve descrição do conteúdo do relatório.</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="file" class="form-label">Arquivo PDF *</label>
-                                <input type="file" class="form-control" id="file" name="file" accept=".pdf"
-                                    required>
-                                <div class="form-text">Apenas arquivos PDF, máximo 5MB.</div>
-                                @error('file')
-                                    <div class="text-danger small">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="available_until" class="form-label">Disponível até</label>
-                                    <input type="date" class="form-control" id="available_until" name="available_until"
-                                        value="{{ old('available_until') }}" min="{{ date('Y-m-d') }}">
-                                    <div class="form-text">Deixe em branco para disponibilidade ilimitada.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-check mt-4">
-                                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active"
-                                            value="1" {{ old('is_active', true) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="is_active">Ativo</label>
-                                    </div>
-                                    <div class="form-text">Relatórios inativos não são exibidos.</div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between">
-                                <a href="{{ route('reports.index') }}" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-1"></i> Voltar
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i> Salvar Relatório
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <x-smart-breadcrumb :items="[['label' => 'Relatórios', 'url' => route('reports.index')], ['label' => 'Publicar']]" />
         </div>
     </div>
+
+    <div class="content-box">
+        <x-alert />
+
+        <form action="{{ route('reports.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+
+            @csrf
+
+            {{-- Título --}}
+            <div>
+                <label class="form-label">Título</label>
+                <input type="text" name="title" class="form-input" value="{{ old('title') }}" required>
+            </div>
+
+            {{-- Descrição --}}
+            <div>
+                <label class="form-label">Descrição</label>
+                <textarea name="description" rows="3" class="form-input">{{ old('description') }}</textarea>
+            </div>
+
+            {{-- Tipo --}}
+            <div>
+                <label class="form-label">Tipo de relatório</label>
+                <select name="type" class="form-input">
+                    <option value="financial">Financeiro</option>
+                    <option value="balancete">Balancete</option>
+                    <option value="auditoria">Auditoria</option>
+                    <option value="ata">Ata</option>
+                </select>
+            </div>
+
+            {{-- PDF --}}
+            <div>
+                <label class="form-label">Arquivo (PDF)</label>
+                <input type="file" name="file" accept="application/pdf" class="file-input" required>
+            </div>
+
+            {{-- Datas --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="form-label">Mês de referência</label>
+                    <input type="month" name="reference_month" class="form-input" value="{{ old('reference_month') }}">
+                </div>
+
+                <div>
+                    <label class="form-label">Publicar em</label>
+                    <input type="date" name="published_at" class="form-input"
+                        value="{{ old('published_at', now()->toDateString()) }}">
+                </div>
+            </div>
+
+            {{-- Validade --}}
+            <div>
+                <label class="form-label">Válido até (opcional)</label>
+                <input type="date" name="valid_until" class="form-input" value="{{ old('valid_until') }}">
+            </div>
+
+            {{-- Publicação --}}
+            <div>
+                <label>
+                    <input type="checkbox" name="is_published" value="1">
+                    Publicar relatório
+                </label>
+                <p class="text-xs text-gray-500 mt-1">
+                    Apenas relatórios publicados aparecem na Transparência.
+                </p>
+            </div>
+
+            {{-- Botões --}}
+            <div class="btn-md-div gap-2">
+                <button class="btn-success">
+                    Salvar relatório
+                </button>
+                <a href="{{ route('reports.index') }}" class="btn-info">
+                    Cancelar
+                </a>
+            </div>
+
+        </form>
+    </div>
+
 @endsection

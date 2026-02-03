@@ -44,8 +44,6 @@ class Member extends Model
         return format_phone($this->phone);
     }
 
-
-
     protected static function booted()
     {
         static::saving(function ($member) {
@@ -53,5 +51,11 @@ class Member extends Model
                 $member->name = StringHelper::formatName($member->name);
             }
         });
+    }
+
+    public function getHasAllDonationsConfirmedAttribute(): bool
+    {
+        return $this->donations->isNotEmpty()
+            && $this->donations->every(fn($d) => $d->is_confirmed);
     }
 }

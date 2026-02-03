@@ -14,7 +14,9 @@ class RoleController extends Controller
     //
     public function index()
     {
-        $roles = Role::orderBy('name', 'ASC')->paginate(10);
+        $roles = Role::where('name', '!=', 'superadmin')
+            ->orderBy('name', 'ASC')
+            ->paginate(10);
 
         return view('roles.index', ['menu' => 'roles', 'roles' => $roles]);
     }

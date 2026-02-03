@@ -46,6 +46,7 @@
                 </thead>
                 <tbody>
                     @forelse ($roles as $role)
+                        @continue($role->name === 'superadmin')
                         <tr class="table-row-body">
                             <td class="table-body">{{ $role->id }}</td>
                             <td class="table-body">{{ $role->name ?? '—' }}</td>

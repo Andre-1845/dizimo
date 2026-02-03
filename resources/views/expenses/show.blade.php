@@ -52,9 +52,12 @@
                 @if ($expense->is_confirmed)
                     <span class="text-green-600 font-semibold">Aprovada</span>
                     <span class="text-sm text-gray-600">
+                        ({{ $expense->approval_info }})
+                    </span>
+                    {{-- <span class="text-sm text-gray-600">
                         ({{ $expense->approved_at->format('d/m/Y H:i') }}
                         – {{ $expense->approver->name }})
-                    </span>
+                    </span> --}}
                 @else
                     <span class="text-orange-500 font-semibold">
                         Aguardando confirmação
@@ -88,8 +91,7 @@
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Criado em:</span>
-                <span
-                    class="detail-content">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y H:i:s') }}</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y H:i:s') }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Modificado em: </span>

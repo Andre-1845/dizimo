@@ -26,6 +26,7 @@ use App\Http\Controllers\{
     MemberController,
     DonationController,
     ExpenseController,
+    FinancialReportController,
     ReportController,
     SiteController,
     TransparencyDashboardController
@@ -212,11 +213,19 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
     });
 
     // CRUD de Relatórios TRANSPARENCIA
-    Route::middleware(['auth'])->prefix('admin')->group(function () {
-        Route::resource('reports', ReportController::class);
-        Route::post('/reports/{report}/toggle-status', [ReportController::class, 'toggleStatus'])
-            ->name('reports.toggle-status');
-    });
+    // Route::middleware(['auth'])->prefix('admin')->group(function () {
+    //     Route::resource('reports', ReportController::class);
+    //     Route::post('/reports/{report}/toggle-status', [ReportController::class, 'toggleStatus'])
+    //         ->name('reports.toggle-status');
+    // });
+
+    Route::middleware(['auth', 'verified'])
+        ->prefix('admin')
+        ->group(function () {
+
+            Route::resource('reports', FinancialReportController::class);
+        });
+
 
     /*
     | Relatórios (apenas para quem tem acesso a relatórios)

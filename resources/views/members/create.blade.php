@@ -54,7 +54,8 @@
 
                 <div>
                     <label class="form-label">Telefone</label>
-                    <input type="text" name="phone" class="form-input">
+                    <input type="tel" name="phone" maxlength="15" pattern="\d{10,11}"
+                        title="Informe um telefone com 10 ou 11 dígitos" class="form-input">
                 </div>
 
                 <div>
@@ -68,6 +69,11 @@
                         Ativo
                     </label>
                 </div>
+
+                <p class="text-sm text-gray-500">
+                    Este cadastro cria apenas o membro.
+                    O acesso ao sistema poderá ser liberado posteriormente, informando um e-mail.
+                </p>
 
                 <div class="btn-md-div">
                     <button class="btn-success-md ">

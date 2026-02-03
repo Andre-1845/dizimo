@@ -61,4 +61,15 @@ class Expense extends Model
     {
         return $this->is_approved;
     }
+
+    public function getApprovalInfoAttribute(): string
+    {
+        if (!$this->approved_at || !$this->approver) {
+            return '-';
+        }
+
+        return $this->approved_at->format('d/m/Y H:i')
+            . ' – '
+            . $this->approver->name;
+    }
 }

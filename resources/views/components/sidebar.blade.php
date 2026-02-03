@@ -146,7 +146,7 @@
                     @endcan
 
                     @can('reports.financial')
-                        <a @class(['sidebar-link']) href="#">
+                        <a @class(['sidebar-link']) href="{{ route('reports.index') }}">
                             <span class="sidebar-icon">@include('components.icons.docdolar')</span>
                             <span class="sidebar-text">Relatórios Financeiros</span>
                         </a>
@@ -167,13 +167,6 @@
                 <div class="sidebar-group">
                     <span class="sidebar-group-title">Configurações</span>
 
-                    {{-- @can('settings.access')
-                        <a @class(['sidebar-link', 'active' => $menu === 'statuses']) href="{{ route('statuses.index') }}">
-                            <span class="sidebar-icon">@include('components.icons.newspaper')</span>
-                            <span class="sidebar-text">Status</span>
-                        </a>
-                    @endcan --}}
-
                     @can('roles.view')
                         <a @class(['sidebar-link', 'active' => $menu === 'roles']) href="{{ route('roles.index') }}">
                             <span class="sidebar-icon">@include('components.icons.usersgroup')</span>
@@ -181,17 +174,6 @@
                         </a>
                     @endcan
 
-                    @can('permissions.view')
-                        <a @class([
-                            'sidebar-link',
-                            'active' => request()->routeIs('role-permissions.*'),
-                        ])
-                            href="{{ route('role-permissions.index', ['role' => \Spatie\Permission\Models\Role::first()->id ?? 1]) }}">
-                            <span class="sidebar-icon">
-                                @include('components.icons.shield')</span>
-                            <span class="sidebar-text">Permissões</span>
-                        </a>
-                    @endcan
                 </div>
             @endcanany
 

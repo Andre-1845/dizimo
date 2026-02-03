@@ -596,6 +596,50 @@
 
     /*******  FIM Transparencia  ********/
 
+    /*************   BADGES  *****************/
+
+    /* =========================
+   BADGES (Status)
+   ========================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px; /* pill */
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Estados */
+.badge-success {
+    background-color: #e6f4ea;
+    color: #137333;
+}
+
+.badge-warning {
+    background-color: #fff4e5;
+    color: #b45309;
+}
+
+.badge-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+/* =========================
+   BADGES (Tipo)
+   ========================= */
+
+.badge-gray {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/*********  Fim Badges ***********/
+
 /* **** SITE *****/
 
 .site-link{

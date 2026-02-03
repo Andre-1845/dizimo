@@ -20,7 +20,7 @@
 
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h3 class="content-box-title">Listar Membros</h3>
+            <h3 class="content-box-title">Editar Membro</h3>
 
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
@@ -52,13 +52,43 @@
                 </div>
 
                 <div>
-                    <label class="form-label">Usuário </label>
-                    <input type="text" name="user_name" class="form-input" value="{{ $member->user?->name }}" readonly>
+                    <label class="form-label">Usuário</label>
+
+                    @if ($member->user)
+                        <input type="text" class="form-input" value="{{ $member->user->name }}" readonly>
+
+                        @if (!$member->user->hasVerifiedEmail())
+                            <p class="text-xs text-orange-600 mt-1">
+                                Convite enviado — aguardando confirmação por e-mail
+                            </p>
+                        @else
+                            <p class="text-xs text-green-600 mt-1">
+                                Acesso ativo
+                            </p>
+                        @endif
+                    @else
+                        <input type="text" class="form-input  text-orange-600" value="Sem acesso ao sistema" readonly>
+
+                        <p class="text-xs text-gray-500 mt-1">
+                            Informe um e-mail abaixo para liberar o acesso.
+                        </p>
+                    @endif
                 </div>
+
+                @if (!$member->user)
+                    <div>
+                        <label class="form-label">E-mail para acesso</label>
+                        <input type="email" name="email" class="form-input" placeholder="email@exemplo.com">
+                        <p class="text-xs text-gray-500 mt-1">
+                            Ao salvar, será enviado um e-mail de confirmação para este endereço.
+                        </p>
+                    </div>
+                @endif
 
                 <div>
                     <label class="form-label">Telefone</label>
-                    <input type="text" name="phone" class="form-input" value="{{ $member->phone }}">
+                    <input type="tel" name="phone" maxlength="15" pattern="\d{10,11}"
+                        title="Informe um telefone com 10 ou 11 dígitos" class="form-input" value="{{ $member->phone }}">
                 </div>
 
                 <div>
@@ -77,7 +107,7 @@
                 <div class="btn-md-div">
                     <button class="btn-success-md">
                         @include('components.icons.save')
-                        Salvar
+                        {{ $member->user ? 'Salvar' : 'Salvar e enviar convite' }}
                     </button>
                 </div>
             </form>

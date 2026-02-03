@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\Category;
+use App\Models\FinancialReport;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,9 +119,14 @@ class TransparencyDashboardController extends Controller
         // =====================
         // 5. RELATÓRIOS ATIVOS
         // =====================
-        $reports = Report::active()
-            ->orderByDesc('created_at')
-            ->limit(6) // Mostra até 6 relatórios
+        // $reports = Report::active()
+        //     ->orderByDesc('created_at')
+        //     ->limit(6) // Mostra até 6 relatórios
+        //     ->get();
+
+        $reports = FinancialReport::public()
+            ->type('financial')
+            ->orderByDesc('reference_month')
             ->get();
 
         // =====================
@@ -131,22 +137,6 @@ class TransparencyDashboardController extends Controller
             ->distinct()
             ->orderByDesc('year')
             ->pluck('year');
-
-        // ANTES do return view, adicione:
-        // dd([
-        //     'Controller acessado' => 'OK',
-        //     'Year' => $year,
-        //     'Month' => $month,
-        //     'Total Income' => $totalIncome,
-        //     'Total Expenses' => $totalExpenses,
-        //     'Balance' => $balance,
-        //     'Income Categories Count' => $incomeByCategory->count(),
-        //     'Expense Categories Count' => $expensesByCategory->count(),
-        //     'Reports Count' => $reports->count(),
-        //     'View a ser carregada' => 'dashboard.transparency',
-        //     'Menu' => 'dashboard-transparency',
-        // ]);
-
 
         return view('dashboard.transparency', [
             'year' => $year,
