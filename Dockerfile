@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     && docker-php-ext-install pdo_pgsql mbstring zip
-#&& docker-php-ext-install pdo_mysql mbstring zip
+
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -35,7 +35,5 @@ RUN chmod -R 775 storage bootstrap/cache
 RUN php artisan storage:link || true
 
 EXPOSE 10000
-
-#CMD php artisan migrate --force || true && php artisan serve --host=0.0.0.0 --port=10000
 
 CMD php artisan migrate --force --seed || true && php artisan serve --host=0.0.0.0 --port=10000
