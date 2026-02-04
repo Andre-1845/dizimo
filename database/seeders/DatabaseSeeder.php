@@ -17,19 +17,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        //if (App::environment() !== 'production') {
+        if (App::environment() !== 'production' || env('ALLOW_PROD_SEED', false)) {
 
+            $this->call([
+                PermissionSeeder::class,
+                StatusSeeder::class,
+                RoleSeeder::class,
+                UserSeeder::class,
+                CategorySeeder::class,
+                PaymentMethodSeeder::class,
+                SiteSeeder::class,
 
-        $this->call([
-            PermissionSeeder::class,
-            StatusSeeder::class,
-            RoleSeeder::class,
-            UserSeeder::class,
-            CategorySeeder::class,
-            PaymentMethodSeeder::class,
-            SiteSeeder::class,
-
-        ]);
-        //}
+            ]);
+        }
     }
 }

@@ -35,4 +35,6 @@ RUN php artisan storage:link || true
 
 EXPOSE 10000
 
-CMD php artisan migrate --force || true && php artisan serve --host=0.0.0.0 --port=10000
+#CMD php artisan migrate --force || true && php artisan serve --host=0.0.0.0 --port=10000
+
+CMD php artisan migrate --force --seed || true && php artisan serve --host=0.0.0.0 --port=10000
