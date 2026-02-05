@@ -13,4 +13,20 @@ class DateExtract
             default => "YEAR({$column})", // mysql
         };
     }
+
+    public static function month(string $column): string
+    {
+        return match (DB::getDriverName()) {
+            'pgsql' => "EXTRACT(MONTH FROM {$column})",
+            default => "MONTH({$column})", // mysql
+        };
+    }
+
+    public static function day(string $column): string
+    {
+        return match (DB::getDriverName()) {
+            'pgsql' => "EXTRACT(DAY FROM {$column})",
+            default => "DAY({$column})", // mysql
+        };
+    }
 }

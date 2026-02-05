@@ -69,14 +69,15 @@ class DashboardController extends Controller
      ===================== */
 
         $donationsByMonth = Donation::confirmed()
-            ->selectRaw('EXTRACT(MONTH FROM donation_date) as month, SUM(amount) as total')
+            ->selectRaw(DateExtract::month('donation_date') . ' as month, SUM(amount) as total')
             ->whereYear('donation_date', $year)
-            ->groupByRaw('EXTRACT(MONTH FROM donation_date)')
+            ->groupByRaw(DateExtract::month('donation_date'))
             ->pluck('total', 'month');
 
-        $expensesByMonth = Expense::selectRaw('EXTRACT(MONTH FROM expense_date) as month, SUM(amount) as total')
+        $expensesByMonth = Expense::aprroved()
+            ->selectRaw(DateExtract::month('expense_date') . ' as month, SUM(amount) as total')
             ->whereYear('expense_date', $year)
-            ->groupByRaw('EXTRACT(MONTH FROM expense_date)')
+            ->groupByRaw(DateExtract::month('expense_date'))
             ->pluck('total', 'month');
 
         /* =====================
