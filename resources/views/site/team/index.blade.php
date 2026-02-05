@@ -28,8 +28,8 @@
                         <div class="text-center">
 
                             {{-- Foto --}}
-                            @if ($person->photo_path)
-                                <img src="{{ asset('storage/' . $person->photo_path) }}" alt="{{ $person->name }}"
+                            @if ($person->photo_url)
+                                <img src="{{ $person->photo_url }}" alt="{{ $person->name }}"
                                     class="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow">
                             @else
                                 <div

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class SiteImage extends Model
 {
@@ -20,5 +21,10 @@ class SiteImage extends Model
             'section_key',
             'key'
         );
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return Storage::disk('s3')->url($this->image_path);
     }
 }

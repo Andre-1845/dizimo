@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class SitePersonController extends Controller
 {
+    private string $disk = 's3';
+
     /**
      * Listagem
      */
@@ -101,9 +103,10 @@ class SitePersonController extends Controller
         // Atualizar imagem (se houver nova)
         if (!empty($data['photo_cropped'])) {
             // Remove imagem antiga
-            if ($person->photo_path && Storage::disk('public')->exists($person->photo_path)) {
-                Storage::disk('public')->delete($person->photo_path);
+            if ($person->photo_path && Storage::disk($this->disk)->exists($person->photo_path)) {
+                Storage::disk($this->disk)->delete($person->photo_path);
             }
+
 
             $data['photo_path'] = $this->storeCroppedImage($data['photo_cropped']);
         }
@@ -125,9 +128,10 @@ class SitePersonController extends Controller
     {
         $this->authorize('delete', $person);
 
-        if ($person->photo_path && Storage::disk('public')->exists($person->photo_path)) {
-            Storage::disk('public')->delete($person->photo_path);
+        if ($person->photo_path && Storage::disk($this->disk)->exists($person->photo_path)) {
+            Storage::disk($this->disk)->delete($person->photo_path);
         }
+
 
         $person->delete();
 
@@ -149,10 +153,15 @@ class SitePersonController extends Controller
 
         $filename = 'people/' . uniqid() . '.jpg';
 
-        Storage::disk('public')->put($filename, $image);
+        Storage::disk($this->disk)->put(
+            $filename,
+            $image,
+            'public'
+        );
 
         return $filename;
     }
+
 
     /**
      * 🔄 Reorganiza a ordem (1,2,3...)

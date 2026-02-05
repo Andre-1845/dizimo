@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\StringHelper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class SitePerson extends Model
 {
@@ -30,5 +31,14 @@ class SitePerson extends Model
                 $person->role = ucfirst(mb_strtolower($person->role));
             }
         });
+    }
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (!$this->photo_path) {
+            return null;
+        }
+
+        return Storage::disk('s3')->url($this->photo_path);
     }
 }

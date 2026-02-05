@@ -29,7 +29,7 @@ class SiteImageController extends Controller
             'caption' => 'nullable|string|max:255',
         ]);
 
-        $path = $request->file('image')->store('site', 'public');
+        $path = $request->file('image')->store('site', 's3');
 
         SiteImage::create([
             'section_key' => $section->key,
@@ -45,7 +45,7 @@ class SiteImageController extends Controller
     {
         $this->authorize('delete', $image);
 
-        Storage::disk('public')->delete($image->image_path);
+        Storage::disk('s3')->delete($image->image_path);
         $image->delete();
 
         return back()->with('success', 'Imagem removida.');

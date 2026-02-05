@@ -21,8 +21,7 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         @foreach ($images as $image)
             <div class="border rounded p-2">
-                <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full h-40 object-cover rounded"
-                    alt="{{ $image->caption }}">
+                <img src="{{ $image->image_url }}" class="w-full h-40 object-cover rounded" alt="{{ $image->caption }}">
 
                 <p class="text-xs mt-1 text-gray-600">
                     {{ $image->caption }}
