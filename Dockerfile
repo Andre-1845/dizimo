@@ -41,6 +41,9 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 10000
 
+RUN chown -R www-data:www-data public storage bootstrap/cache
+
+
 CMD sh -c "chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
     && php artisan storage:link || true \
