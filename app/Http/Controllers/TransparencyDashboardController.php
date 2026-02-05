@@ -7,6 +7,7 @@ use App\Models\Expense;
 use App\Models\Category;
 use App\Models\FinancialReport;
 use App\Models\Report;
+use App\Support\DateExtract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -132,10 +133,16 @@ class TransparencyDashboardController extends Controller
         // =====================
         // 6. ANOS DISPONÍVEIS
         // =====================
-        $availableYears = Donation::selectRaw('YEAR(donation_date) as year')
-            ->union(Expense::selectRaw('YEAR(expense_date) as year'))
+        $availableYears = Donation::selectRaw(
+            DateExtract::year('donation_date') . ' as year'
+        )
+            ->union(
+                Expense::selectRaw(
+                    DateExtract::year('expense_date') . ' as year'
+                )
+            )
             ->distinct()
-            ->orderByDesc('year')
+            ->orderBy('year', 'desc')
             ->pluck('year');
 
         return view('dashboard.transparency', [
