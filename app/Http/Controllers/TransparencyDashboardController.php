@@ -60,9 +60,10 @@ class TransparencyDashboardController extends Controller
                         return $q->whereMonth('donation_date', $month);
                     });
             }], 'amount')
-            ->whereRaw('COALESCE(total, 0) > 0')
             ->orderByDesc('total')
-            ->get();
+            ->get()
+            ->filter(fn($category) => ($category->total ?? 0) > 0)
+            ->values();
 
         // =====================
         // 3. DESPESAS POR CATEGORIA
@@ -75,9 +76,10 @@ class TransparencyDashboardController extends Controller
                         return $q->whereMonth('expense_date', $month);
                     });
             }], 'amount')
-            ->whereRaw('COALESCE(total, 0) > 0')
             ->orderByDesc('total')
-            ->get();
+            ->get()
+            ->filter(fn($category) => ($category->total ?? 0) > 0)
+            ->values();
 
         // =====================
         // 4. EVOLUÇÃO MENSAL
