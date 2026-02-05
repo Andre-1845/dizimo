@@ -60,7 +60,7 @@ class TransparencyDashboardController extends Controller
                         return $q->whereMonth('donation_date', $month);
                     });
             }], 'amount')
-            ->having('total', '>', 0)
+            ->whereRaw('COALESCE(total, 0) > 0')
             ->orderByDesc('total')
             ->get();
 
@@ -75,7 +75,7 @@ class TransparencyDashboardController extends Controller
                         return $q->whereMonth('expense_date', $month);
                     });
             }], 'amount')
-            ->having('total', '>', 0)
+            ->whereRaw('COALESCE(total, 0) > 0')
             ->orderByDesc('total')
             ->get();
 
