@@ -21,13 +21,6 @@ class DashboardController extends Controller
         $month = $request->filled('month') ? $request->month : null;
 
 
-        // dd(
-        //     [
-        //         'dashboard.admin' => auth()->user()->can('dashboard.admin'),
-        //         'dashboard.treasury' => auth()->user()->can('dashboard.treasury'),
-        //         'dashboard.member' => auth()->user()->can('dashboard.member')
-        //     ]
-        // );
         /* =====================
      |  TOTAIS (CARDS)
      ===================== */
@@ -75,14 +68,14 @@ class DashboardController extends Controller
      ===================== */
 
         $donationsByMonth = Donation::confirmed()
-            ->selectRaw('MONTH(donation_date) as month, SUM(amount) as total')
+            ->selectRaw('EXTRACT(MONTH FROM donation_date) as month, SUM(amount) as total')
             ->whereYear('donation_date', $year)
-            ->groupBy('month')
+            ->groupByRaw('EXTRACT(MONTH FROM donation_date)')
             ->pluck('total', 'month');
 
-        $expensesByMonth = Expense::selectRaw('MONTH(expense_date) as month, SUM(amount) as total')
+        $expensesByMonth = Expense::selectRaw('EXTRACT(MONTH FROM expense_date) as month, SUM(amount) as total')
             ->whereYear('expense_date', $year)
-            ->groupBy('month')
+            ->groupByRaw('EXTRACT(MONTH FROM expense_date)')
             ->pluck('total', 'month');
 
         /* =====================
