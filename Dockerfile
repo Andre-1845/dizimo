@@ -45,5 +45,7 @@ CMD sh -c "chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
     && php artisan storage:link || true \
     && php artisan migrate --force || true \
+    && php artisan view:clear \
+    && php artisan optimize:clear \
     && php-fpm -D \
     && nginx -g 'daemon off;'"
