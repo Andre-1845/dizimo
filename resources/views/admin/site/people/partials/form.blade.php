@@ -29,7 +29,7 @@
 <div>
     <label class="form-label">Foto</label>
 
-    <input type="file" id="photo" accept="image/*" class="form-input">
+    <input type="file" id="photo" accept="image/*" class="file-input">
 
     <input type="hidden" name="photo_cropped" id="photo_cropped">
 

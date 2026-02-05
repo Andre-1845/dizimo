@@ -12,8 +12,8 @@
         class="mb-6 flex gap-4 items-center">
         @csrf
 
-        <input type="file" name="image" required>
-        <input type="text" name="caption" placeholder="Legenda">
+        <input type="file" name="image" class="file-input" required>
+        <input type="text" name="caption" placeholder="Legenda" class="form-input">
 
         <button class="btn-primary">Enviar</button>
     </form>
