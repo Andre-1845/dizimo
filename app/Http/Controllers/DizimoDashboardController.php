@@ -6,13 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Donation;
 use App\Models\Category;
+use App\Support\DateExtract;
 
 class DizimoDashboardController extends Controller
 {
     public function index(Request $request)
     {
-
-        // dd($request->query());
 
         /* =====================
      |  CONTADORES

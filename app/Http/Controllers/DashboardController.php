@@ -6,6 +6,7 @@ use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\Member;
 use App\Models\User;
+use App\Support\DateExtract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -106,9 +107,13 @@ class DashboardController extends Controller
             ->pluck('total', 'category');
 
 
-        $availableYears = Donation::selectRaw('YEAR(donation_date) as year')
+        $availableYears = Donation::selectRaw(
+            DateExtract::year('donation_date') . ' as year'
+        )
             ->union(
-                Expense::selectRaw('YEAR(expense_date) as year')
+                Expense::selectRaw(
+                    DateExtract::year('expense_date') . ' as year'
+                )
             )
             ->distinct()
             ->orderBy('year', 'desc')
