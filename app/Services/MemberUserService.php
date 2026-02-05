@@ -37,7 +37,7 @@ class MemberUserService
         /**
          *  Atribui papel MEMBRO
          */
-        $user->assignRole('MEMBRO');
+        $user->assignRole('membro');
 
 
         $member->user()->associate($user);

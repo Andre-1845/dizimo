@@ -233,7 +233,7 @@ class ExpenseController extends Controller
 
     public function pending()
     {
-        $expenses = Expense::where('is_approved', 'pending')
+        $expenses = Expense::pending()
             ->with(['category', 'user'])
             ->latest()
             ->paginate(10);
