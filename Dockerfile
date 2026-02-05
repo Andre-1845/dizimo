@@ -41,5 +41,7 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 10000
 
-CMD php-fpm -D \
-    && nginx -g "daemon off;"
+CMD sh -c "php artisan storage:link || true \
+    && php artisan migrate --force || true \
+    && php-fpm -D \
+    && nginx -g 'daemon off;'"
