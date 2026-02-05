@@ -41,7 +41,9 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 10000
 
-CMD sh -c "php artisan storage:link || true \
+CMD sh -c "chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && php artisan storage:link || true \
     && php artisan migrate --force || true \
     && php-fpm -D \
     && nginx -g 'daemon off;'"
