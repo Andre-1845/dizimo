@@ -78,6 +78,7 @@
             <p class="text-lg font-semibold mt-1">
                 R$ {{ money($membersPaidTotal) }}
             </p>
+            <p class="text-gray-500 text-sm">Doações não confirmadas: {{ $donationsNotConfirmed }}</p>
 
             <a href="{{ route('reports.dizimos.paid', request()->query()) }}"
                 class="btn-success mt-4 inline-flex items-center justify-center">

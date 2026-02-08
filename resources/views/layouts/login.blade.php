@@ -14,7 +14,7 @@
     <div class="card-login">
         <div class="logo-wrapper-login">
             <a href="{{ route('site.home') }}">
-                <img class="w-20" src="{{ asset('images/sarex.png') }}" alt="LOGO" />
+                <img class="w-20" src="{{ asset('storage/images/simbolo_capelania.jpg') }}" alt="LOGO" />
             </a>
         </div>
         @yield('content')

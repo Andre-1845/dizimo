@@ -17,11 +17,6 @@
 
     <x-alert />
 
-    @if (session('success'))
-        <div class="alert-success mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <table class="min-w-full">

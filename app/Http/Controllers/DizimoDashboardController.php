@@ -12,7 +12,6 @@ class DizimoDashboardController extends Controller
     public function index(Request $request)
     {
 
-        // dd($request->query());
 
         /* =====================
      |  CONTADORES
@@ -83,6 +82,12 @@ class DizimoDashboardController extends Controller
             ->whereYear('donation_date', $year)
             ->whereMonth('donation_date', $month)
             ->sum('amount');
+            
+        $donationsNotConfirmed = Donation::where('is_confirmed', false)
+            ->where('category_id', $dizimoCategory->id)
+            ->whereYear('donation_date', $year)
+            ->whereMonth('donation_date', $month)
+            ->count();
 
         // Membros pendentes
         $membersPendingCount = Member::where('active', true)
@@ -131,6 +136,7 @@ class DizimoDashboardController extends Controller
             'percentageCollected',
             'membersPaidCount',
             'membersPaidTotal',
+            'donationsNotConfirmed',
             'membersPendingCount',
             'membersPendingTotal',
             'anonymousCount',

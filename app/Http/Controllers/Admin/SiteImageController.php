@@ -30,6 +30,7 @@ class SiteImageController extends Controller
         ]);
 
         $path = $request->file('image')->store('site', 'public');
+       
 
         SiteImage::create([
             'section_key' => $section->key,

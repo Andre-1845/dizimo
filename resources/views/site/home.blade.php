@@ -10,6 +10,7 @@
 
             {{-- Imagem --}}
             @if (isset($images['hero'][0]))
+
                 <img src="{{ asset('storage/' . $images['hero'][0]->image_path) }}"
                     class="absolute inset-0 w-full h-full object-cover" />
             @endif

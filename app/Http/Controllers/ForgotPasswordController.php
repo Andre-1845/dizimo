@@ -96,7 +96,8 @@ class ForgotPasswordController extends Controller
                 // Retornar o CALLBACK se a redefinicao de senha for bem-sucedida
                 function (User $user, string $password) {
                     $user->forceFill([
-                        'password' => $password
+                        'password' => $password,
+                        'status_id' => 2, // ATIVO
                     ]);
 
                     // Salvar as alteracoes

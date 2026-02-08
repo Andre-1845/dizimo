@@ -221,6 +221,6 @@ class UserController extends Controller
         }
 
         $user->delete();
-        return redirect()->route('users.index', ['menu' => 'users'])->with('success', 'Usuário apagado!');
+        return redirect()->route('users.index', ['menu' => 'users'])->with('success', 'Usuário excluído!');
     }
 }

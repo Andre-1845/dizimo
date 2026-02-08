@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h1 class="content-title">
+    <h1 class="content-title mb-6">
         Imagens — {{ $section->title }}
     </h1>
 
@@ -12,8 +12,8 @@
         class="mb-6 flex gap-4 items-center">
         @csrf
 
-        <input type="file" name="image" required>
-        <input type="text" name="caption" placeholder="Legenda">
+        <input type="file" name="image" class="file-input gap-2" required>
+        <input type="text" name="caption" placeholder="Legenda" class="form-input">
 
         <button class="btn-primary">Enviar</button>
     </form>
@@ -21,6 +21,7 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         @foreach ($images as $image)
             <div class="border rounded p-2">
+              
                 <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full h-40 object-cover rounded"
                     alt="{{ $image->caption }}">
 

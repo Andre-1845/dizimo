@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\InviteUserNotification;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
 
 class MemberUserService
 {
@@ -16,34 +17,23 @@ class MemberUserService
      */
     public function createUserIfNeeded(Member $member, ?string $email, ?string $userName = null): void
     {
-        // Já é USER → não faz nada
-        if ($member->user) {
-            return;
-        }
+       if ($member->user) {
+        return;
+    }
 
-        // Ainda não virou USER
-        if (!$email) {
-            return;
-        }
+    $user = User::create([
+        'name' => $member->name,
+        'email' => $email,
+        'password' => bcrypt(Str::random(16)), // senha temporária
+        'status_id' => 2, // ATIVO
+    ]);
 
-        // $initialPassword = config('auth.default_user_password');
-        $user = User::create([
-            'name'     => $userName ?? $member->name,
-            'email'    => $email,
-            'password' => Hash::make(Str::random(16)), // senha temporária
-            'email_verified_at' => null,
-        ]);
+    $user->assignRole('MEMBRO');
 
-        /**
-         *  Atribui papel MEMBRO
-         */
-        $user->assignRole('MEMBRO');
+    $member->user()->associate($user);
+    $member->save();
 
-
-        $member->user()->associate($user);
-        $member->save();
-
-        // Envia e-mail de confirmação
-        $user->notify(new InviteUserNotification());
+    // 🔑 ENVIA LINK DE DEFINIÇÃO DE SENHA (convite)
+    Password::sendResetLink(['email' => $user->email]);
     }
 }

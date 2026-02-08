@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -50,6 +51,10 @@ use Illuminate\Support\Facades\Auth;
 | SITE PÚBLICO
 |--------------------------------------------------------------------------
 */
+
+Route::get('/login-teste', function () {
+return 'rota /login-teste OK';
+});
 
 Route::get('/', [SiteController::class, 'home'])
     ->name('site.home');
