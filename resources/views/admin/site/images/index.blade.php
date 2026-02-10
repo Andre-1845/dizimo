@@ -22,7 +22,7 @@
         @foreach ($images as $image)
             <div class="border rounded p-2">
               
-                <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full h-40 object-cover rounded"
+                <img src="{{ Storage::url($image->image_path) }}" class="w-full h-40 object-cover rounded"
                     alt="{{ $image->caption }}">
 
                 <p class="text-xs mt-1 text-gray-600">
