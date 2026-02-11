@@ -13,7 +13,7 @@ class VerifyEmailInvite extends VerifyEmail
     protected function buildMailMessage($url)
     {
         return (new MailMessage)
-            ->subject('Convite para acesso ao sistema')
+            ->subject('Convite para acesso ao sistema da Capelania N Sra das Graças (AMAN)')
             ->greeting('Olá!')
             ->line('Você foi cadastrado como membro e recebeu acesso ao sistema.')
             ->line('Para ativar seu acesso, confirme seu endereço de e-mail clicando no botão abaixo.')

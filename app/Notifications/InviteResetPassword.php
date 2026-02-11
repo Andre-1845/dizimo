@@ -21,7 +21,7 @@ class InviteResetPassword extends ResetPassword
         return (new MailMessage)
             ->subject('Convite para acessar o Sistema da Capelania N Sra das Graças')
             ->greeting('Olá!')
-            ->line('Você foi convidado(a) para acessar o sistema de dízimos.')
+            ->line('Você foi convidado(a) para acessar o sistema da Capelania N Sra das Graças (AMAN).')
             ->line('Para definir sua senha e acessar o sistema, clique no botão abaixo:')
             ->action('Definir minha senha', $url)
             ->line('Se você não esperava este convite, pode ignorar este e-mail.');
