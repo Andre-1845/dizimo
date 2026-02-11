@@ -17,23 +17,25 @@ class MemberUserService
      */
     public function createUserIfNeeded(Member $member, ?string $email, ?string $userName = null): void
     {
-       if ($member->user) {
-        return;
-    }
+        if ($member->user) {
+            return;
+        }
 
-    $user = User::create([
-        'name' => $member->name,
-        'email' => $email,
-        'password' => bcrypt(Str::random(16)), // senha temporária
-        'status_id' => 2, // ATIVO
-    ]);
+        $user = User::create([
+            'name' => $member->name,
+            'email' => $email,
+            'password' => bcrypt(Str::random(16)), // senha temporária
+            'status_id' => 2, // ATIVO
+            // Email is considered verified because access is granted via secure invite link
+            'email_verified_at' => now(),
+        ]);
 
-    $user->assignRole('MEMBRO');
+        $user->assignRole('membro');
 
-    $member->user()->associate($user);
-    $member->save();
+        $member->user()->associate($user);
+        $member->save();
 
-    // 🔑 ENVIA LINK DE DEFINIÇÃO DE SENHA (convite)
-    Password::sendResetLink(['email' => $user->email]);
+        // 🔑 ENVIA LINK DE DEFINIÇÃO DE SENHA (convite)
+        Password::sendResetLink(['email' => $user->email]);
     }
 }
