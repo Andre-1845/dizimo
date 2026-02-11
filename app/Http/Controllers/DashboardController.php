@@ -53,12 +53,14 @@ class DashboardController extends Controller
      |  ÚLTIMOS REGISTROS
      ===================== */
 
-        $lastDonations = Donation::with('member')
+        $lastDonations = Donation::confirmed()
+            ->with('member')
             ->orderByDesc('donation_date')
             ->limit(10)
             ->get();
 
-        $lastExpenses = Expense::with('category')
+        $lastExpenses = Expense::approved()
+            ->with('category')
             ->orderByDesc('expense_date')
             ->limit(10)
             ->get();
@@ -74,7 +76,8 @@ class DashboardController extends Controller
             ->groupBy('month')
             ->pluck('total', 'month');
 
-        $expensesByMonth = Expense::selectRaw('MONTH(expense_date) as month, SUM(amount) as total')
+        $expensesByMonth = Expense::approved()
+            ->selectRaw('MONTH(expense_date) as month, SUM(amount) as total')
             ->whereYear('expense_date', $year)
             ->groupBy('month')
             ->pluck('total', 'month');
@@ -84,17 +87,8 @@ class DashboardController extends Controller
      |  Doações por categoria
      ===================== */
 
-        // $donationsByCategory = Donation::join('categories', 'categories.id', '=', 'donations.category_id')
-        //     ->selectRaw('categories.name as category, SUM(donations.amount) as total')
-        //     ->groupBy('categories.name')
-        //     ->pluck('total', 'category');
-
-        // $expensesByCategory = Expense::join('categories', 'categories.id', '=', 'expenses.category_id')
-        //     ->selectRaw('categories.name as category, SUM(expenses.amount) as total')
-        //     ->groupBy('categories.name')
-        //     ->pluck('total', 'category');
-
-        $expensesByCategoryQuery = Expense::join('categories', 'categories.id', '=', 'expenses.category_id')
+        $expensesByCategoryQuery = Expense::approved()
+            ->join('categories', 'categories.id', '=', 'expenses.category_id')
             ->selectRaw('categories.name as category, SUM(expenses.amount) as total')
             ->whereYear('expenses.expense_date', $year);
 
@@ -107,9 +101,11 @@ class DashboardController extends Controller
             ->pluck('total', 'category');
 
 
-        $availableYears = Donation::selectRaw('YEAR(donation_date) as year')
+        $availableYears = Donation::confirmed()
+            ->selectRaw('YEAR(donation_date) as year')
             ->union(
-                Expense::selectRaw('YEAR(expense_date) as year')
+                Expense::approved()
+                    ->selectRaw('YEAR(expense_date) as year')
             )
             ->distinct()
             ->orderBy('year', 'desc')
@@ -164,7 +160,8 @@ class DashboardController extends Controller
         $totalDonations = $donationsQuery->sum('amount');
 
         // Despesas
-        $expensesQuery = Expense::whereYear('expense_date', $year);
+        $expensesQuery = Expense::approved()
+            ->whereYear('expense_date', $year);
         if ($month) {
             $expensesQuery->whereMonth('expense_date', $month);
         }
@@ -182,10 +179,11 @@ class DashboardController extends Controller
             $myDonationsQuery->whereMonth('donation_date', $month);
         }
 
-        $myDonations = $myDonationsQuery->paginate(5);
+        $myDonations = $myDonationsQuery->paginate(10);
 
         // Despesas por categoria (agrupado)
-        $expensesByCategory = Expense::selectRaw('categories.name, SUM(expenses.amount) as total')
+        $expensesByCategory = Expense::approved()
+            ->selectRaw('categories.name, SUM(expenses.amount) as total')
             ->join('categories', 'categories.id', '=', 'expenses.category_id')
             ->whereYear('expense_date', $year)
             ->whereMonth('expense_date', $month)

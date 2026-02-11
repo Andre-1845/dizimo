@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Nova Doação')
+@section('title', 'Nova Receita')
 
 @section('content')
 
@@ -8,8 +8,8 @@
 
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Doações</h2>
-            <x-smart-breadcrumb :items="[['label' => 'Minhas Doações']]" />
+            <h2 class="content-title">Receitas</h2>
+            <x-smart-breadcrumb :items="[['label' => 'Minhas Colaborações']]" />
         </div>
     </div>
 
@@ -17,7 +17,7 @@
 
     <div class="content-box"><!-- Content-Box  -->
         <div class="content-box-header">
-            <h3 class="content-box-title">Nova Doação</h3>
+            <h3 class="content-box-title">Nova Colaboração</h3>
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
                 <!-- Botoes (com icones)  -->
@@ -109,7 +109,7 @@
                 <div class="btn-md-div">
                     <button class="btn-success-md ">
                         @include('components.icons.save')
-                        Salvar Doação
+                        Salvar Colaboração
                     </button>
                 </div>
             </form>

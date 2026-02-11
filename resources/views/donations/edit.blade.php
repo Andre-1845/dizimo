@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Editar Doação')
+@section('title', 'Editar Receita')
 
 @section('content')
 
@@ -23,7 +23,7 @@
 
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h3 class="content-box-title">Editar Doacao</h3>
+            <h3 class="content-box-title">Editar Receita</h3>
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
 
