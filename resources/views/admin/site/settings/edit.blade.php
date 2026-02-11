@@ -22,7 +22,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('admin.site.settings.update') }}">
+        <form method="POST" action="{{ route('admin.site.settings.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -51,6 +51,33 @@
                 <label class="block form-label">E-mail</label>
                 <input type="email" name="email" value="{{ $settings['email'] ?? '' }}" class="w-full form-input">
             </div>
+
+            {{-- Nome do Aplicativo --}}
+            <div class="mb-4">
+                <label class="block form-label">Nome do Aplicativo</label>
+                <input type="text" name="app_name" value="{{ $settings['app_name'] ?? '' }}" class="w-full form-input">
+            </div>
+
+            {{-- Logo do Sistema --}}
+            <div class="mb-4">
+                <label class="block form-label">Logo do Sistema</label>
+
+                @if (!empty($settings['site_logo']))
+                    <div class="mb-2">
+                        <img src="{{ asset('storage/' . $settings['site_logo']) }}" class="h-16">
+
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="remove_logo" value="1" class="mr-2">
+                                Remover logo atual
+                            </label>
+                        </div>
+                    </div>
+                @endif
+
+                <input type="file" name="site_logo" accept="image/*" class="w-full form-input">
+            </div>
+
 
             {{-- Redes sociais --}}
             <div class="mb-4">
