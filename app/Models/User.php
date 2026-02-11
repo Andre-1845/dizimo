@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'status_id',
         'password',
+        'email_verified_at',
     ];
 
     public function status()
@@ -106,9 +107,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyEmailInvite());
     }
-    
+
     public function sendPasswordResetNotification($token)
     {
-         $this->notify(new InviteResetPassword($token));
+        $this->notify(new InviteResetPassword($token));
     }
 }

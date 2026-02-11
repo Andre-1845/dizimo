@@ -1,42 +1,47 @@
-# Projeto Dízimo
+# Dízimo Project
 
-O **Projeto Dízimo** é um sistema web desenvolvido para auxiliar instituições religiosas no controle de membros, doações e transparência financeira, promovendo organização, segurança e clareza na gestão.
+🌍 Read this README in Portuguese: [README.pt-BR.md](README.pt-BR.md)
 
-O sistema foi pensado para uso real, com separação de perfis, controle de acesso e foco em boas práticas de desenvolvimento.
+**Dízimo Project** is a web-based system designed to manage members, donations, and financial transparency for religious institutions.
 
----
-
-## 🎯 Objetivo do Projeto
-
-- Centralizar o registro de doações (dízimos e ofertas)
-- Permitir que membros acompanhem suas próprias contribuições
-- Oferecer transparência financeira através de relatórios consolidados
-- Facilitar a administração de receitas e despesas da instituição
+The application focuses on organization, security, and clear financial reporting, following real-world development best practices.
 
 ---
 
-## 🧩 Funcionalidades
+## 🎯 Project Purpose
 
-### 👤 Membros
-- Cadastro de membros
-- Visualização de doações pessoais
-- Definição de dízimo mensal previsto
-- Visualização de painel de transparência (acompanhamento de contabilidade da igreja/instituição)
-
-### 🛡️ Administração
-- Cadastro e gerenciamento de usuários
-- Controle de permissões por nível de acesso
-- Registro de doações, receitas e despesas
-- Relatórios por período (mês, ano, intervalo)
-- Comparativo entre dízimo previsto x realizado
-
-### 📊 Transparência
-- Painel com dados consolidados
-- Relatórios financeiros acessíveis aos membros
+- Centralize donation records (tithes and offerings)
+- Allow members to track their own contributions
+- Provide financial transparency through consolidated reports
+- Support administrators in managing income and expenses efficiently
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## 🧩 Features
+
+### 👤 Members
+
+- Member registration
+- Personal donation history
+- Monthly tithe goal definition
+- Access to transparency dashboard
+
+### 🛡️ Administration
+
+- User and member management
+- Role-based access control
+- Donation, income, and expense registration
+- Financial reports by period (month, year, custom range)
+- Comparison between expected and actual tithes
+
+### 📊 Transparency
+
+- Consolidated financial dashboards
+- Member-accessible reports for accountability
+
+---
+
+## 🛠️ Technologies Used
 
 - **PHP 8+**
 - **Laravel 12**
@@ -47,47 +52,46 @@ O sistema foi pensado para uso real, com separação de perfis, controle de aces
 
 ---
 
-## 🧱 Arquitetura e Organização
+## 🧱 Architecture and Organization
 
-- Arquitetura MVC (Model–View–Controller)
-- Separação clara entre:
-  - Painel administrativo
-  - Área do membro
-  - Área pública
-- Services dedicados para regras de negócio
-- Uso de migrations e seeders
-- Controle de acesso via roles
-
----
-
-## 🔐 Controle de Acesso
-
-O sistema utiliza níveis de acesso para garantir segurança:
-
-- Administrador
-- Usuário/Membro
-
-Cada usuário visualiza apenas os dados permitidos conforme seu perfil.
-Existem papéis definidos como Tesoureiro, Auxiliar e Secretário
+- MVC (Model–View–Controller) architecture
+- Clear separation between:
+  - Administrative panel
+  - Member area
+  - Public area
+- Dedicated Service classes for business logic
+- Database migrations and seeders
+- Role-based authorization system
 
 ---
 
-## 🚀 Fluxo de Desenvolvimento e Deploy
+## 🔐 Access Control
 
-O projeto segue um fluxo profissional de versionamento:
+The system uses role-based permissions to ensure data security:
 
-- `localdev`: desenvolvimento local
-- `main`: produção
-
-Fluxo:
-1. Desenvolvimento na `localdev`
-2. Commit e push para o GitHub
-3. Merge para `main`
-4. Deploy em produção
+- Administrator
+- Member / User
+- Treasurer, Assistant, and Secretary roles with specific permissions
 
 ---
 
-## ⚙️ Instalação Local
+## 🚀 Development and Deployment Workflow
+
+This project follows a professional Git branching strategy:
+
+- `localdev` → development branch
+- `main` → production branch
+
+Workflow:
+
+1. Development on `localdev`
+2. Commit and push to GitHub
+3. Merge into `main`
+4. Deploy to production environment
+
+---
+
+## ⚙️ Local Installation
 
 ```bash
 git clone https://github.com/Andre-1845/dizimo.git

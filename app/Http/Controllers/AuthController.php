@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\User;
 use Exception;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -94,13 +95,18 @@ class AuthController extends Controller
 
     // LOGOUT
 
-    public function logout()
+    public function logout(Request $request)
     {
         Log::notice('Logout', ['action_user_id' => Auth::id()]);
 
         Auth::logout();
 
-        return redirect()->route('site.home')->with('success', 'LOGOUT executado!!');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()
+            ->route('site.home')
+            ->with('success', 'Logout realizado com sucesso!');
     }
 
     public function create()
