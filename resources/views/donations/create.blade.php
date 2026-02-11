@@ -23,7 +23,7 @@
 
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
-            <h3 class="content-box-title">Nova Doacao</h3>
+            <h3 class="content-box-title">Nova Receita</h3>
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
 
@@ -118,7 +118,7 @@
                 <div class="btn-md-div">
                     <button class="btn-primary-md">
                         @include('components.icons.save')
-                        Salvar Doação
+                        Salvar Colaboração
                     </button>
                 </div>
             </form>

@@ -34,7 +34,7 @@
                             title="Cadastrar">
                             @include('components.icons.plus')
 
-                            <span>Nova Doacao</span>
+                            <span>Nova Receita</span>
                         </a>
                     </div>
                 @endcan
@@ -103,7 +103,7 @@
                     @empty
                         <tr>
                             <td colspan="5" class="py-4 text-center text-gray-600">
-                                Nenhuma doação registrada.
+                                Nenhuma colaboração registrada.
                             </td>
                         </tr>
                     @endforelse

@@ -187,7 +187,7 @@
                         'active' => request()->routeIs('member.donations.*'),
                     ]) href="{{ route('member.donations.create') }}">
                         <span class="sidebar-icon">@include('components.icons.doc_plus')</span>
-                        <span class="sidebar-text">Nova Doação</span>
+                        <span class="sidebar-text">Nova Colaboração</span>
                     </a>
                 </div>
             @endcan

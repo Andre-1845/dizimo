@@ -13,9 +13,11 @@
 <body class="bg-login">
     <div class="card-login">
         <div class="logo-wrapper-login">
-            <a href="{{ route('site.home') }}">
-                <img class="w-20" src="{{ asset('storage/images/simbolo_capelania.jpg') }}" alt="LOGO" />
-            </a>
+            @if ($siteLogo)
+                <img class="w-20" src="{{ asset('storage/' . $siteLogo) }}" alt="{{ $appName }}">
+            @else
+                <span class="text-xl font-bold">{{ $appName }}</span>
+            @endif
         </div>
         @yield('content')
 

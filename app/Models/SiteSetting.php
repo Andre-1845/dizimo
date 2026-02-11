@@ -9,10 +9,6 @@ class SiteSetting extends Model
     protected $fillable = ['key', 'value'];
     public $timestamps = false;
 
-    public static function get($key, $default = null)
-    {
-        return static::where('key', $key)->value('value') ?? $default;
-    }
 
     public static function set($key, $value)
     {
@@ -20,5 +16,13 @@ class SiteSetting extends Model
             ['key' => $key],
             ['value' => $value]
         );
+    }
+
+    public static function get($key, $default = null)
+    {
+        return cache()->rememberForever("setting_{$key}", function () use ($key, $default) {
+            $setting = static::where('key', $key)->first();
+            return $setting ? $setting->value : $default;
+        });
     }
 }

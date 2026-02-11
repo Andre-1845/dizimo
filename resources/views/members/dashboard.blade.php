@@ -7,14 +7,14 @@
     <div class="content-header">
         {{-- Título centralizado acima --}}
         <div class="text-center mb-6">
-            <h1 class="content-title">Minhas Doações</h1>
+            <h1 class="content-title">Minhas Colaborações</h1>
         </div>
-        <x-smart-breadcrumb :items="[['label' => 'Minhas Doações']]" />
+        <x-smart-breadcrumb :items="[['label' => 'Minhas Colaborações']]" />
     </div>
 
 
     <div class="content-box-header">
-        <h3 class="content-box-title">Listar Doações</h3>
+        <h3 class="content-box-title">Listar colaborações</h3>
 
         <!-- Botoes (com icones)  -->
         <div class="content-box-btn">
@@ -36,7 +36,7 @@
                         title="Cadastrar">
                         @include('components.icons.plus')
 
-                        <span>Nova Doacao</span>
+                        <span>Nova Colaboração</span>
                     </a>
                 </div>
             @endcan
@@ -161,12 +161,12 @@
                         </td>
                         <x-table-actions-icons :show="route('member.donations.show', $donation)" :edit="!$donation->is_confirmed ? route('member.donations.edit', $donation) : null" :delete="route('member.donations.destroy', $donation)"
                             can-show="donations.view" can-edit="donations.edit" can-delete="member.donations.delete"
-                            confirm="Deseja excluir esta doação?" />
+                            confirm="Deseja excluir esta colaboração?" />
                     </tr>
                 @empty
                     <tr>
                         <td colspan="2" class="py-4 text-center text-gray-500">
-                            Nenhuma doação encontrada.
+                            Nenhuma colaboração encontrada.
                         </td>
                     </tr>
                 @endforelse

@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard')
+@section('title', 'Painel Administrativo')
 
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
 
-            <h2 class="content-title mb-4">Dashboard</h2>
+            <h2 class="content-title mb-4">Painel Administrativo</h2>
 
-            <x-smart-breadcrumb :items="[['label' => 'Dashboard']]" />
+            <x-smart-breadcrumb :items="[['label' => 'Painel Adm']]" />
         </div>
     </div>
 

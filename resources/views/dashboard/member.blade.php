@@ -33,7 +33,7 @@
     {{-- CARDS --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-white rounded-xl shadow p-6">
-            <p class="text-sm text-gray-500">Doações</p>
+            <p class="text-sm text-gray-500">Colaborações</p>
             <p class="text-2xl font-bold text-green-600">
                 R$ {{ number_format($totalDonations, 2, ',', '.') }}
             </p>
@@ -72,10 +72,10 @@
 
     {{-- MINHAS DOAÇÕES --}}
     <div class="bg-white rounded-xl shadow p-6">
-        <h2 class="text-lg font-semibold mb-4">Minhas Doações</h2>
+        <h2 class="text-lg font-semibold mb-4">Minhas Colaborações</h2>
 
         @if ($myDonations->isEmpty())
-            <p class="text-gray-500">Você ainda não registrou doações.</p>
+            <p class="text-gray-500">Você ainda não registrou colaborações.</p>
         @else
             <table class="w-full text-sm">
                 <thead>
