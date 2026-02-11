@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 
@@ -53,6 +54,11 @@ class ForgotPasswordController extends Controller
 
     public function showRequestForm(Request $request)
     {
+        if (Auth::check()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         // Recuperar os dados do usuario no BD atraves do email
         $user = User::where('email', $request->email)->first();
@@ -107,6 +113,11 @@ class ForgotPasswordController extends Controller
 
             // Salvar LOG
             Log::info('Senha atualizada', ['status' => $status, 'email' => $request->email]);
+
+            //  GARANTIR SESSÃO LIMPA APÓS RESET
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             // Redirecionar o Usuario e enviar as mensagens(sucesso ou erro)
             return $status === Password::PASSWORD_RESET ? redirect()->route('login')->with('success', 'Senha atualizada com sucesso!') : redirect()->route('login')->with('error', 'ERRO - Senha NÃO atualizada!');

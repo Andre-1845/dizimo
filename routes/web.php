@@ -46,6 +46,7 @@ use App\Http\Controllers\Admin\{
 use App\Http\Controllers\Site\TeamController;
 use Illuminate\Support\Facades\Auth;
 
+
 /*
 |--------------------------------------------------------------------------
 | SITE PÚBLICO
@@ -53,7 +54,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/login-teste', function () {
-return 'rota /login-teste OK';
+    return 'rota /login-teste OK';
 });
 
 Route::get('/', [SiteController::class, 'home'])
@@ -85,10 +86,14 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
     ->name('password.email');
 
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showRequestForm'])
+    ->middleware('logout.if.auth')
     ->name('password.reset');
 
 Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])
+    ->middleware('logout.if.auth')
     ->name('password.update');
+
+
 
 /*
 |--------------------------------------------------------------------------
