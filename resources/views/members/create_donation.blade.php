@@ -46,7 +46,7 @@
                     <select name="category_id" class="form-input">
                         <option value="">Selecione</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">
+                            <option value="{{ $category->id }}" @selected(old('category_id', 1) == $category->id)>
                                 {{ $category->name }}
                             </option>
                         @endforeach
@@ -61,7 +61,7 @@
                     <select name="payment_method_id" class="form-input">
                         <option value="">Selecione</option>
                         @foreach ($paymentMethods as $method)
-                            <option value="{{ $method->id }}">
+                            <option value="{{ $method->id }}" @selected(old('payment_method_id') == $method->id)>
                                 {{ $method->name }}
                             </option>
                         @endforeach
@@ -73,7 +73,8 @@
 
                 <div>
                     <label class="form-label">Data</label>
-                    <input type="date" name="donation_date" class="form-input" value="{{ now()->toDateString() }}">
+                    <input type="date" name="donation_date" class="form-input"
+                        value="{{ old('donation_date', now()->toDateString()) }}">
                     @error('donation_date')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -81,15 +82,16 @@
 
                 <div>
                     <label class="form-label">Valor</label>
-                    <input type="number" step="0.01" name="amount" class="form-input">
+                    <input type="number" step="0.01" name="amount" class="form-input" value="{{ old('amount') }}">
                     @error('amount')
-                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                        <p class="text-red-600 text-sm
+                        mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
                     <label class="form-label">Observações</label>
-                    <textarea name="notes" class="form-input"></textarea>
+                    <textarea name="notes" class="form-input">{{ old('notes') }}</textarea>
                 </div>
 
                 <div>
