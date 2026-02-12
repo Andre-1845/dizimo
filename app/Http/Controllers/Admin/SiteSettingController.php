@@ -26,40 +26,33 @@ class SiteSettingController extends Controller
             'site_logo' => 'nullable|image|max:2048',
         ]);
 
+        // Trata checkbox
         SiteSetting::set(
             'use_default_email_templates',
             $request->has('use_default_email_templates') ? 1 : 0
         );
-        //  Salva campos normais (texto)
-        foreach ($request->except(['_token', '_method', 'site_logo']) as $key => $value) {
 
-            SiteSetting::updateOrInsert(
-                ['key' => $key],
-                ['value' => $value]
-            );
-
-            cache()->forget("setting_{$key}");
+        // Salva campos de texto
+        foreach ($request->except(['_token', '_method', 'site_logo', 'remove_logo', 'use_default_email_templates']) as $key => $value) {
+            SiteSetting::set($key, $value);
         }
 
-        //  Remover logo
-        if ($request->remove_logo) {
+        // Remover logo
+        if ($request->has('remove_logo')) {
 
-            $oldLogo = SiteSetting::where('key', 'site_logo')->value('value');
+            $oldLogo = SiteSetting::get('site_logo');
 
             if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
                 Storage::disk('public')->delete($oldLogo);
             }
 
-            SiteSetting::where('key', 'site_logo')->delete();
-
-            cache()->forget('setting_site_logo');
+            SiteSetting::deleteKey('site_logo'); // método novo no model
         }
 
-        //  Upload do logo
-
+        // Upload nova logo
         if ($request->hasFile('site_logo')) {
 
-            $oldLogo = SiteSetting::where('key', 'site_logo')->value('value');
+            $oldLogo = SiteSetting::get('site_logo');
 
             if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
                 Storage::disk('public')->delete($oldLogo);
@@ -67,12 +60,7 @@ class SiteSettingController extends Controller
 
             $path = $request->file('site_logo')->store('settings', 'public');
 
-            SiteSetting::updateOrInsert(
-                ['key' => 'site_logo'],
-                ['value' => $path]
-            );
-
-            cache()->forget('setting_site_logo');
+            SiteSetting::set('site_logo', $path);
         }
 
         return back()->with('success', 'Configurações atualizadas.');

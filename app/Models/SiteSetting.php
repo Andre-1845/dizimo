@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class SiteSetting extends Model
 {
     protected $fillable = ['key', 'value'];
-    public $timestamps = false;
-
 
     public static function set($key, $value)
     {
@@ -16,6 +14,9 @@ class SiteSetting extends Model
             ['key' => $key],
             ['value' => $value]
         );
+        cache()->forget("setting_{$key}");
+
+        return $setting;
     }
 
     public static function get($key, $default = null)
@@ -24,5 +25,11 @@ class SiteSetting extends Model
             $setting = static::where('key', $key)->first();
             return $setting ? $setting->value : $default;
         });
+    }
+
+    public static function deleteKey($key)
+    {
+        static::where('key', $key)->delete();
+        cache()->forget("setting_{$key}");
     }
 }
