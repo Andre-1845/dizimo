@@ -30,7 +30,8 @@
             <a href="{{ route('admin.site.settings.edit') }}" class="card-config-site">
                 <h2 class="card-config-title">Configurações</h2>
                 <p class="card-config-subtitle">
-                    Título do site, rodapé, endereço e telefone.
+                    Título e Logo do site, rodapé, endereço, telefone.
+                    Configurações de e-mails do sistema.
                 </p>
             </a>
 

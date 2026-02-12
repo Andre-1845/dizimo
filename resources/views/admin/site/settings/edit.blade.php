@@ -80,7 +80,7 @@
                         </div>
                     @endif
 
-                    <input type="file" name="site_logo" accept="image/*" class="w-full form-input">
+                    <input type="file" name="site_logo" accept="image/*" class="w-full file-input">
                 </div>
             </div>
 
