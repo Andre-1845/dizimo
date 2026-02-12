@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Doações Administrativas')
+@section('title', 'Colaborações Administrativas')
 
 @section('content')
 
     <h1 class="text-2xl font-bold mb-6">
-        Doações Administrativas / Anônimas
+        Colaborações Administrativas / Anônimas
     </h1>
 
     <p class="text-sm text-gray-500 mb-4">
@@ -20,8 +20,6 @@
             'year' => request('year'),
         ]">
 
-        {{-- Futuro --}}
-        {{-- <a class="btn-primary">Outro botão</a> --}}
     </x-report.actions>
 
     <div class="bg-white rounded shadow p-4">
@@ -52,7 +50,7 @@
                 @empty
                     <tr>
                         <td colspan="3" class="py-4 text-center text-gray-500">
-                            Nenhuma doação administrativa encontrada.
+                            Nenhuma colaboração administrativa encontrada.
                         </td>
                     </tr>
                 @endforelse

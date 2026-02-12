@@ -6,7 +6,7 @@
 
     <div class="content-wrapper">
         <div class="content-header">
-            <h1 class="content-title mb-4">Dashboard de Dízimos</h1>
+            <h1 class="content-title mb-4">Painel de Dízimos</h1>
 
             <x-smart-breadcrumb :items="[['label' => 'Painel Dizimos']]" />
         </div>
@@ -102,7 +102,7 @@
 
         {{-- ANÔNIMAS --}}
         <div class="bg-gray-100 rounded border shadow p-5">
-            <p class="text-gray-500 text-sm">Doações Administrativas</p>
+            <p class="text-gray-500 text-sm">Colaborações Administrativas</p>
             <p class="text-3xl font-bold text-blue-600">{{ $anonymousCount }}</p>
             <p class="text-lg font-semibold mt-1">
                 R$ {{ money($anonymousTotal) }}

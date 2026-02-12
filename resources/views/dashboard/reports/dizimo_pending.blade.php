@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Doações Pendentes')
+@section('title', 'Colaborações Pendentes')
 
 @section('content')
 
@@ -20,8 +20,6 @@
             'year' => request('year'),
         ]">
 
-        {{-- Futuro --}}
-        {{-- <a class="btn-primary">Outro botão</a> --}}
     </x-report.actions>
 
     <div class="bg-white rounded shadow p-4">

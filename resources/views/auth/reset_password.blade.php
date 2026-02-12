@@ -33,7 +33,7 @@
 
             <div class="btn-group-login">
 
-                <a href="{{ route('login') }}">LOGIN</a>
+                <a href="{{ route('login') }}" class="link-login">LOGIN</a>
                 <a href="{{ route('site.home') }}" class="link-login">HomePage</a>
                 <button class="btn-primary" type="submit">Cadastrar</button>
             </div>

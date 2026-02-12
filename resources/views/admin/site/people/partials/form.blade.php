@@ -25,7 +25,7 @@
     </label>
 </div>
 
-{{-- FOTO (Cropper será integrado depois) --}}
+{{-- FOTO --}}
 <div>
     <label class="form-label">Foto</label>
 
@@ -43,6 +43,7 @@
 
 </div>
 
+{{--  CROPPER --}}
 
 @push('scripts')
     <script>
