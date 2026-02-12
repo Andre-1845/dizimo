@@ -26,6 +26,10 @@ class SiteSettingController extends Controller
             'site_logo' => 'nullable|image|max:2048',
         ]);
 
+        SiteSetting::set(
+            'use_default_email_templates',
+            $request->has('use_default_email_templates') ? 1 : 0
+        );
         //  Salva campos normais (texto)
         foreach ($request->except(['_token', '_method', 'site_logo']) as $key => $value) {
 
@@ -60,18 +64,6 @@ class SiteSettingController extends Controller
             if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
                 Storage::disk('public')->delete($oldLogo);
             }
-
-            $path = $request->file('site_logo')->store('settings', 'public');
-
-            SiteSetting::updateOrInsert(
-                ['key' => 'site_logo'],
-                ['value' => $path]
-            );
-
-            cache()->forget('setting_site_logo');
-        }
-
-        if ($request->hasFile('site_logo')) {
 
             $path = $request->file('site_logo')->store('settings', 'public');
 

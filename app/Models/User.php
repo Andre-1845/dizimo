@@ -10,7 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Notifications\InviteResetPassword;
-
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Notifications\VerifyEmail;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -105,11 +106,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmailInvite());
+        $this->notify(new VerifyEmail());
     }
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new InviteResetPassword($token));
+        $this->notify(new ResetPassword($token));
     }
 }
