@@ -10,11 +10,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Permissões</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <span>Permissões</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Papéis', 'url' => route('roles.index')], ['label' => 'Permissões']]" />
         </div>
     </div>
 
@@ -40,7 +36,7 @@
                 <thead>
                     <tr class="table-row-header">
                         <th class="table-header">Permissão</th>
-                        <th class="table-header">Descrição</th>
+                        <th class="table-header table-cell-lg-hidden">Descrição</th>
                         <th class="table-header">Status</th>
                         <th class="table-header text-center">Ação</th>
                     </tr>
@@ -57,7 +53,7 @@
                                 {{ $permission->display_name }}
                             </td>
 
-                            <td class="table-body text-sm text-gray-500">
+                            <td class="table-body text-sm text-gray-500 table-cell-lg-hidden">
                                 {{ $permission->name }}
                             </td>
 

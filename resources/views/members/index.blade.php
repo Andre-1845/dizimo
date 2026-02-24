@@ -40,8 +40,8 @@
                 <thead>
                     <tr class="table-row-header">
                         <th class="table-header">Nome</th>
-                        <th class="table-header">Email</th>
-                        <th class="table-header">Status</th>
+                        <th class="table-header table-cell-lg-hidden">Email</th>
+                        <th class="table-header table-cell-lg-hidden">Status</th>
                         <th class="table-header text-center">Dizimo prev</th>
                         <th class="table-header text-center">Ações</th>
                     </tr>
@@ -50,8 +50,8 @@
                     @forelse ($members as $member)
                         <tr class="table-row-body">
                             <td class="table-body">{{ $member->name }}</td>
-                            <td class="table-body">{{ $member->user->email ?? '—' }}</td>
-                            <td class="table-body">
+                            <td class="table-body table-cell-lg-hidden">{{ $member->user->email ?? '—' }}</td>
+                            <td class="table-body table-cell-lg-hidden">
                                 @if ($member->active)
                                     <x-badge type="active">Ativo</x-badge>
                                 @else

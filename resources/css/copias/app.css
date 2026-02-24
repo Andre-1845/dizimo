@@ -1,0 +1,1017 @@
+
+@import "tailwindcss";
+
+/* @import "tailwindcss/preflight";
+@import "tailwindcss/utilities"; */
+
+/* fontes opcionais */
+/* @theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+} */
+
+/* HTML */
+@source "../**/*.html";
+
+/* JS (se usar depois) */
+@source "../**/*.js";
+
+@layer components{
+    /* ===== LOGIN ===== */
+    /* Estilização do fundo */
+    .bg-login{
+        @apply bg-linear-to-r from-green-950 to-green-600 min-h-screen flex flex-col justify-center items-center;
+    }
+
+    /* .bg-login {
+        @apply bg-gradient-to-r from-blue-950 to-blue-900 min-h-screen flex flex-col justify-center items-center;
+    } */
+
+    /* Container principal do formulário */
+    .card-login {
+        @apply mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg;
+    }
+
+     /* Wrapper da logo */
+    .logo-wrapper-login {
+        @apply flex justify-center mb-4;
+    }
+
+     /* Estilização da logo */
+    .logo-login{
+        @apply h-20 w-20;
+    }
+
+    /* Estilização do título */
+    .title-login {
+        @apply text-2xl font-bold text-center text-blue-600;
+    }
+
+    /* Margem superior para os campos */
+    .form-group-login {
+        @apply mt-4;
+    }
+
+    /* Estilização do label */
+    .form-label-login {
+        @apply block text-sm font-medium text-gray-700;
+    }
+
+    /* Estilização do input */
+    .form-input-login {
+        @apply mt-1 block w-full rounded-md border-2 border-blue-100 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-300 focus:outline-none px-3 py-2;
+    }
+
+    /* Margem superior para o link e o botão */
+    .btn-group-login{
+        @apply mt-4 flex items-center justify-between;
+    }
+
+    /* Link da página de login */
+    .link-login {
+        @apply text-lg text-blue-600 hover:text-blue-900 hover:font-bold transition hover:no-underline;
+    }
+
+
+    /****** Início Navbar ******/
+
+     /* Estilização do fundo */
+     .bg-dashboard {
+        @apply bg-gray-100;
+    }
+
+    /* Navbar */
+    .navbar {
+         @apply bg-blue-900 border-b border-gray-200 px-4 py-2 sm:px-6 lg:px-8 relative z-[55];
+    }
+
+    /* Botão de menu mobile */
+    .menu-button {
+        @apply text-gray-50 relative z-[60] cursor-pointer;
+    }
+
+    /* Container da Navbar */
+    .navbar-container {
+        @apply flex justify-end items-center;
+    }
+
+    /* Container do usuário */
+    .user-container {
+        @apply ml-auto flex items-center space-x-4;
+    }
+
+    /* Dropdown */
+    .dropdown-button {
+        @apply bg-blue-900 px-3 py-2 text-sm text-gray-50 flex items-center cursor-pointer;
+    }
+
+    .dropdown-content {
+        @apply absolute right-0 z-50 mt-2 rounded-md shadow-lg bg-white w-48;
+    }
+
+    .dropdown-item {
+        @apply block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 focus:bg-gray-400 focus:outline-none;
+    }
+
+    /* Ícone do dropdown */
+    .dropdown-icon {
+        @apply ml-2 h-4 w-4;
+    }
+    /****** Fim Navbar ******/
+
+        /****** Início Sidebar ******/
+
+    /* .sidebar-container {
+        @apply bg-blue-950 relative h-full;
+    }
+
+    .sidebar-close-button {
+        @apply absolute top-4 right-4 text-gray-50 cursor-pointer;
+    }
+
+    .sidebar-header {
+        @apply flex items-center border-b-2 border-blue-900 space-x-2 pl-4 py-3;
+    }
+
+    .sidebar-title {
+    @apply text-lg font-bold text-blue-400 opacity-0;
+}
+
+    .sidebar-nav {
+        @apply mt-4;
+    }
+
+    .sidebar-link {
+        @apply flex items-center space-x-3 px-2 py-2 text-sm text-gray-50 hover:bg-blue-900;
+    }
+    .sidebar-link.active {
+        @apply flex items-center space-x-3 px-2 py-2 mx-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
+    }
+
+    @media (min-width: 1024px) {
+    .sidebar:hover .sidebar-title {
+        @apply opacity-100 block;
+    }
+}*/
+    /****** Fim Sidebar ******/
+
+    /****** Início Sidebar - VERSÃO CORRIGIDA ******/
+
+/* Sidebar base */
+.sidebar {
+    width: 64px;
+    transition: width 0.25s ease;
+    overflow-x: hidden;
+    background-color: #0f172a; /* bg-blue-950 */
+    height: 100%;
+    position: relative;
+}
+
+/* Container interno */
+.sidebar-container {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #0f172a;
+}
+
+/* Header da sidebar */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #1e3a8a; /* border-blue-900 */
+    padding: 0.75rem 0 0.75rem 1rem; /* pl-4 py-3 */
+}
+
+/* Título da sidebar (inicialmente escondido) */
+.sidebar-title {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 700; /* font-bold */
+    color: #60a5fa; /* text-blue-400 */
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+    margin-left: 0.5rem;
+}
+
+/* Quando a sidebar é expandida (hover no desktop ou expandida no mobile) */
+.sidebar:hover .sidebar-title,
+.sidebar.sidebar-expanded .sidebar-title {
+    opacity: 1 !important;
+}
+
+/* Navegação */
+.sidebar-nav {
+    margin-top: 1rem;
+}
+
+/* Links da sidebar */
+.sidebar-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    color: #f9fafb !important; /* text-gray-50 */
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-link:hover {
+    background-color: #1e3a8a !important; /* hover:bg-blue-900 */
+}
+
+.sidebar-link.active {
+    margin: 0 0.5rem !important;
+    border: 1px solid #ffffff !important;
+    border-radius: 0.375rem !important; /* rounded-md */
+    background-color: transparent;
+}
+
+/* Ícones - sempre visíveis */
+.sidebar-icon {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Textos - escondidos inicialmente */
+.sidebar-text,
+.sidebar-group-title {
+    opacity: 0;
+    visibility: hidden;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Grupos */
+.sidebar-group {
+    margin-bottom: 1rem;
+}
+
+/* Título do grupo */
+.sidebar-group-title {
+    font-size: 0.75rem; /* text-xs */
+    text-transform: uppercase;
+    color: #ffffff;
+    padding: 0 0.75rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Quando a sidebar é expandida, mostrar textos */
+.sidebar:hover .sidebar-text,
+.sidebar:hover .sidebar-group-title,
+.sidebar.sidebar-expanded .sidebar-text,
+.sidebar.sidebar-expanded .sidebar-group-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Desktop: expandir no hover */
+@media (min-width: 1024px) {
+    .sidebar {
+        width: 64px;
+        transition: width 0.25s ease;
+    }
+
+    .sidebar:hover {
+        width: 240px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 1023px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px; /* Largura fixa em mobile, não 100% */
+        height: 100vh;
+        background: #0f172a;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        overflow-y: auto;
+    }
+
+    .sidebar.sidebar-expanded {
+        transform: translateX(0);
+    }
+
+    /* Em mobile expandido, textos sempre visíveis */
+    .sidebar.sidebar-expanded .sidebar-text,
+    .sidebar.sidebar-expanded .sidebar-group-title,
+    .sidebar.sidebar-expanded .sidebar-title {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+}
+
+/* Ajuste para o ícone do SVG */
+.sidebar-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+}
+
+/****** Fim Sidebar ******/
+
+
+/*  */
+/****** MENU DO SITE - MOBILE SIDEBAR ******/
+
+    /****** Início Conteúdo Principal ******/
+    .main-content {
+        @apply flex-1 p-4 min-w-0 ;
+    }
+
+    .content-wrapper {
+        @apply max-w-full mx-auto px-1 sm:px-0 lg:px-0 mb-2;
+    }
+
+    .content-wrapper-full {
+    @apply max-w-full px-1 sm:px-2 lg:px-4;
+}
+
+    .content-header{
+        @apply flex justify-between items-center;
+    }
+
+    .content-title {
+        @apply text-2xl font-semibold text-blue-900;
+    }
+
+    .breadcrumb {
+        @apply text-sm text-gray-500;
+    }
+
+    .breadcrumb-link {
+        @apply text-blue-500 hover:text-blue-700;
+    }
+
+    .content-box {
+        @apply bg-white shadow-lg sm:rounded-lg text-gray-900 p-4;
+    }
+
+    .content-box-header {
+        @apply flex justify-between items-center border-b-2 border-gray-100 pb-2 mb-3;
+    }
+
+    .content-box-title{
+        @apply text-lg font-semibold text-blue-900;
+    }
+
+    .content-box-btn{
+        @apply flex space-x-1;
+    }
+
+    .content-box-body {
+        @apply bg-gray-50 text-sm p-4;
+    }
+    /****** Fim Conteúdo Principal ******/
+
+     /****** Inicio Tabela Listar Registros ******/
+
+    .table-title {
+        @apply mt-3 mb-2 font-semibold text-lg text-blue-600;
+    }
+
+    .table-container {
+        @apply overflow-hidden bg-white shadow-sm;
+    }
+
+    .table {
+        @apply min-w-full divide-y divide-gray-400 border-separate border-spacing-0;
+    }
+
+    .table-row-header {
+        @apply bg-gray-200;
+    }
+
+    .table-header {
+        @apply px-5 py-2 text-left text-sm font-medium text-gray-900 tracking-wider border border-gray-400;
+    }
+
+    .table-header.center {
+        @apply text-center;
+    }
+
+    .table-body {
+        @apply px-6 py-2 align-middle text-sm text-gray-950 border-b border-gray-400;
+    }
+
+    .table-cell-lg-hidden {
+        @apply hidden lg:table-cell;
+    }
+
+    .table-row-body {
+        @apply hover:bg-gray-100;
+    }
+
+    .table-actions {
+        @apply  py-4 text-center space-x-1 border-b border-gray-400;
+
+    }
+    .table-link {
+        @apply font-bold cursor-pointer text-blue-700 underline;
+    }
+
+    /****** Fim Tabela Listar Registros ******/
+
+
+    /******* Formularios *******/
+
+    /*---- LABEL ----*/
+.form-div {
+    @apply  mb-4;
+}
+
+.form-label{
+    @apply block text-sm font-semibold;
+}
+
+    /*---- INPUT -----*/
+.form-input{
+    @apply border p-2 w-full mt-1 rounded-md border-blue-300 shadow-md focus:border-blue-400 focus:ring focus:ring-blue-500 focus:outline-none ;
+}
+
+    /******* FIM - Formularios *******/
+
+    /******* Detalhes dos Registros *******/
+
+    .detail-box{
+        @apply text-gray-700;
+    }
+
+    .detail-content{
+        @apply font-bold;
+    }
+    /******* FIM - Detalhes dos Registros *******/
+
+
+    /****** Início Botões ******/
+
+
+/* Botão pequeno */
+.btn-sm {
+    @apply px-3 py-1.5 text-sm leading-tight;
+}
+
+/* Botão apenas ícone */
+.btn-icon {
+    @apply inline-flex items-center justify-center
+           w-9 h-9 p-0 rounded-md;
+}
+
+
+
+/* *****  Novo layout
+
+/* 🔑 BOTÃO DE AÇÃO PADRÃO */
+.btn-action {
+    @apply inline-flex items-center justify-center
+           gap-1 px-3 h-10 leading-none align-middle;
+}
+
+.btn-md-div {
+    @apply flex justify-end mt-4;
+}
+
+ /* Botão verde */
+    .btn-success {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-10 leading-none align-middle
+           bg-green-500 text-white text-sm rounded
+           hover:bg-green-600 transition-colors cursor-pointer;
+    }
+
+    .btn-success-md {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-12 leading-none align-middle
+           bg-green-500 text-white text-base rounded
+           hover:bg-green-600 transition-colors cursor-pointer;
+    }
+
+    /* Botão azul */
+    .btn-primary {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-10 leading-none align-middle
+           bg-blue-500 text-white text-sm rounded
+           hover:bg-blue-600 transition-colors cursor-pointer;
+    }
+
+    .btn-primary-md {
+        @apply inline-flex items-center justify-center
+           gap-1 px-3 h-12 leading-none align-middle
+           bg-blue-500 text-white text-base rounded
+           hover:bg-blue-600 transition-colors cursor-pointer;
+    }
+
+
+    /* Botão info */
+    .btn-info {
+        @apply inline-flex items-center justify-center
+            gap-1 px-3 h-10 leading-none align-middle
+            bg-gray-500 text-white text-sm rounded
+            hover:bg-gray-600 transition-colors cursor-pointer;
+    }
+
+    /* Botão warning */
+    .btn-warning {
+        @apply inline-flex items-center justify-center
+            gap-1 px-3 h-10 leading-none align-middle
+            bg-yellow-500 text-white text-sm rounded
+            hover:bg-yellow-600 transition-colors cursor-pointer;
+    }
+
+    /* Botão danger */
+    .btn-danger {
+        @apply inline-flex items-center justify-center
+            gap-1 px-3 h-10 leading-none align-middle
+            bg-red-500 text-white text-sm rounded
+            hover:bg-red-600 transition-colors cursor-pointer;
+    }
+
+    .btn-danger-md {
+            @apply inline-flex items-center justify-center
+            gap-1 px-3 h-12 leading-none align-middle
+            bg-red-500 text-white text-base rounded
+            hover:bg-red-600 transition-colors cursor-pointer;
+    }
+
+    /****** Fim Botões ******/
+
+     /****** Início Alertas ******/
+    .alert-primary {
+        @apply p-3 my-3 text-sm text-blue-800 rounded-lg bg-blue-100 border border-blue-300;
+    }
+
+    .alert-info {
+        @apply p-3 my-3 text-sm text-gray-800 rounded-lg bg-gray-200 border border-gray-400;
+    }
+
+    .alert-success {
+        @apply p-3 my-3 text-sm text-lime-800 rounded-lg bg-lime-200 border border-lime-500;
+    }
+
+    .alert-warning {
+        @apply p-3 my-3 text-sm text-yellow-800 rounded-lg bg-yellow-200 border border-yellow-400;
+    }
+
+    .alert-danger {
+        @apply p-3 my-3 text-sm text-red-800 rounded-lg bg-red-200 border border-red-400;
+    }
+
+    /****** Fim Alertas ******/
+
+    /*******   NOVOS AJUSTES  *******/
+
+    /* Sidebar base */
+.sidebar {
+    width: 64px;
+    transition: width .25s ease;
+    overflow-x: hidden;
+}
+
+/* Expande no hover (desktop) */
+@media (min-width: 1024px) {
+    .sidebar:hover {
+        width: 240px;
+    }
+
+    .sidebar:hover .sidebar-text,
+    .sidebar:hover .sidebar-group-title {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Texto escondido */
+.sidebar-text,
+.sidebar-group-title {
+    opacity: 0;
+    visibility: hidden;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+/* Ícones */
+.sidebar-icon {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Links */
+.sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2 text-sm text-gray-50 hover:bg-blue-900;
+}
+
+/* Grupo */
+.sidebar-group {
+    @apply mb-4;
+}
+
+/* Título do grupo */
+.sidebar-group-title {
+    @apply text-xs uppercase text-white px-3 mb-2 block;
+}
+
+/* Usuário */
+.sidebar-user {
+    @apply text-white font-semibold px-3 mb-4;
+}
+
+/* Mobile: sidebar fora da tela */
+@media (max-width: 1023px) {
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #0f172a; /* azul escuro consistente */
+        z-index: 50;
+
+        transform: translateX(-100%);
+        transition: transform .3s ease;
+    }
+
+    .sidebar.sidebar-expanded {
+        transform: translateX(0);
+    }
+}
+
+/********** TRANSPARENCIA DASHBOARD **********/
+
+ .transparency-grid-3 {
+        @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+    }
+
+    .transparency-grid-2 {
+        @apply grid grid-cols-1 lg:grid-cols-2 gap-4;
+    }
+
+     .transparency-summary {
+          @apply bg-white rounded-lg p-4
+               border border-gray-300
+               flex justify-between items-start;
+    }
+
+    .transparency-summary:hover {
+        @apply -translate-y-0.5 shadow-md;
+    }
+
+    .transparency-summary-title {
+        @apply text-xs uppercase text-gray-500 mb-1;
+    }
+
+    .transparency-summary-value {
+        @apply text-2xl font-semibold;
+    }
+
+    .transparency-summary-meta {
+        @apply text-sm text-gray-500 mt-1;
+    }
+
+    .transparency-income {
+         @apply border-2 border-green-500;
+    }
+
+    .transparency-expense {
+        @apply border-2 border-blue-500;
+    }
+
+    .transparency-balance-positive {
+        @apply border-2 border-green-600;
+    }
+
+    .transparency-balance-negative {
+        @apply border-2 border-red-500;
+    }
+
+      /* Header destacado para tabelas da transparência */
+    .transparency-section-header {
+        @apply px-4 py-3 rounded-t-lg
+               text-white font-semibold;
+    }
+
+    .transparency-section-income {
+        @apply bg-green-600;
+    }
+
+    .transparency-section-expense {
+        @apply bg-blue-600;
+    }
+
+    /* Remove a borda inferior padrão quando usar header colorido */
+    .content-box-header.transparency-colored {
+        @apply border-b-0 mb-0;
+    }
+
+    .table-transparency {
+    @apply w-full rounded-b-lg overflow-hidden;
+}
+
+ .content-box.p-0 {
+        @apply overflow-hidden;
+    }
+
+     .table-transparency tbody tr {
+        @apply border-b border-gray-300;
+    }
+
+    .table-transparency tbody tr:nth-child(even) {
+        @apply bg-gray-100;
+    }
+
+    .table-transparency tbody tr:hover {
+        @apply bg-gray-200;
+    }
+
+    .table-transparency td,
+    .table-transparency th {
+        @apply py-2.5;
+    }
+
+/* grafico */
+     .transparency-chart-card {
+        @apply bg-white rounded-lg shadow-sm p-4;
+    }
+
+    .transparency-chart-title {
+        @apply text-sm font-semibold text-blue-900 mb-3;
+    }
+   .table-transparency td {
+        @apply py-2;
+    }
+
+    .table-transparency .percent-badge {
+        @apply inline-block px-2 py-0.5 text-xs rounded
+               bg-gray-200 text-gray-700;
+    }
+
+      .empty-state {
+        @apply text-center text-gray-500 py-8;
+    }
+
+    .empty-state i {
+        @apply text-3xl mb-3 opacity-50;
+    }
+
+     .report-card {
+        @apply bg-white border rounded-lg p-4 shadow-sm
+               flex flex-col
+               hover:shadow-md transition;
+    }
+
+    .report-footer {
+        @apply flex justify-between items-center mt-4 text-sm text-gray-500;
+    }
+
+    /*******  FIM Transparencia  ********/
+
+    /*************   BADGES  *****************/
+
+    /* =========================
+   BADGES (Status)
+   ========================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px; /* pill */
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Estados */
+.badge-success {
+    background-color: #e6f4ea;
+    color: #137333;
+}
+
+.badge-warning {
+    background-color: #fff4e5;
+    color: #b45309;
+}
+
+.badge-secondary {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+/* =========================
+   BADGES (Tipo)
+   ========================= */
+
+.badge-gray {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/*********  Fim Badges ***********/
+
+/* **** SITE *****/
+
+.site-link{
+    @apply text-sm font-semibold text-gray-700 hover:text-blue-600;
+}
+
+.card-config-site {
+    @apply block p-6 border rounded-lg shadow-sm
+           transition
+           hover:bg-blue-50 hover:border-blue-400 hover:shadow-lg;
+}
+
+
+.card-config-title {
+    @apply text-lg font-semibold mb-2;
+}
+.card-config-subtitle {
+    @apply text-sm text-gray-600;
+}
+
+
+.breadcrumb-item:not(:last-child)::after {
+    content: '/';
+    margin: 0 8px;
+    color: #d1d5db;
+}
+
+
+.breadcrumb-arrow {
+    position: relative;
+    padding-right: 20px;
+}
+
+.breadcrumb-arrow::after {
+    content: '›';
+    position: absolute;
+    right: 0;
+    color: #9ca3af;
+}
+
+/* Estilização do input file */
+.file-input {
+    @apply w-full px-3 py-2 border border-blue-300 rounded-md
+           text-blue-700 cursor-pointer
+           hover:bg-blue-100 hover:border-blue-400
+           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+           transition-colors;
+}
+
+/* Remove o texto padrão "Nenhum arquivo escolhido" em alguns navegadores */
+.file-input::file-selector-button {
+    @apply bg-blue-600 text-white px-3 py-1 mr-3 rounded border-0
+           hover:bg-blue-700 cursor-pointer transition-colors;
+}
+
+.simple-file-input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded
+           bg-gray-50 text-gray-700 cursor-pointer
+           hover:bg-gray-100 hover:border-gray-400
+           focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+}
+
+.simple-file-input::file-selector-button {
+    @apply bg-gray-200 text-gray-700 px-4 py-2 mr-4 rounded border border-gray-300
+           hover:bg-gray-300 hover:text-gray-900 cursor-pointer
+           transition-colors;
+}
+
+.file-input-with-icon {
+    @apply w-full px-4 py-3 border-2 border-dashed border-blue-300 rounded-lg
+           bg-blue-50 text-gray-700 cursor-pointer
+           hover:bg-blue-100 hover:border-blue-400
+           focus:outline-none focus:ring-2 focus:ring-blue-500
+           transition-all duration-200;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    background-size: 20px;
+    padding-left: 40px;
+}
+
+.file-input-with-icon::file-selector-button {
+    @apply bg-blue-600 text-white px-4 py-2 mr-4 rounded-lg border-0
+           hover:bg-blue-700 cursor-pointer font-medium
+           transition-colors duration-200;
+}
+
+/* transparency.css - Estilos mínimos */
+.transparency-card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.transparency-card .card-header {
+    border-bottom: none;
+    padding: 1rem 1.25rem;
+}
+
+.transparency-card .card-body {
+    padding: 1.25rem;
+}
+
+/* Cores para os cards */
+.card-income {
+    border-left: 4px solid #28a745;
+}
+
+.card-expense {
+    border-left: 4px solid #007bff;
+}
+
+.card-balance-positive {
+    border-left: 4px solid #28a745;
+}
+
+.card-balance-negative {
+    border-left: 4px solid #dc3545;
+}
+
+/* Tabelas compactas */
+.table-transparency {
+    font-size: 0.875rem;
+}
+
+.table-transparency th {
+    border-top: none;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+/* Filtros */
+.filter-box {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+/* transparency.css */
+.transparency-dashboard .card {
+    transition: transform 0.2s;
+}
+
+.transparency-dashboard .card:hover {
+    transform: translateY(-2px);
+}
+
+.color-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 8px;
+}
+
+.icon-shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
+.empty-state {
+    opacity: 0.6;
+}
+
+/* Para o gráfico */
+#evolutionChart {
+    max-height: 300px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .transparency-dashboard .col-md-4 {
+        margin-bottom: 1rem;
+    }
+
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+
+
+
+
+
+
+/* FIM */
+}

@@ -1,4 +1,3 @@
-
 @import "tailwindcss";
 
 /* @import "tailwindcss/preflight";
@@ -22,21 +21,17 @@
         @apply bg-linear-to-r from-green-950 to-green-600 min-h-screen flex flex-col justify-center items-center;
     }
 
-    /* .bg-login {
-        @apply bg-gradient-to-r from-blue-950 to-blue-900 min-h-screen flex flex-col justify-center items-center;
-    } */
-
     /* Container principal do formulário */
     .card-login {
         @apply mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg;
     }
 
-     /* Wrapper da logo */
+    /* Wrapper da logo */
     .logo-wrapper-login {
         @apply flex justify-center mb-4;
     }
 
-     /* Estilização da logo */
+    /* Estilização da logo */
     .logo-login{
         @apply h-20 w-20;
     }
@@ -71,22 +66,21 @@
         @apply text-lg text-blue-600 hover:text-blue-900 hover:font-bold transition hover:no-underline;
     }
 
-
     /****** Início Navbar ******/
 
-     /* Estilização do fundo */
-     .bg-dashboard {
+    /* Estilização do fundo */
+    .bg-dashboard {
         @apply bg-gray-100;
     }
 
     /* Navbar */
     .navbar {
-        @apply bg-blue-900 border-b border-gray-200 px-4 py-2 sm:px-6 lg:px-8;
+        @apply bg-blue-900 border-b border-gray-200 px-4 py-2 sm:px-6 lg:px-8 relative z-[55];
     }
 
     /* Botão de menu mobile */
     .menu-button {
-        @apply text-gray-50;
+        @apply text-gray-50 relative z-[60] cursor-pointer;
     }
 
     /* Container da Navbar */
@@ -118,46 +112,194 @@
     }
     /****** Fim Navbar ******/
 
-        /****** Início Sidebar ******/
+    /****** Início Sidebar - VERSÃO FINAL CORRIGIDA ******/
 
+    /* Sidebar base */
+    .sidebar {
+        width: 64px;
+        transition: width 0.25s ease;
+        overflow-x: hidden;
+        background-color: #0f172a;
+        height: 100vh; /* ALTURA TOTAL DA VIEWPORT */
+        position: sticky; /* FIXO DURANTE ROLAGEM */
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Container interno - OCUPA TODO ESPAÇO */
     .sidebar-container {
-        @apply bg-blue-950 relative h-full;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: #0f172a;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
     }
 
-    .sidebar-close-button {
-        @apply absolute top-4 right-4 text-gray-50 cursor-pointer;
-    }
-
+    /* Header da sidebar */
     .sidebar-header {
-        @apply flex items-center border-b-2 border-blue-900 space-x-2 pl-4 py-3;
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #1e3a8a;
+        padding: 0.75rem 0 0.75rem 1rem;
+        flex-shrink: 0;
     }
 
+    /* Título da sidebar */
     .sidebar-title {
-    @apply text-lg font-bold text-blue-400 opacity-0;
-}
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #60a5fa;
+        opacity: 0;
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+        margin-left: 0.5rem;
+    }
 
+    /* Quando expandida, mostrar título */
+    .sidebar:hover .sidebar-title,
+    .sidebar.sidebar-expanded .sidebar-title {
+        opacity: 1 !important;
+    }
+
+    /* Navegação - OCUPA ESPAÇO RESTANTE */
     .sidebar-nav {
-        @apply mt-4;
+        flex: 1;
+        margin-top: 1rem;
+        overflow-y: auto;
+        padding-bottom: 1rem;
     }
 
+    /* Garantir fundo até o final */
+    .sidebar-nav::after {
+        content: '';
+        display: block;
+        height: 1px;
+        flex: 1;
+    }
+
+    /* Links da sidebar */
     .sidebar-link {
-        @apply flex items-center space-x-3 px-2 py-2 text-sm text-gray-50 hover:bg-blue-900;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem !important;
+        color: #f9fafb !important;
+        text-decoration: none !important;
+        white-space: nowrap;
+        transition: background-color 0.2s ease;
     }
+
+    .sidebar-link:hover {
+        background-color: #1e3a8a !important;
+    }
+
     .sidebar-link.active {
-        @apply flex items-center space-x-3 px-2 py-2 mx-2 text-sm text-gray-50 border-white border-1 rounded-md hover:bg-blue-900;
+        margin: 0 0.5rem !important;
+        border: 1px solid #ffffff !important;
+        border-radius: 0.375rem !important;
+        background-color: transparent;
     }
 
+    /* Ícones */
+    .sidebar-icon {
+        width: 24px;
+        min-width: 24px;
+        text-align: center;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        fill: none;
+    }
+
+    /* Textos - escondidos inicialmente */
+    .sidebar-text,
+    .sidebar-group-title {
+        opacity: 0;
+        visibility: hidden;
+        white-space: nowrap;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    /* Grupos */
+    .sidebar-group {
+        margin-bottom: 1rem;
+    }
+
+    /* Título do grupo */
+    .sidebar-group-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #ffffff;
+        padding: 0 0.75rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    /* Quando expandida, mostrar textos */
+    .sidebar:hover .sidebar-text,
+    .sidebar:hover .sidebar-group-title,
+    .sidebar.sidebar-expanded .sidebar-text,
+    .sidebar.sidebar-expanded .sidebar-group-title {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Desktop: expandir no hover */
     @media (min-width: 1024px) {
-    .sidebar:hover .sidebar-title {
-        @apply opacity-100 block;
-    }
-}
-    /****** Fim Sidebar ******/
+        .sidebar {
+            width: 64px;
+            transition: width 0.25s ease;
+        }
 
+        .sidebar:hover {
+            width: 240px;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 1023px) {
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: #0f172a;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.sidebar-expanded {
+            transform: translateX(0);
+        }
+
+        .sidebar.sidebar-expanded .sidebar-text,
+        .sidebar.sidebar-expanded .sidebar-group-title,
+        .sidebar.sidebar-expanded .sidebar-title {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    }
+
+    /****** Fim Sidebar ******/
 
     /****** Início Conteúdo Principal ******/
     .main-content {
-        @apply flex-1 p-4 min-w-0 ;
+        @apply flex-1 p-4 min-w-0;
     }
 
     .content-wrapper {
@@ -165,10 +307,10 @@
     }
 
     .content-wrapper-full {
-    @apply max-w-full px-1 sm:px-2 lg:px-4;
-}
+        @apply max-w-full px-1 sm:px-2 lg:px-4;
+    }
 
-    .content-header{
+    .content-header {
         @apply flex justify-between items-center;
     }
 
@@ -192,11 +334,11 @@
         @apply flex justify-between items-center border-b-2 border-gray-100 pb-2 mb-3;
     }
 
-    .content-box-title{
+    .content-box-title {
         @apply text-lg font-semibold text-blue-900;
     }
 
-    .content-box-btn{
+    .content-box-btn {
         @apply flex space-x-1;
     }
 
@@ -205,8 +347,7 @@
     }
     /****** Fim Conteúdo Principal ******/
 
-     /****** Inicio Tabela Listar Registros ******/
-
+    /****** Inicio Tabela Listar Registros ******/
     .table-title {
         @apply mt-3 mb-2 font-semibold text-lg text-blue-600;
     }
@@ -244,139 +385,89 @@
     }
 
     .table-actions {
-        @apply  py-4 text-center space-x-1 border-b border-gray-400;
-
+        @apply py-4 text-center space-x-1 border-b border-gray-400;
     }
+
     .table-link {
         @apply font-bold cursor-pointer text-blue-700 underline;
     }
-
     /****** Fim Tabela Listar Registros ******/
 
-
     /******* Formularios *******/
+    .form-div {
+        @apply mb-4;
+    }
 
-    /*---- LABEL ----*/
-.form-div {
-    @apply  mb-4;
-}
+    .form-label {
+        @apply block text-sm font-semibold;
+    }
 
-.form-label{
-    @apply block text-sm font-semibold;
-}
-
-    /*---- INPUT -----*/
-.form-input{
-    @apply border p-2 w-full mt-1 rounded-md border-blue-300 shadow-md focus:border-blue-400 focus:ring focus:ring-blue-500 focus:outline-none ;
-}
-
+    .form-input {
+        @apply border p-2 w-full mt-1 rounded-md border-blue-300 shadow-md focus:border-blue-400 focus:ring focus:ring-blue-500 focus:outline-none;
+    }
     /******* FIM - Formularios *******/
 
     /******* Detalhes dos Registros *******/
-
-    .detail-box{
+    .detail-box {
         @apply text-gray-700;
     }
 
-    .detail-content{
+    .detail-content {
         @apply font-bold;
     }
     /******* FIM - Detalhes dos Registros *******/
 
-
     /****** Início Botões ******/
+    .btn-sm {
+        @apply px-3 py-1.5 text-sm leading-tight;
+    }
 
+    .btn-icon {
+        @apply inline-flex items-center justify-center w-9 h-9 p-0 rounded-md;
+    }
 
-/* Botão pequeno */
-.btn-sm {
-    @apply px-3 py-1.5 text-sm leading-tight;
-}
+    .btn-action {
+        @apply inline-flex items-center justify-center gap-1 px-3 h-10 leading-none align-middle;
+    }
 
-/* Botão apenas ícone */
-.btn-icon {
-    @apply inline-flex items-center justify-center
-           w-9 h-9 p-0 rounded-md;
-}
+    .btn-md-div {
+        @apply flex justify-end mt-4;
+    }
 
-
-
-/* *****  Novo layout
-
-/* 🔑 BOTÃO DE AÇÃO PADRÃO */
-.btn-action {
-    @apply inline-flex items-center justify-center
-           gap-1 px-3 h-10 leading-none align-middle;
-}
-
-.btn-md-div {
-    @apply flex justify-end mt-4;
-}
-
- /* Botão verde */
     .btn-success {
-        @apply inline-flex items-center justify-center
-           gap-1 px-3 h-10 leading-none align-middle
-           bg-green-500 text-white text-sm rounded
-           hover:bg-green-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-10 leading-none align-middle bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors cursor-pointer;
     }
 
     .btn-success-md {
-        @apply inline-flex items-center justify-center
-           gap-1 px-3 h-12 leading-none align-middle
-           bg-green-500 text-white text-base rounded
-           hover:bg-green-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-12 leading-none align-middle bg-green-500 text-white text-base rounded hover:bg-green-600 transition-colors cursor-pointer;
     }
 
-    /* Botão azul */
     .btn-primary {
-        @apply inline-flex items-center justify-center
-           gap-1 px-3 h-10 leading-none align-middle
-           bg-blue-500 text-white text-sm rounded
-           hover:bg-blue-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-10 leading-none align-middle bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors cursor-pointer;
     }
 
     .btn-primary-md {
-        @apply inline-flex items-center justify-center
-           gap-1 px-3 h-12 leading-none align-middle
-           bg-blue-500 text-white text-base rounded
-           hover:bg-blue-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-12 leading-none align-middle bg-blue-500 text-white text-base rounded hover:bg-blue-600 transition-colors cursor-pointer;
     }
 
-
-    /* Botão info */
     .btn-info {
-        @apply inline-flex items-center justify-center
-            gap-1 px-3 h-10 leading-none align-middle
-            bg-gray-500 text-white text-sm rounded
-            hover:bg-gray-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-10 leading-none align-middle bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition-colors cursor-pointer;
     }
 
-    /* Botão warning */
     .btn-warning {
-        @apply inline-flex items-center justify-center
-            gap-1 px-3 h-10 leading-none align-middle
-            bg-yellow-500 text-white text-sm rounded
-            hover:bg-yellow-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-10 leading-none align-middle bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600 transition-colors cursor-pointer;
     }
 
-    /* Botão danger */
     .btn-danger {
-        @apply inline-flex items-center justify-center
-            gap-1 px-3 h-10 leading-none align-middle
-            bg-red-500 text-white text-sm rounded
-            hover:bg-red-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-10 leading-none align-middle bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors cursor-pointer;
     }
 
     .btn-danger-md {
-            @apply inline-flex items-center justify-center
-            gap-1 px-3 h-12 leading-none align-middle
-            bg-red-500 text-white text-base rounded
-            hover:bg-red-600 transition-colors cursor-pointer;
+        @apply inline-flex items-center justify-center gap-1 px-3 h-12 leading-none align-middle bg-red-500 text-white text-base rounded hover:bg-red-600 transition-colors cursor-pointer;
     }
-
     /****** Fim Botões ******/
 
-     /****** Início Alertas ******/
+    /****** Início Alertas ******/
     .alert-primary {
         @apply p-3 my-3 text-sm text-blue-800 rounded-lg bg-blue-100 border border-blue-300;
     }
@@ -396,81 +487,10 @@
     .alert-danger {
         @apply p-3 my-3 text-sm text-red-800 rounded-lg bg-red-200 border border-red-400;
     }
-
     /****** Fim Alertas ******/
 
-    /*******   NOVOS AJUSTES  *******/
-
-    /* Sidebar base */
-.sidebar {
-    width: 64px;
-    transition: width .25s ease;
-    overflow-x: hidden;
-}
-
-/* Expande no hover (desktop) */
-@media (min-width: 1024px) {
-    .sidebar:hover {
-        width: 240px;
-    }
-
-    .sidebar:hover .sidebar-text,
-    .sidebar:hover .sidebar-group-title {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-
-/* Texto escondido */
-.sidebar-text,
-.sidebar-group-title {
-    opacity: 0;
-    visibility: hidden;
-    white-space: nowrap;
-    transition: all .2s ease;
-}
-
-/* Ícones */
-.sidebar-icon {
-    width: 24px;
-    min-width: 24px;
-    text-align: center;
-}
-
-/* Links */
-.sidebar-link {
-    @apply flex items-center gap-3 px-3 py-2 text-sm text-gray-50 hover:bg-blue-900;
-}
-
-/* Grupo */
-.sidebar-group {
-    @apply mb-4;
-}
-
-/* Título do grupo */
-.sidebar-group-title {
-    @apply text-xs uppercase text-white px-3 mb-2 block;
-}
-
-/* Usuário */
-.sidebar-user {
-    @apply text-white font-semibold px-3 mb-4;
-}
-
-/* Mobile: sidebar fora da tela */
-@media (max-width: 1023px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
-
-    .sidebar.sidebar-expanded {
-        transform: translateX(0);
-    }
-}
-
-/********** TRANSPARENCIA DASHBOARD **********/
-
- .transparency-grid-3 {
+    /********** TRANSPARENCIA DASHBOARD **********/
+    .transparency-grid-3 {
         @apply grid grid-cols-1 md:grid-cols-3 gap-4;
     }
 
@@ -478,10 +498,8 @@
         @apply grid grid-cols-1 lg:grid-cols-2 gap-4;
     }
 
-     .transparency-summary {
-          @apply bg-white rounded-lg p-4
-               border border-gray-300
-               flex justify-between items-start;
+    .transparency-summary {
+        @apply bg-white rounded-lg p-4 border border-gray-300 flex justify-between items-start;
     }
 
     .transparency-summary:hover {
@@ -501,7 +519,7 @@
     }
 
     .transparency-income {
-         @apply border-2 border-green-500;
+        @apply border-2 border-green-500;
     }
 
     .transparency-expense {
@@ -516,10 +534,8 @@
         @apply border-2 border-red-500;
     }
 
-      /* Header destacado para tabelas da transparência */
     .transparency-section-header {
-        @apply px-4 py-3 rounded-t-lg
-               text-white font-semibold;
+        @apply px-4 py-3 rounded-t-lg text-white font-semibold;
     }
 
     .transparency-section-income {
@@ -530,20 +546,19 @@
         @apply bg-blue-600;
     }
 
-    /* Remove a borda inferior padrão quando usar header colorido */
     .content-box-header.transparency-colored {
         @apply border-b-0 mb-0;
     }
 
     .table-transparency {
-    @apply w-full rounded-b-lg overflow-hidden;
-}
+        @apply w-full rounded-b-lg overflow-hidden;
+    }
 
- .content-box.p-0 {
+    .content-box.p-0 {
         @apply overflow-hidden;
     }
 
-     .table-transparency tbody tr {
+    .table-transparency tbody tr {
         @apply border-b border-gray-300;
     }
 
@@ -560,24 +575,23 @@
         @apply py-2.5;
     }
 
-/* grafico */
-     .transparency-chart-card {
+    .transparency-chart-card {
         @apply bg-white rounded-lg shadow-sm p-4;
     }
 
     .transparency-chart-title {
         @apply text-sm font-semibold text-blue-900 mb-3;
     }
-   .table-transparency td {
+
+    .table-transparency td {
         @apply py-2;
     }
 
     .table-transparency .percent-badge {
-        @apply inline-block px-2 py-0.5 text-xs rounded
-               bg-gray-200 text-gray-700;
+        @apply inline-block px-2 py-0.5 text-xs rounded bg-gray-200 text-gray-700;
     }
 
-      .empty-state {
+    .empty-state {
         @apply text-center text-gray-500 py-8;
     }
 
@@ -585,252 +599,201 @@
         @apply text-3xl mb-3 opacity-50;
     }
 
-     .report-card {
-        @apply bg-white border rounded-lg p-4 shadow-sm
-               flex flex-col
-               hover:shadow-md transition;
+    .report-card {
+        @apply bg-white border rounded-lg p-4 shadow-sm flex flex-col hover:shadow-md transition;
     }
 
     .report-footer {
         @apply flex justify-between items-center mt-4 text-sm text-gray-500;
     }
+    /******* FIM Transparencia ********/
 
-    /*******  FIM Transparencia  ********/
-
-    /*************   BADGES  *****************/
-
-    /* =========================
-   BADGES (Status)
-   ========================= */
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 8px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 9999px; /* pill */
-    line-height: 1.2;
-    white-space: nowrap;
-}
-
-/* Estados */
-.badge-success {
-    background-color: #e6f4ea;
-    color: #137333;
-}
-
-.badge-warning {
-    background-color: #fff4e5;
-    color: #b45309;
-}
-
-.badge-secondary {
-    background-color: #f1f5f9;
-    color: #475569;
-}
-
-/* =========================
-   BADGES (Tipo)
-   ========================= */
-
-.badge-gray {
-    background-color: #f3f4f6;
-    color: #374151;
-}
-
-/*********  Fim Badges ***********/
-
-/* **** SITE *****/
-
-.site-link{
-    @apply text-sm font-semibold text-gray-700 hover:text-blue-600;
-}
-
-.card-config-site {
-    @apply block p-6 border rounded-lg shadow-sm
-           transition
-           hover:bg-blue-50 hover:border-blue-400 hover:shadow-lg;
-}
-
-
-.card-config-title {
-    @apply text-lg font-semibold mb-2;
-}
-.card-config-subtitle {
-    @apply text-sm text-gray-600;
-}
-
-
-.breadcrumb-item:not(:last-child)::after {
-    content: '/';
-    margin: 0 8px;
-    color: #d1d5db;
-}
-
-
-.breadcrumb-arrow {
-    position: relative;
-    padding-right: 20px;
-}
-
-.breadcrumb-arrow::after {
-    content: '›';
-    position: absolute;
-    right: 0;
-    color: #9ca3af;
-}
-
-/* Estilização do input file */
-.file-input {
-    @apply w-full px-3 py-2 border border-blue-300 rounded-md
-           text-blue-700 cursor-pointer
-           hover:bg-blue-100 hover:border-blue-400
-           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-           transition-colors;
-}
-
-/* Remove o texto padrão "Nenhum arquivo escolhido" em alguns navegadores */
-.file-input::file-selector-button {
-    @apply bg-blue-600 text-white px-3 py-1 mr-3 rounded border-0
-           hover:bg-blue-700 cursor-pointer transition-colors;
-}
-
-.simple-file-input {
-    @apply w-full px-4 py-3 border border-gray-300 rounded
-           bg-gray-50 text-gray-700 cursor-pointer
-           hover:bg-gray-100 hover:border-gray-400
-           focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
-}
-
-.simple-file-input::file-selector-button {
-    @apply bg-gray-200 text-gray-700 px-4 py-2 mr-4 rounded border border-gray-300
-           hover:bg-gray-300 hover:text-gray-900 cursor-pointer
-           transition-colors;
-}
-
-.file-input-with-icon {
-    @apply w-full px-4 py-3 border-2 border-dashed border-blue-300 rounded-lg
-           bg-blue-50 text-gray-700 cursor-pointer
-           hover:bg-blue-100 hover:border-blue-400
-           focus:outline-none focus:ring-2 focus:ring-blue-500
-           transition-all duration-200;
-
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12' /%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 12px center;
-    background-size: 20px;
-    padding-left: 40px;
-}
-
-.file-input-with-icon::file-selector-button {
-    @apply bg-blue-600 text-white px-4 py-2 mr-4 rounded-lg border-0
-           hover:bg-blue-700 cursor-pointer font-medium
-           transition-colors duration-200;
-}
-
-/* transparency.css - Estilos mínimos */
-.transparency-card {
-    border: none;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.transparency-card .card-header {
-    border-bottom: none;
-    padding: 1rem 1.25rem;
-}
-
-.transparency-card .card-body {
-    padding: 1.25rem;
-}
-
-/* Cores para os cards */
-.card-income {
-    border-left: 4px solid #28a745;
-}
-
-.card-expense {
-    border-left: 4px solid #007bff;
-}
-
-.card-balance-positive {
-    border-left: 4px solid #28a745;
-}
-
-.card-balance-negative {
-    border-left: 4px solid #dc3545;
-}
-
-/* Tabelas compactas */
-.table-transparency {
-    font-size: 0.875rem;
-}
-
-.table-transparency th {
-    border-top: none;
-    font-weight: 600;
-    color: #6c757d;
-}
-
-/* Filtros */
-.filter-box {
-    background: #f8f9fa;
-    border-radius: 6px;
-    padding: 1rem;
-}
-
-/* transparency.css */
-.transparency-dashboard .card {
-    transition: transform 0.2s;
-}
-
-.transparency-dashboard .card:hover {
-    transform: translateY(-2px);
-}
-
-.color-indicator {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    margin-right: 8px;
-}
-
-.icon-shape {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-}
-
-.empty-state {
-    opacity: 0.6;
-}
-
-/* Para o gráfico */
-#evolutionChart {
-    max-height: 300px;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .transparency-dashboard .col-md-4 {
-        margin-bottom: 1rem;
+    /************* BADGES *****************/
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 9999px;
+        line-height: 1.2;
+        white-space: nowrap;
     }
 
-    .table-responsive {
+    .badge-success {
+        background-color: #e6f4ea;
+        color: #137333;
+    }
+
+    .badge-warning {
+        background-color: #fff4e5;
+        color: #b45309;
+    }
+
+    .badge-secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+    }
+
+    .badge-gray {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+    /********* Fim Badges ***********/
+
+    /* **** SITE *****/
+    .site-link {
+        @apply text-sm font-semibold text-gray-700 hover:text-blue-600;
+    }
+
+    .card-config-site {
+        @apply block p-6 border rounded-lg shadow-sm transition hover:bg-blue-50 hover:border-blue-400 hover:shadow-lg;
+    }
+
+    .card-config-title {
+        @apply text-lg font-semibold mb-2;
+    }
+
+    .card-config-subtitle {
+        @apply text-sm text-gray-600;
+    }
+
+    .breadcrumb-item:not(:last-child)::after {
+        content: '/';
+        margin: 0 8px;
+        color: #d1d5db;
+    }
+
+    .breadcrumb-arrow {
+        position: relative;
+        padding-right: 20px;
+    }
+
+    .breadcrumb-arrow::after {
+        content: '›';
+        position: absolute;
+        right: 0;
+        color: #9ca3af;
+    }
+
+    /* Input file */
+    .file-input {
+        @apply w-full px-3 py-2 border border-blue-300 rounded-md text-blue-700 cursor-pointer hover:bg-blue-100 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors;
+    }
+
+    .file-input::file-selector-button {
+        @apply bg-blue-600 text-white px-3 py-1 mr-3 rounded border-0 hover:bg-blue-700 cursor-pointer transition-colors;
+    }
+
+    .simple-file-input {
+        @apply w-full px-4 py-3 border border-gray-300 rounded bg-gray-50 text-gray-700 cursor-pointer hover:bg-gray-100 hover:border-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+    }
+
+    .simple-file-input::file-selector-button {
+        @apply bg-gray-200 text-gray-700 px-4 py-2 mr-4 rounded border border-gray-300 hover:bg-gray-300 hover:text-gray-900 cursor-pointer transition-colors;
+    }
+
+    .file-input-with-icon {
+        @apply w-full px-4 py-3 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50 text-gray-700 cursor-pointer hover:bg-blue-100 hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12' /%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: 12px center;
+        background-size: 20px;
+        padding-left: 40px;
+    }
+
+    .file-input-with-icon::file-selector-button {
+        @apply bg-blue-600 text-white px-4 py-2 mr-4 rounded-lg border-0 hover:bg-blue-700 cursor-pointer font-medium transition-colors duration-200;
+    }
+
+    /* Transparency extras */
+    .transparency-card {
+        border: none;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .transparency-card .card-header {
+        border-bottom: none;
+        padding: 1rem 1.25rem;
+    }
+
+    .transparency-card .card-body {
+        padding: 1.25rem;
+    }
+
+    .card-income {
+        border-left: 4px solid #28a745;
+    }
+
+    .card-expense {
+        border-left: 4px solid #007bff;
+    }
+
+    .card-balance-positive {
+        border-left: 4px solid #28a745;
+    }
+
+    .card-balance-negative {
+        border-left: 4px solid #dc3545;
+    }
+
+    .table-transparency {
         font-size: 0.875rem;
     }
-}
 
+    .table-transparency th {
+        border-top: none;
+        font-weight: 600;
+        color: #6c757d;
+    }
 
+    .filter-box {
+        background: #f8f9fa;
+        border-radius: 6px;
+        padding: 1rem;
+    }
 
+    .transparency-dashboard .card {
+        transition: transform 0.2s;
+    }
 
+    .transparency-dashboard .card:hover {
+        transform: translateY(-2px);
+    }
 
+    .color-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        margin-right: 8px;
+    }
 
+    .icon-shape {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+    }
 
-/* FIM */
+    .empty-state {
+        opacity: 0.6;
+    }
+
+    #evolutionChart {
+        max-height: 300px;
+    }
+
+    @media (max-width: 768px) {
+        .transparency-dashboard .col-md-4 {
+            margin-bottom: 1rem;
+        }
+
+        .table-responsive {
+            font-size: 0.875rem;
+        }
+    }
 }

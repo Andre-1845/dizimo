@@ -37,7 +37,7 @@
             <table class="table">
                 <thead>
                     <tr class="table-row-header">
-                        <th class="table-header">ID</th>
+                        <th class="table-header table-cell-lg-hidden">ID</th>
                         <th class="table-header">Usuario</th>
                         <th class="table-header">Nome</th>
                         <th class="table-header table-cell-lg-hidden">E-mail</th>
@@ -50,7 +50,7 @@
                     <!-- Listar os usuarios -->
                     @forelse ($users as $user)
                         <tr class="table-row-body">
-                            <td class="table-body">{{ $user->id }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $user->id }}</td>
                             <td class="table-body">{{ $user->name }}</td>
                             <td class="table-body">{{ $user->member?->name }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $user->email }}</td>

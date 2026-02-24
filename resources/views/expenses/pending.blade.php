@@ -33,9 +33,9 @@
             
                 'headers' => [
                     ['label' => 'Descrição'],
-                    ['label' => 'Categoria'],
+                    ['label' => 'Categoria', 'class' => 'text-center table-cell-lg-hidden'],
                     ['label' => 'Valor', 'class' => 'text-center'],
-                    ['label' => 'Data', 'class' => 'text-center table-cell-lg-hidden'],
+                    ['label' => 'Data', 'class' => 'text-center'],
                     ['label' => 'Comprovante', 'class' => 'text-center table-cell-lg-hidden'],
                 ],
             
@@ -44,6 +44,7 @@
                         'value' => fn($e) => $e->description,
                     ],
                     [
+                        'class' => 'text-center table-cell-lg-hidden',
                         'value' => fn($e) => $e->category->name,
                     ],
                     [
@@ -55,7 +56,7 @@
                         'value' => fn($e) => $e->expense_date->format('d/m/Y'),
                     ],
                     [
-                        'class' => 'text-center',
+                        'class' => 'text-center table-cell-lg-hidden',
                         'value' => fn($e) => $e->receipt_path
                             ? '<div class="flex justify-center items-center">' .
                                 '<a href="' .

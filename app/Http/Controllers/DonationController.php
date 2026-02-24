@@ -98,8 +98,8 @@ class DonationController extends Controller
             [
                 'type' => 'text',
                 'name' => 'donor_name',
-                'label' => 'Doador',
-                'placeholder' => 'Nome do doador',
+                'label' => 'Colaborador',
+                'placeholder' => 'Nome do colaborador',
             ],
             [
                 'type' => 'select',
@@ -208,7 +208,7 @@ class DonationController extends Controller
 
         return redirect()
             ->route('donations.index')
-            ->with('success', 'Doação registrada com sucesso.');
+            ->with('success', 'Colaboração registrada com sucesso.');
     }
 
 
@@ -275,7 +275,7 @@ class DonationController extends Controller
 
         return redirect()
             ->route('donations.index')
-            ->with('success', 'Doação atualizada com sucesso.');
+            ->with('success', 'Colaboração atualizada com sucesso.');
     }
 
     /**
@@ -290,7 +290,7 @@ class DonationController extends Controller
 
         return redirect()
             ->route('donations.index')
-            ->with('success', 'Doação removida com sucesso.');
+            ->with('success', 'Colaboração removida com sucesso.');
     }
 
     // app/Http/Controllers/DonationController.php
@@ -312,7 +312,7 @@ class DonationController extends Controller
         $this->authorize('confirm', $donation);
 
         if ($donation->is_confirmed) {
-            return back()->with('warning', 'Esta doação já foi confirmada.');
+            return back()->with('warning', 'Esta receita já foi confirmada.');
         }
 
         $donation->update([
@@ -321,6 +321,6 @@ class DonationController extends Controller
             'confirmed_by' => Auth::id(),
         ]);
 
-        return back()->with('success', 'Doação confirmada com sucesso.');
+        return back()->with('success', 'Receita confirmada com sucesso.');
     }
 }

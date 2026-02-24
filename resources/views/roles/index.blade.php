@@ -6,11 +6,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Papéis</h2>
-            <nav class="breadcrumb">
-                <a href="{{ route('dashboard.admin') }}" class="breadcrumb-link">Dashboard</a>
-                <span>/</span>
-                <span>Papéis</span>
-            </nav>
+            <x-smart-breadcrumb :items="[['label' => 'Papeis']]" />
         </div>
     </div>
 
@@ -36,7 +32,7 @@
             <table class="table">
                 <thead>
                     <tr class="table-row-header">
-                        <th class="table-header">ID</th>
+                        <th class="table-header table-cell-lg-hidden">ID</th>
                         <th class="table-header">Papel</th>
                         <th class="table-header text-center">Permissões</th>
                         <th class="table-header table-cell-lg-hidden">Criado em</th>
@@ -48,12 +44,12 @@
                     @forelse ($roles as $role)
                         @continue($role->name === 'superadmin')
                         <tr class="table-row-body">
-                            <td class="table-body">{{ $role->id }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $role->id }}</td>
                             <td class="table-body">{{ $role->name ?? '—' }}</td>
                             <td class="table-body table-link text-center"> <a
                                     href="{{ route('role-permissions.index', ['role' => $role->id]) }}">Permissoes</a></td>
-                            <td class="table-body">{{ $role->created_at->format('d/m/Y') }}</td>
-                            <td class="table-body">{{ $role->updated_at->format('d/m/Y') }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $role->created_at->format('d/m/Y') }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $role->updated_at->format('d/m/Y') }}</td>
 
                             <x-table-actions-icons :show="route('roles.show', $role)" :edit="route('roles.edit', $role)" :delete="route('roles.destroy', $role)"
                                 confirm="Deseja excluir este papel?" />

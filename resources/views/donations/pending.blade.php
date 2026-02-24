@@ -19,7 +19,7 @@
             <div class="content-box-btn">
                 <a href="{{ route('donations.index') }}" class="btn-primary flex items-center space-x-1">
                     @include('components.icons.list')
-                    <span>Doações</span>
+                    <span>Receitas</span>
                 </a>
             </div>
             <!--FIM  Botao CADASTRAR (com icone)  -->
@@ -33,9 +33,9 @@
             
                 'headers' => [
                     ['label' => 'Membro'],
-                    ['label' => 'Categoria'],
+                    ['label' => 'Categoria', 'class' => 'text-center table-cell-lg-hidden'],
                     ['label' => 'Valor', 'class' => 'text-center'],
-                    ['label' => 'Data', 'class' => 'text-center table-cell-lg-hidden'],
+                    ['label' => 'Data', 'class' => 'text-center'],
                     ['label' => 'Comprovante', 'class' => 'text-center table-cell-lg-hidden'],
                 ],
             
@@ -44,6 +44,7 @@
                         'value' => fn($d) => $d->member->name ?? $d->donor_name,
                     ],
                     [
+                        'class' => 'text-center table-cell-lg-hidden',
                         'value' => fn($d) => $d->category->name,
                     ],
                     [
@@ -55,7 +56,7 @@
                         'value' => fn($d) => $d->donation_date->format('d/m/Y'),
                     ],
                     [
-                        'class' => 'text-center',
+                        'class' => 'text-center table-cell-lg-hidden',
                         'value' => fn($d) => $d->receipt_path
                             ? '<div class="flex justify-center items-center">' .
                                 '<a href="' .

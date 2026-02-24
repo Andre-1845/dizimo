@@ -54,25 +54,25 @@
                 <thead>
                     <tr class="table-row-header">
                         <th class="table-header">Categoria</th>
-                        <th class="table-header">Forma</th>
+                        <th class="table-header table-cell-lg-hidden">Forma</th>
                         <th class="table-header center">Data</th>
-                        <th class="table-header">Descrição</th>
+                        <th class="table-header table-cell-lg-hidden">Descrição</th>
                         <th class="table-header table-cell-lg-hidden">Cadastrado por</th>
                         <th class="table-header table-cell-lg-hidden">Editado em</th>
                         <th class="table-header center">Valor</th>
                         <th class="table-header center">Doc</th>
-                        <th class="table-header center">Ações</th>
+                        <th class="table-header center table-cell-lg-hidden">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($expenses as $expense)
                         <tr class="table-row-body">
                             <td class="table-body">{{ $expense->category->name ?? '—' }}</td>
-                            <td class="table-body">{{ $expense->paymentMethod->name ?? '—' }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $expense->paymentMethod->name ?? '—' }}</td>
                             <td class="table-body">{{ $expense->expense_date->format('d/m/Y') }}</td>
-                            <td class="table-body">{{ $expense->description ?? '—' }}</td>
-                            <td class="table-body">{{ $expense->user->name ?? '—' }}</td>
-                            <td class="table-body">{{ $expense->updated_at->format('d/m/Y') }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $expense->description ?? '—' }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $expense->user->name ?? '—' }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $expense->updated_at->format('d/m/Y') }}</td>
                             <td @class([
                                 'table-body text-right font-semibold',
                                 'text-green-600' => $expense->is_confirmed,
@@ -93,9 +93,9 @@
                                     —
                                 @endif
                             </td> {{-- FIM Link do Recibo --}}
-                            <x-table-actions-icons :show="route('expenses.show', $expense)" :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)"
-                                can-show="expenses.view" can-edit="expenses.edit" can-delete="expenses.delete"
-                                confirm="Deseja excluir esta despesa?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :show="route('expenses.show', $expense)"
+                                :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)" can-show="expenses.view" can-edit="expenses.edit"
+                                can-delete="expenses.delete" confirm="Deseja excluir esta despesa?" />
 
                         </tr>
                     @empty

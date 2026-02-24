@@ -6,7 +6,7 @@
 
     <div class="content-wrapper-full">
         <div class="content-header">
-            <h2 class="content-title">Receitas e Doações</h2>
+            <h2 class="content-title">Receitas e Colaborações</h2>
             <x-smart-breadcrumb :items="[['label' => 'Receitas']]" />
         </div>
     </div>
@@ -27,7 +27,7 @@
                 </a>
                 <!-- Fim - Botao PAINEL  -->
 
-                <!-- Botao NOVA DOACAO (com icone)  -->
+                <!-- Botao NOVA COLABORACAO (com icone)  -->
                 @can('donations.create')
                     <div class="content-box-btn">
                         <a href="{{ route('donations.create') }}" class="btn-success flex items-center space-x-1"
@@ -38,7 +38,7 @@
                         </a>
                     </div>
                 @endcan
-                <!--FIM  Botao NOVA DOACAO (com icone)  -->
+                <!--FIM  Botao NOVA COLABORACAO (com icone)  -->
 
             </div>
             <!-- Botoes (com icones)  -->
@@ -54,13 +54,13 @@
                 <thead>
                     <tr class="table-row-header">
                         <th class="table-header">Membro</th>
-                        <th class="table-header">Categoria</th>
+                        <th class="table-header table-cell-lg-hidden">Categoria</th>
                         <th class="table-header table-cell-lg-hidden">Forma</th>
                         <th class="table-header">Data</th>
                         <th class="table-header table-cell-lg-hidden">Cadastrado por</th>
                         <th class="table-header center">Valor</th>
                         <th class="table-header center">Doc</th>
-                        <th class="table-header center">Ações</th>
+                        <th class="table-header center table-cell-lg-hidden">Ações</th>
 
                     </tr>
                 </thead>
@@ -68,7 +68,7 @@
                     @forelse ($donations as $donation)
                         <tr class="table-row-body">
                             <td class="table-body">{{ $donation->display_donor ?? '—' }}</td>
-                            <td class="table-body">{{ $donation->category->name ?? '—' }}</td>
+                            <td class="table-body table-cell-lg-hidden">{{ $donation->category->name ?? '—' }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $donation->paymentMethod->name ?? '—' }}</td>
                             <td class="table-body">
                                 {{ \Carbon\Carbon::parse($donation->donation_date)->format('d/m/Y') }}
@@ -96,9 +96,9 @@
                                 @endif
                             </td> {{-- FIM Link do Recibo --}}
 
-                            <x-table-actions-icons :show="route('donations.show', $donation)" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)"
-                                can-show="donations.view" can-edit="donations.edit" can-delete="donations.delete"
-                                confirm="Deseja excluir esta receita/doação?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :show="route('donations.show', $donation)"
+                                :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-show="donations.view" can-edit="donations.edit"
+                                can-delete="donations.delete" confirm="Deseja excluir esta receita/colaboração?" />
                         </tr>
                     @empty
                         <tr>
