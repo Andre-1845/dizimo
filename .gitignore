@@ -8,7 +8,7 @@
 /node_modules
 
 # Build
-/public/build
+
 /public/hot
 
 # Storage
