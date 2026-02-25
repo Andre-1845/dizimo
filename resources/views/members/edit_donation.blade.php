@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Editar Doação')
+@section('title', 'Editar Colaboração')
 
 @section('content')
     <div class="content-header">
-        <h1 class="content-title">Editar Doação</h1>
+        <h1 class="content-title">Editar Colaboração</h1>
         <x-smart-breadcrumb :items="[['label' => 'Editar']]" />
     </div>
 
@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Data da Doação *</label>
+                    <label class="form-label">Data da Colaboração *</label>
                     <input class="form-input" type="date" name="donation_date"
                         value="{{ old('donation_date', $donation->donation_date->format('Y-m-d')) }}" required>
                     @error('donation_date')
@@ -99,7 +99,7 @@
         <div class="bg-yellow-200 border border-black rounded p-4 mt-6">
             <h3 class="font-semibold text-black mb-2">⚠️ Atenção</h3>
             <p class="text-orange-700 text-sm font-bold">
-                Esta doação ainda não foi validada pela tesouraria.
+                Esta colaboração ainda não foi validada pela tesouraria.
                 Após a validação, não será mais possível editar.
             </p>
         </div>

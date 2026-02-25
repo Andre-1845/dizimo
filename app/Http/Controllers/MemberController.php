@@ -231,47 +231,6 @@ class MemberController extends Controller
     }
 
 
-
-    /* ANTIGA */
-    // public function update(Request $request, Member $member)
-    // {
-    //     $this->authorize('update', $member);
-
-    //     $data = $request->all();
-    //     $data['active'] = $request->has('active');
-
-    //     $validated = validator($data, [
-    //         'name'          => 'required|string|max:255',
-    //         'phone'         => 'nullable|string|digits_between:10,11',
-    //         'monthly_tithe' => 'required|numeric|min:0',
-    //         'user_name'     => 'nullable|string|max:255',
-    //         'active'        => 'boolean',
-    //     ])->validate();
-
-    //     DB::transaction(function () use ($member, $validated) {
-
-    //         // Atualiza MEMBER
-    //         $member->update([
-    //             'name'          => $validated['name'],
-    //             'phone'         => $validated['phone'] ?? null,
-    //             'monthly_tithe' => $validated['monthly_tithe'],
-    //             'active'        => $validated['active'] ?? false,
-    //         ]);
-
-    //         // Atualiza USER relacionado
-    //         if ($member->user) {
-    //             $member->user->update([
-    //                 'name' => $validated['user_name'],
-    //             ]);
-    //         }
-    //     });
-
-    //     return redirect()
-    //         ->route('members.index')
-    //         ->with('success', 'Membro atualizado com sucesso.');
-    // }
-
-
     public function destroy(Member $member)
     {
         $this->authorize('delete', $member);

@@ -290,7 +290,7 @@ class DonationController extends Controller
 
         return redirect()
             ->route('donations.index')
-            ->with('success', 'Colaboração removida com sucesso.');
+            ->with('success', 'Colaboração excluída com sucesso.');
     }
 
     // app/Http/Controllers/DonationController.php

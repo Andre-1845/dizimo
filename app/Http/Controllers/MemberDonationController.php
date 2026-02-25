@@ -49,7 +49,7 @@ class MemberDonationController extends Controller
 
         return redirect()
             ->route('dashboard.member')
-            ->with('success', 'Doação registrada com sucesso.');
+            ->with('success', 'Colaboração registrada com sucesso.');
     }
 
     /**
@@ -83,7 +83,7 @@ class MemberDonationController extends Controller
         // Verifica se a doação está confirmada
         if ($donation->is_confirmed) {
             return redirect()->route('dashboard.member')
-                ->with('error', 'Doações confirmadas não podem ser editadas.');
+                ->with('error', 'Colaborações confirmadas não podem ser editadas.');
         }
 
         $categories = Category::where('type', 'income')->get();
@@ -104,7 +104,7 @@ class MemberDonationController extends Controller
 
         // Verifica se a doação está confirmada
         if ($donation->is_confirmed) {
-            return back()->with('error', 'Doações confirmadas não podem ser editadas.');
+            return back()->with('error', 'Colaborações confirmadas não podem ser editadas.');
         }
 
         $validated = $request->validate([
@@ -138,7 +138,7 @@ class MemberDonationController extends Controller
 
         return redirect()->route('member.donations.show', $donation)
             ->with([
-                'success' => 'Doação atualizada com sucesso!',
+                'success' => 'Colaboração atualizada com sucesso!',
             ]);
     }
 
@@ -154,13 +154,7 @@ class MemberDonationController extends Controller
 
         // Verifica se a doação está confirmada
         if ($donation->is_confirmed) {
-            return back()->with('error', 'Doações confirmadas não podem ser excluídas.');
-        }
-
-        // Verifica se a doação foi criada a mais de 24 horas (opcional)
-        $hoursSinceCreation = $donation->created_at->diffInHours(now());
-        if ($hoursSinceCreation > 24) {
-            return back()->with('error', 'Doações com mais de 24 horas não podem ser excluídas.');
+            return back()->with('error', 'Colaborações confirmadas não podem ser excluídas.');
         }
 
         // Remove o comprovante do storage se existir

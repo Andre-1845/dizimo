@@ -19,16 +19,6 @@
         <!-- Botoes (com icones)  -->
         <div class="content-box-btn">
 
-            <!-- Botao PAINEL ANTIGO (com icone)  -->
-            <div class="content-box-btn">
-                <span class="btn-warning">
-                    <a href="{{ route('dashboard.member') }}">
-                        Visualizar dashboard antigo
-                    </a>
-                </span>
-            </div>
-            <!-- Fim - Botao PAINEL  -->
-
             <!-- Botao NOVA DOACAO (com icone)  -->
             @can('donations.create')
                 <div class="content-box-btn">

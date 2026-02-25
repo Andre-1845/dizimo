@@ -9,7 +9,7 @@
     <div class="content-wrapper">
         <div class="content-header">
             <h2 class="content-title">Receitas</h2>
-            <x-smart-breadcrumb :items="[['label' => 'Minhas Colaborações']]" />
+            <x-smart-breadcrumb :items="[['label' => 'Minhas Colaborações'],['label' => 'Cadastrar']]" />
         </div>
     </div>
 

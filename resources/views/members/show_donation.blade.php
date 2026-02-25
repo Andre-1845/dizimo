@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Detalhes da Doação')
+@section('title', 'Detalhes da Colaboração')
 
 @section('content')
     <div class="content-header">
-        <h1 class="content-title">Detalhes da Doação</h1>
+        <h1 class="content-title">Detalhes da Colaboração</h1>
         <x-smart-breadcrumb :items="[['label' => 'Detalhes']]" />
     </div>
 
@@ -16,7 +16,7 @@
 
                 {{-- Informações principais --}}
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Informações da Doação</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Informações da Colaboração</h3>
 
 
 
@@ -149,7 +149,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn-danger">
-                            Excluir Doação
+                            Excluir Colaboração
                         </button>
                     </form>
                 @endif
@@ -166,7 +166,7 @@
                             clip-rule="evenodd" />
                     </svg>
                     <p class="text-green-800 font-bold">
-                        Esta doação já foi confirmada pela tesouraria e não pode mais ser editada ou excluída.
+                        Esta colaboração já foi confirmada pela tesouraria e não pode mais ser editada ou excluída.
                     </p>
                 </div>
             </div>

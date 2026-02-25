@@ -216,7 +216,7 @@ class ExpenseController extends Controller
 
         return redirect()
             ->route('expenses.index')
-            ->with('success', 'Despesa removida com sucesso.');
+            ->with('success', 'Despesa excluída com sucesso.');
     }
 
 
