@@ -45,15 +45,15 @@
                         </a>
                     @endcan
 
-
-                    <a @class([
-                        'sidebar-link',
-                        'active' => request()->routeIs('dashboard.transparency'),
-                    ]) href="{{ route('dashboard.transparency') }}">
-                        <span class="sidebar-icon">@include('components.icons.graph')</span>
-                        <span class="sidebar-text">Transparência</span>
-                    </a>
-
+                    @can('transparency.view')
+                        <a @class([
+                            'sidebar-link',
+                            'active' => request()->routeIs('dashboard.transparency'),
+                        ]) href="{{ route('dashboard.transparency') }}">
+                            <span class="sidebar-icon">@include('components.icons.graph')</span>
+                            <span class="sidebar-text">Transparência</span>
+                        </a>
+                    @endcan
                 </div>
             @endcanany
 
