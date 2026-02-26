@@ -23,10 +23,11 @@ class DatabaseSeeder extends Seeder
                 PermissionSeeder::class,
                 StatusSeeder::class,
                 RoleSeeder::class,
-                UserSeeder::class,
+                ChurchSeeder::class,
                 CategorySeeder::class,
                 PaymentMethodSeeder::class,
                 SiteSeeder::class,
+                UserSeeder::class,
 
             ]);
         }
