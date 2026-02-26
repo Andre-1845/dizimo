@@ -58,6 +58,11 @@
                     @enderror
                 </div>
 
+                <div>
+                    <label class="form-label">Igreja</label>
+                    <input type="text" class="form-input" value="{{ $churchName }}" readonly>
+                </div>
+
                 {{-- Forma de pagamento --}}
                 <div>
                     <label class="form-label">Forma de Pagamento</label>

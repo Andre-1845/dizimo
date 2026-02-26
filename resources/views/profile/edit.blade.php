@@ -46,6 +46,17 @@
                 <input class="form-input" type="text" name="member_name"
                     value="{{ old('member_name', $user->member->name) }}">
 
+                @if ($user->member)
+                    <label class="form-label" for="church_id">Igreja:</label>
+                    <select name="church_id" class="form-input">
+                        @foreach ($churches as $church)
+                            <option value="{{ $church->id }}" @selected(old('church_id', $user->member->church_id) == $church->id)>
+                                {{ $church->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                @endif
+
                 <label class="form-label" for="phone">Telefone: </label>
                 <input class="form-input" type="text" name="phone" value="{{ old('phone', $user->member->phone) }}">
             @endif

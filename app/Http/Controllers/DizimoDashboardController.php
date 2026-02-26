@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Donation;
 use App\Models\Category;
+use App\Models\Church;
 
 class DizimoDashboardController extends Controller
 {
     public function index(Request $request)
     {
-
+        $church = Church::find(session('view_church_id'));
 
         /* =====================
      |  CONTADORES
@@ -82,7 +83,7 @@ class DizimoDashboardController extends Controller
             ->whereYear('donation_date', $year)
             ->whereMonth('donation_date', $month)
             ->sum('amount');
-            
+
         $donationsNotConfirmed = Donation::where('is_confirmed', false)
             ->where('category_id', $dizimoCategory->id)
             ->whereYear('donation_date', $year)
@@ -140,7 +141,8 @@ class DizimoDashboardController extends Controller
             'membersPendingCount',
             'membersPendingTotal',
             'anonymousCount',
-            'anonymousTotal'
+            'anonymousTotal',
+            'church',
         ) + ['menu' => 'dashboard-dizimo']);
     }
 }

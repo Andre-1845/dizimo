@@ -38,7 +38,6 @@
             <!-- Botoes (com icones)  -->
         </div>
 
-
         <x-alert />
 
         @can('update', $member)
@@ -89,6 +88,17 @@
                     <label class="form-label">Telefone</label>
                     <input type="tel" name="phone" maxlength="15" pattern="\d{10,11}"
                         title="Informe um telefone com 10 ou 11 dígitos" class="form-input" value="{{ $member->phone }}">
+                </div>
+
+                <div>
+                    <label class="form-label">Igreja</label>
+                    <select name="church_id">
+                        @foreach ($churches as $church)
+                            <option value="{{ $church->id }}" {{ $member->church_id == $church->id ? 'selected' : '' }}>
+                                {{ $church->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div>

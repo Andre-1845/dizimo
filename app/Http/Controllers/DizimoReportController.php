@@ -6,12 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Donation;
 use App\Models\Category;
+use App\Models\Church;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class DizimoReportController extends Controller
 {
+    private function currentChurch()
+    {
+        return Church::find(session('view_church_id'));
+    }
+
     private function filtros(Request $request)
     {
         return [
@@ -75,6 +81,7 @@ class DizimoReportController extends Controller
             'filters' => $filters,
             'totalDoado' =>  $totalDoado,
             'totalPrevisto' => $totalPrevisto,
+            'church' => $this->currentChurch(),
         ]);
     }
 
@@ -156,10 +163,13 @@ class DizimoReportController extends Controller
             ->orderBy('name')
             ->get();
 
+        $church = $this->currentChurch();
+
         $pdf = Pdf::loadView('pdf.dizimo_paid', compact(
             'members',
             'year',
-            'month'
+            'month',
+            'church',
         ))->setPaper('a4', 'portrait')
             ->setOptions([
                 'enable_php' => true,
@@ -191,6 +201,7 @@ class DizimoReportController extends Controller
             'menu' => 'dashboard-dizimo',
             'members' => $members,
             'filters' => $filters,
+            'church' => $this->currentChurch(),
         ]);
     }
 
@@ -248,10 +259,13 @@ class DizimoReportController extends Controller
             ->orderBy('name')
             ->get();
 
+        $church = $this->currentChurch();
+
         $pdf = Pdf::loadView('pdf.dizimo_pending', compact(
             'members',
             'year',
-            'month'
+            'month',
+            'church',
         ))->setPaper('a4', 'portrait');
 
         return $pdf->download("dizimo_pendentes_{$month}_{$year}.pdf");
@@ -279,6 +293,7 @@ class DizimoReportController extends Controller
             'menu' => 'dashboard-dizimo',
             'donations' => $donations,
             'filters' => $filters,
+            'church' => $this->currentChurch(),
         ]);
     }
 
@@ -337,10 +352,13 @@ class DizimoReportController extends Controller
             ->orderBy('donation_date')
             ->get();
 
+        $church = $this->currentChurch();
+
         $pdf = Pdf::loadView('pdf.dizimo_anonymous', compact(
             'donations',
             'year',
-            'month'
+            'month',
+            'church',
         ))->setPaper('a4', 'portrait');
 
         return $pdf->download("dizimo_anonimos_{$month}_{$year}.pdf");

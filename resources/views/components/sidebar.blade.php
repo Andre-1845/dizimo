@@ -177,6 +177,16 @@
                 </div>
             @endcanany
 
+
+            @can('setting.access')
+                <a @class(['sidebar-link', 'active' => $menu === 'roles']) href="{{ route('churches.index') }}">
+                    <span class="sidebar-icon">@include('components.icons.church')</span>
+                    <span class="sidebar-text">Igrejas</span>
+                </a>
+            @endcan
+
+
+
             {{-- ================= ÁREA DO MEMBRO ================= --}}
             @can('dashboard.member')
                 <div class="sidebar-group">

@@ -8,8 +8,9 @@
         Membros que contribuíram com Dízimo
     </h1>
 
+
     <p class="text-lg text-center text-gray-900 font-semibold mb-4">
-        {{ \Carbon\Carbon::create()->month($filters['month'])->translatedFormat('F') }}
+        {{ $church->name }} - {{ \Carbon\Carbon::create()->month($filters['month'])->translatedFormat('F') }}
         / {{ $filters['year'] }}
     </p>
 

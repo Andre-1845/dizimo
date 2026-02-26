@@ -23,6 +23,17 @@
                 class="form-input-login" />
         </div>
 
+        <div class="form-group-login">
+            <label for="church_id">Igreja</label>
+            <select name="church_id" required class="form-input-login">
+                @foreach ($churches as $church)
+                    <option value="{{ $church->id }}">
+                        {{ $church->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <!-- Campo senha -->
         <div class="form-group-login">
             <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>

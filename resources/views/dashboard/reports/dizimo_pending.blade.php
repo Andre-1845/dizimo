@@ -8,8 +8,8 @@
         Membros com Dízimo Pendente
     </h1>
 
-    <p class="text-sm text-gray-500 mb-4">
-        {{ \Carbon\Carbon::create()->month($filters['month'])->translatedFormat('F') }}
+    <p class="text-lg text-center text-gray-900 font-semibold mb-4">
+        {{ $church->name }} - {{ \Carbon\Carbon::create()->month($filters['month'])->translatedFormat('F') }}
         / {{ $filters['year'] }}
     </p>
 

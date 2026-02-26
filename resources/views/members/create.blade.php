@@ -53,6 +53,17 @@
                 </div>
 
                 <div>
+                    <label class="form-label">Igreja</label>
+                    <select name="church_id" class="form-input">
+                        @foreach ($churches as $church)
+                            <option value="{{ $church->id }}">
+                                {{ $church->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
                     <label class="form-label">Dízimo (R$)</label>
                     <input class="form-input" type="number" step="0.01" name="monthly_tithe">
                 </div>

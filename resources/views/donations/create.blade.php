@@ -46,14 +46,20 @@
 
                 <div>
                     <label class="form-label">Membro</label>
-                    <select name="member_id" class="form-input">
+                    <select name="member_id" id="memberSelect" class="form-input">
                         <option value="">Administração</option>
                         @foreach ($members as $member)
-                            <option value="{{ $member->id }}" @selected(old('member_id') == $member->id)>
+                            <option value="{{ $member->id }}" data-church-id="{{ $member->church->id }}"
+                                data-church-name="{{ $member->church->name }}" @selected(old('member_id') == $member->id)>
                                 {{ $member->name }}
                             </option>
                         @endforeach
                     </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Igreja</label>
+                    <input type="text" id="churchNameDisplay" class="form-input" value="{{ $currentChurchName }}" readonly>
                 </div>
 
                 <div>

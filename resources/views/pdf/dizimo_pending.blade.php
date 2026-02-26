@@ -63,7 +63,11 @@
 
     <h1>Membros com Dízimo Pendente</h1>
     <p>Período: {{ \App\Helpers\DateHelper::periodoExtenso($month, $year) }}</p>
-
+    @if ($church)
+        <h3 style="margin-bottom:5px;">
+            {{ $church->name }}
+        </h3>
+    @endif
     <table>
         <thead>
             <tr>

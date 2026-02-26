@@ -47,6 +47,12 @@
                 <span class="title-detail-content">Telefone: </span>
                 <span class="detail-content">{{ format_phone($member->phone) ?? '—' }}</span>
             </div>
+
+            <div class="mb-1">
+                <span class="title-detail-content">Igreja: </span>
+                <span class="detail-content">{{ $member->church->name ?? '—' }}</span>
+            </div>
+
             <div class="mb-1">
                 <span class="title-detail-content">Status: </span>
                 <span class="detail-content {{ $member->active ? 'text-green-600' : 'text-red-600' }}">
