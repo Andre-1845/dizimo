@@ -30,7 +30,8 @@ use App\Http\Controllers\{
     FinancialReportController,
     ReportController,
     SiteController,
-    TransparencyDashboardController
+    TransparencyDashboardController,
+    ChurchController
 };
 
 use App\Http\Controllers\MemberDonationController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Admin\{
     SitePersonController
 };
 use App\Http\Controllers\Site\TeamController;
+use App\Models\Church;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -61,6 +63,17 @@ Route::get('/', [SiteController::class, 'home'])
     ->name('site.home');
 Route::get('/equipe', [TeamController::class, 'index'])
     ->name('site.team');
+
+Route::post('/switch-church/{church}', function (Church $church, Request $request) {
+
+    if (!auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
+        abort(403);
+    }
+
+    session(['view_church_id' => $church->id]);
+
+    return back();
+})->name('church.switch')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -222,20 +235,12 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
             ->name('transparency.dashboard');
     });
 
-    // CRUD de Relatórios TRANSPARENCIA
-    // Route::middleware(['auth'])->prefix('admin')->group(function () {
-    //     Route::resource('reports', ReportController::class);
-    //     Route::post('/reports/{report}/toggle-status', [ReportController::class, 'toggleStatus'])
-    //         ->name('reports.toggle-status');
-    // });
-
     Route::middleware(['auth', 'verified'])
         ->prefix('admin')
         ->group(function () {
 
             Route::resource('reports', FinancialReportController::class);
         });
-
 
     /*
     | Relatórios (apenas para quem tem acesso a relatórios)
@@ -432,12 +437,7 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
             ->middleware('permission:profile.password');
     });
 
-    /*
-    | Transparência (acesso público autenticado)
-    */
-    // Route::middleware('permission:transparency.access')->group(function () {
-    //     Route::get('/transparencia', function () {
-    //         return view('transparency.index');
-    //     })->name('transparency.index');
-    // });
+    /* Igrejas */
+    Route::middleware(['auth'])
+        ->resource('churches', ChurchController::class);
 });

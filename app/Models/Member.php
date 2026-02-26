@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\StringHelper;
+use App\Models\Traits\BelongsToChurch;
 
 class Member extends Model
 {
     use HasFactory;
+    use BelongsToChurch;
 
     protected $fillable = [
         'user_id',
         'name',
         'phone',
         'active',
+        'church_id',
         'monthly_tithe', // valor previsto
     ];
 
@@ -57,5 +60,10 @@ class Member extends Model
     {
         return $this->donations->isNotEmpty()
             && $this->donations->every(fn($d) => $d->is_confirmed);
+    }
+
+    public function church()
+    {
+        return $this->belongsTo(Church::class);
     }
 }

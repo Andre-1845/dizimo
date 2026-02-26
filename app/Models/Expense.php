@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToChurch;
 use Illuminate\Database\Eloquent\Model;
 
 class Expense extends Model
 {
+    use BelongsToChurch;
     //
     protected $fillable = [
         'user_id',
@@ -19,6 +21,7 @@ class Expense extends Model
         'is_approved',
         'approved_at',
         'approved_by',
+        'church_id',
     ];
 
     protected $casts = [
@@ -40,6 +43,11 @@ class Expense extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function church()
+    {
+        return $this->belongsTo(Church::class);
     }
 
     public function approver()

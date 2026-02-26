@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'dashboard.redirect' => \App\Http\Middleware\RedirectToDashboard::class,
             'logout.if.auth' => \App\Http\Middleware\LogoutIfAuthenticated::class,
         ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\SetActiveChurch::class,
+        ]);
     })
 
     ->withExceptions(function (Exceptions $exceptions): void {

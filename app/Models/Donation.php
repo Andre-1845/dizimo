@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToChurch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Donation extends Model
 {
     use SoftDeletes;
+    use BelongsToChurch;
 
     protected $fillable = [
         'user_id',
@@ -22,6 +24,7 @@ class Donation extends Model
         'is_confirmed',
         'confirmed_at',
         'confirmed_by',
+        'church_id',
     ];
 
     protected $casts = [
@@ -37,6 +40,11 @@ class Donation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function church()
+    {
+        return $this->belongsTo(Church::class);
     }
 
     public function confirmedBy()
