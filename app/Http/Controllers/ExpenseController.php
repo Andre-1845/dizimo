@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenseRequest;
 use App\Models\Expense;
 use App\Models\Category;
+use App\Models\Church;
 use App\Models\PaymentMethod;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -128,10 +129,18 @@ class ExpenseController extends Controller
     {
         $this->authorize('create', Expense::class);
 
+        $user = Auth::user();
+        $churchId = $user->member
+            ? $user->member->church_id
+            : session('view_church_id');
+
+        $churchName = optional(Church::find($churchId))->name;
+
         return view('expenses.create', [
             'menu' => 'expenses',
             'categories' => Category::where('type', 'expense')->orderBy('name')->get(),
             'paymentMethods' => PaymentMethod::orderBy('name')->get(),
+            'churchName' => $churchName,
         ]);
     }
 
@@ -142,10 +151,23 @@ class ExpenseController extends Controller
     public function store(ExpenseRequest $request)
     {
         $this->authorize('create', Expense::class);
-
+        $user = Auth::user();
         $data = $request->validated();
 
         $data['user_id'] = Auth::id();
+
+        //  Resolver church_id corretamente
+        if ($user->member) {
+            $churchId = $user->member->church_id;
+        } else {
+            $churchId = session('view_church_id');
+        }
+
+        if (!$churchId) {
+            abort(403, 'Igreja não definida.');
+        }
+
+        $data['church_id'] = $churchId;
 
         // Upload do comprovante
         if ($request->hasFile('receipt')) {
@@ -183,9 +205,16 @@ class ExpenseController extends Controller
     {
         $this->authorize('update', $expense);
 
+        $user = Auth::user();
         $data = $request->validated();
 
         $data['user_id'] = Auth::id();
+
+        if ($user->member) {
+            $data['church_id'] = $user->member->church_id;
+        } else {
+            $data['church_id'] = session('view_church_id');
+        }
 
         // Apaga comprovante anterior quando enviado um novo
         if ($request->hasFile('receipt') && $expense->receipt_path) {

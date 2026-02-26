@@ -10,6 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use App\Models\Church;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +35,12 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*', function ($view) {
             $view->with('siteLogo', SiteSetting::get('site_logo'));
             $view->with('appName', SiteSetting::get('app_name', config('app.name')));
+
+            if (auth()->check() && auth()->user()->hasAnyRole(['admin', 'superadmin'])) {
+
+                $view->with('churchesList', Church::all());
+                $view->with('activeChurchId', session('view_church_id'));
+            }
         });
 
         // ==========================

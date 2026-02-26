@@ -37,6 +37,7 @@ class AuthRegisterUserRequest extends FormRequest
                 'regex:/[0-9]/',           // Pelo menos um número
                 'regex:/[@$!%*#?&]/',      // Pelo menos um caractere especial
             ],
+            'church_id' => 'required|exists:churches,id',
         ];
     }
 

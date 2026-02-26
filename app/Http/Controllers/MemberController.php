@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Church;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -117,8 +118,11 @@ class MemberController extends Controller
     {
         $this->authorize('create', Member::class);
 
+        $churches = Church::all();
+
         return view('members.create', [
             'menu' => 'members',
+            'churches' => $churches,
         ]);
     }
 
@@ -136,6 +140,7 @@ class MemberController extends Controller
             'phone'  => 'nullable|string|digits_between:10,11',
             'monthly_tithe' => 'required|numeric|min:0',
             'active' => 'boolean',
+            'church_id'     => 'required|exists:churches,id',
         ])->validate();
 
 
@@ -174,9 +179,12 @@ class MemberController extends Controller
         $this->authorize('update', $member);
 
         $member->load('user');
+        $churches = Church::all();
+
         return view('members.edit', [
             'member' => $member,
             'menu' => 'members',
+            'churches' => $churches,
         ]);
     }
     /**
@@ -196,8 +204,9 @@ class MemberController extends Controller
             'phone'         => 'nullable|string|digits_between:10,11',
             'monthly_tithe' => 'required|numeric|min:0',
             'user_name'     => 'nullable|string|max:255',
-            'email'         => 'nullable|email|unique:users,email',
+            'email'         => 'nullable|email|unique:users,email,' . ($member->user->id ?? 'NULL'),
             'active'        => 'boolean',
+            'church_id'     => 'required|exists:churches,id',
         ])->validate();
 
         DB::transaction(function () use ($member, $validated, $memberUserService) {
@@ -208,6 +217,7 @@ class MemberController extends Controller
                 'phone'         => $validated['phone'] ?? null,
                 'monthly_tithe' => $validated['monthly_tithe'],
                 'active'        => $validated['active'] ?? false,
+                'church_id'     => $validated['church_id'],
             ]);
 
             // 🔑 Cria USER se necessário + envia e-mail

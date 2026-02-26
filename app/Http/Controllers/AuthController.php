@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRegisterUserRequest;
 use App\Http\Requests\LoginRequest;
+use App\Models\Church;
 use App\Models\Member;
 use App\Models\User;
 use Exception;
@@ -69,11 +70,6 @@ class AuthController extends Controller
             Auth::logout();
             return back()->withErrors('Usuário sem papel atribuído.');
         }
-        // if ($user->status_id != 2) { // ID 2 = Ativo
-        //     Auth::logout();
-        //     Log::warning('Tentativa de login de usuário inativo', ['user_id' => $user->id]);
-        //     return back()->withInput()->with('error', 'Usuário inativo ou suspenso.');
-        // }
 
         Log::info('Login realizado', [
             'user_id' => $user->id,
@@ -111,8 +107,11 @@ class AuthController extends Controller
 
     public function create()
     {
-        return view('auth.register');
+        $churches = Church::all();
+
+        return view('auth.register', compact('churches'));
     }
+
     public function store(AuthRegisterUserRequest $request)
     {
         DB::beginTransaction();
@@ -131,10 +130,13 @@ class AuthController extends Controller
             }
 
             // Criar MEMBER automaticamente
+
             Member::create([
                 'user_id' => $user->id,
                 'name'    => $request->name,
                 'active'  => true,
+                'church_id' => $request->church_id,
+
             ]);
 
 

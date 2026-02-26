@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Church;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +32,11 @@ class ProfileController extends Controller
     {
         $user = Auth::user()->load('member');
 
-        return view('profile.edit', ['user' => $user, 'menu' => 'profile']);
+        return view('profile.edit', [
+            'user' => $user,
+            'menu' => 'profile',
+            'churches' => Church::orderBy('name')->get(),
+        ]);
     }
 
     public function update(ProfileUpdateRequest $request)
@@ -39,36 +44,24 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
-
-        // DB::transaction(function () use ($user, $request) {
-
-        //     // Atualiza USERS
-        //     $user->update([
-        //         'name'  => $request->name,
-        //         'email' => $request->email,
-        //     ]);
-
-        //     // Atualiza MEMBERS (se existir)
-        //     if ($user->member) {
-        //         $user->member->update([
-        //             'name'  => $request->name,
-        //             'phone' => $request->phone,
-        //         ]);
-        //     }
-        // });
-
         DB::transaction(function () use ($request, $user) {
+
             // Atualiza USER
             $user->update([
                 'name'  => $request->user_name,
                 'email' => $request->email,
             ]);
 
-            if ($user->member && filled('member_name')) {
+            if ($user->member) {
+
                 $user->member->update([
-                    'name'  => $request->member_name,
-                    'phone' => $request->phone,
+                    'name'      => $request->member_name,
+                    'phone'     => $request->phone,
+                    'church_id' => $request->church_id,
                 ]);
+
+                // Atualiza contexto da sessão se o usuário for membro
+                session(['view_church_id' => $request->church_id]);
             }
         });
 

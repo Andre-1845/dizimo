@@ -7,6 +7,7 @@ use App\Http\Requests\DonationRequest;
 use App\Models\Donation;
 use App\Models\Member;
 use App\Models\Category;
+use App\Models\Church;
 use App\Models\PaymentMethod;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -162,11 +163,18 @@ class DonationController extends Controller
 
         $this->authorize('create', Donation::class);
 
+        $currentChurchId = session('view_church_id');
+        $currentChurchName = optional(
+            Church::find($currentChurchId)
+        )->name;
+
         return view('donations.create', [
             'menu' => 'donations',
-            'members' => Member::orderBy('name')->get(),
+            'members' => Member::with('church')->orderBy('name')->get(),
             'categories' => Category::where('type', 'income')->orderBy('name')->get(),
             'paymentMethods' => PaymentMethod::orderBy('name')->get(),
+            'currentChurchId' => $currentChurchId,
+            'currentChurchName' => $currentChurchName,
         ]);
     }
 
@@ -193,6 +201,9 @@ class DonationController extends Controller
         Donation::create([
             'member_id'         => $member?->id,
             'user_id'           => Auth::id(),
+            'church_id' => $member
+                ? $member->church_id
+                : session('view_church_id'),
             'category_id'       => $data['category_id'],
             'payment_method_id' => $data['payment_method_id'] ?? null,
 

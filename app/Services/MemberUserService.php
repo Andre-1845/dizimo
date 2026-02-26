@@ -21,6 +21,10 @@ class MemberUserService
             return;
         }
 
+        if (!$email) {
+            return;
+        }
+
         $user = User::create([
             'name' => $member->name,
             'email' => $email,

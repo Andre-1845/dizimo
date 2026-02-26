@@ -31,6 +31,12 @@ class MemberDonationController extends Controller
         $data = $request->validated();
 
         $user = Auth::user();
+        $member = $user->member;
+
+        if (!$member) {
+            abort(403, 'Usuário não possui vínculo com membro.');
+        }
+
         $data['donor_name'] = $user->member->name;
 
         // Upload do comprovante
@@ -43,6 +49,7 @@ class MemberDonationController extends Controller
             ...$data,
             'member_id' => $user->member->id,
             'user_id'   => $user->id,
+            'church_id' => $member->church_id,
         ]);
 
         Log::info('Doação cadastrada', ['user_id' => $user->id]);
