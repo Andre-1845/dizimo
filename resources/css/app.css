@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* @import "tailwindcss/preflight";
-@import "tailwindcss/utilities"; */
 
 /* fontes opcionais */
 /* @theme {
@@ -11,10 +9,11 @@
 /* HTML */
 @source "../**/*.html";
 
-/* JS (se usar depois) */
+
 @source "../**/*.js";
 
 @layer components{
+
     /* ===== LOGIN ===== */
     /* Estilização do fundo */
     .bg-login{
@@ -112,7 +111,7 @@
     }
     /****** Fim Navbar ******/
 
-    /****** Início Sidebar - VERSÃO FINAL CORRIGIDA ******/
+    /****** Início Sidebar ******/
 
     /* Sidebar base */
     .sidebar {
@@ -182,46 +181,64 @@
     }
 
     /* Links da sidebar */
-    .sidebar-link {
-        display: flex !important;
-        align-items: center !important;
-        gap: 0.75rem !important;
-        padding: 0.5rem 0.75rem !important;
-        font-size: 0.875rem !important;
-        color: #f9fafb !important;
-        text-decoration: none !important;
-        white-space: nowrap;
-        transition: background-color 0.2s ease;
-    }
 
-    .sidebar-link:hover {
-        background-color: #1e3a8a !important;
-    }
+/* Links da sidebar */
+.sidebar-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    color: #f9fafb !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+    position: relative; /* Para posicionamento preciso */
+}
 
-    .sidebar-link.active {
-        margin: 0 0.5rem !important;
-        border: 1px solid #ffffff !important;
-        border-radius: 0.375rem !important;
-        background-color: transparent;
-    }
+.sidebar-link:hover {
+    background-color: #1e3a8a !important;
+}
 
-    /* Ícones */
-    .sidebar-icon {
-        width: 24px;
-        min-width: 24px;
-        text-align: center;
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
+/* Item ativo - CORRIGIDO */
+.sidebar-link.active {
+    /* Removido o margin que causava deslocamento */
+    margin: 0 !important; /* Zera qualquer margem */
 
-    .sidebar-icon svg {
-        width: 20px;
-        height: 20px;
-        stroke: currentColor;
-        fill: none;
-    }
+    /* Borda branca ao redor */
+    border: 1px solid #ffffff !important;
+    border-radius: 0.375rem !important;
+
+    /* Mantém o padding consistente com os outros itens */
+    padding: 0.5rem 0.75rem !important;
+
+    /* Garante que o ícone fique centralizado */
+    background-color: transparent;
+    background-clip: padding-box;
+}
+
+/* Ícones - sempre visíveis e centralizados */
+.sidebar-icon {
+    width: 24px;
+    min-width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Garante que o SVG dentro fique centralizado */
+    line-height: 1;
+}
+
+.sidebar-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    display: block; /* Remove espaços extras */
+    margin: 0 auto; /* Centraliza se necessário */
+}
 
     /* Textos - escondidos inicialmente */
     .sidebar-text,
