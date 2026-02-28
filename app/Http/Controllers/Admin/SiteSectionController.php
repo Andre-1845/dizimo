@@ -35,6 +35,7 @@ class SiteSectionController extends Controller
             'is_active' => 'boolean',
             'order' => 'integer',
         ]);
+        $data['is_active'] = $request->has('is_active');
 
         $section->update($data);
         $this->reindexOrder();
