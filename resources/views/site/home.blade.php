@@ -267,7 +267,7 @@
 
     {{-- CONTATO --}}
     @if (isset($sections['contact']))
-        <section id="contact" class="pt-8 pb-6 bg-gray-900 text-white">
+        <section id="contact" class="mt-2 pt-10 pb-6 bg-gray-900 text-white">
             <div class="max-w-4xl mx-auto px-6 text-center">
 
                 <h2 class="text-3xl font-bold mb-4">
