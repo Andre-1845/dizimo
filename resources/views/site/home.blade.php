@@ -10,7 +10,6 @@
 
             {{-- Imagem --}}
             @if (isset($images['hero'][0]))
-
                 <img src="{{ asset('storage/' . $images['hero'][0]->image_path) }}"
                     class="absolute inset-0 w-full h-full object-cover" />
             @endif
@@ -268,14 +267,14 @@
 
     {{-- CONTATO --}}
     @if (isset($sections['contact']))
-        <section id="contact" class="py-20 bg-gray-900 text-white">
+        <section id="contact" class="pt-8 pb-6 bg-gray-900 text-white">
             <div class="max-w-4xl mx-auto px-6 text-center">
 
-                <h2 class="text-3xl font-bold mb-6">
+                <h2 class="text-3xl font-bold mb-4">
                     {{ $sections['contact']->title ?? '' }}
                 </h2>
 
-                <p class="text-gray-300 mb-4">
+                <p class="text-gray-300 mb-2">
                     {{ $sections['contact']->content ?? '' }}
                 </p>
 
@@ -287,5 +286,4 @@
             </div>
         </section>
     @endif
-
 @endsection

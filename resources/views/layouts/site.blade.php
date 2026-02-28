@@ -89,10 +89,10 @@
 
     {{-- ================= FOOTER ================= --}}
     <footer class="bg-gray-900 text-gray-200">
-        <div class="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-8">
+        <div class="max-w-7xl mx-auto px-6 pt-6 pb-6 grid md:grid-cols-3 gap-8 text-center md:text-center">
 
             {{-- Igreja --}}
-            <div>
+            <div class="flex flex-col items-center">
                 <h3 class="font-semibold mb-2">
                     {{ \App\Models\SiteSetting::get('church_name', 'Igreja') }}
                 </h3>
@@ -105,7 +105,7 @@
             </div>
 
             {{-- Contato --}}
-            <div>
+            <div class="flex flex-col items-center">
                 <h3 class="font-semibold mb-2">Contato</h3>
                 <p class="text-sm">
                     {{ \App\Models\SiteSetting::get('email') }}
@@ -113,7 +113,7 @@
             </div>
 
             {{-- Redes sociais --}}
-            <div>
+            <div class="flex flex-col items-center">
                 <h3 class="font-semibold mb-2">Redes sociais</h3>
                 <div class="flex gap-4 text-sm">
                     @if ($instagram = \App\Models\SiteSetting::get('instagram'))
@@ -136,6 +136,10 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="text-center text-small text-gray-400 py-2">
+            Desenvolvido por : André Andrino
         </div>
 
         <div class="text-center text-xs text-gray-400 py-4 border-t border-gray-800">
