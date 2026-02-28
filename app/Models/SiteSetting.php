@@ -10,10 +10,12 @@ class SiteSetting extends Model
 
     public static function set($key, $value)
     {
-        return static::updateOrCreate(
+        $setting = static::updateOrCreate(
             ['key' => $key],
             ['value' => $value]
         );
+
+        // Limpa o cache após salvar
         cache()->forget("setting_{$key}");
 
         return $setting;
