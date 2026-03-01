@@ -52,7 +52,7 @@
                 </div>
                 <div class="mb-1">
                     <span class="title-detail-content">Igreja: </span>
-                    <span class="detail-content">{{ $user->member->church->name }}</span>
+                    <span class="detail-content">{{ $user->member?->church?->name ?? '-' }}</span>
                 </div>
                 <div class="mb-1">
                     <span class="title-detail-content">Status: </span>

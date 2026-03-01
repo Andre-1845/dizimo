@@ -1,7 +1,16 @@
 <aside id="sidebar" class="sidebar">
     <div class="sidebar-container">
         <div class="sidebar-header ">
-            <span class="sidebar-title">Dízimo</span>
+            <span class="sidebar-title">Menu</span>
+            <div class="flex justify-end lg:hidden p-2">
+                <button id="closeSidebar" class="text-white p-2 rounded hover:bg-blue-800 transition">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
         </div>
 
         <nav class="sidebar-nav">
@@ -209,4 +218,5 @@
             </a>
         </nav>
     </div>
+
 </aside>

@@ -11,29 +11,6 @@ window.Chart = Chart;
 window.Cropper = Cropper;
 
 /* =====================================================
-   DROPDOWN USUÁRIO
-===================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-    const dropdownButton = document.getElementById("userDropdownButton");
-    const dropdownContent = document.getElementById("dropdownContent");
-
-    if (dropdownButton && dropdownContent) {
-        dropdownButton.addEventListener("click", (e) => {
-            e.stopPropagation();
-            dropdownContent.classList.toggle("hidden");
-        });
-
-        window.addEventListener("click", (event) => {
-            if (
-                !dropdownButton.contains(event.target) &&
-                !dropdownContent.contains(event.target)
-            ) {
-                dropdownContent.classList.add("hidden");
-            }
-        });
-    }
-});
-/* =====================================================
    MENU DO SITE - VERSÃO SIMPLIFICADA
 ===================================================== */
 function initSiteMobileMenu() {
@@ -53,9 +30,6 @@ function initSiteMobileMenu() {
         "justify-center",
     );
     mobileMenu.classList.add("site-sidebar");
-
-    // Garantir que o conteúdo existente seja mantido
-    // mas com a estrutura correta
 
     // Criar overlay
     const overlay = document.createElement("div");
@@ -101,71 +75,46 @@ document.addEventListener("DOMContentLoaded", initSiteMobileMenu);
 ===================================================== */
 function initSidebar() {
     const toggleSidebar = document.getElementById("toggleSidebar");
+    const closeSidebar = document.getElementById("closeSidebar");
     const sidebar = document.getElementById("sidebar");
 
-    if (!toggleSidebar || !sidebar) {
-        console.warn(
-            "Sidebar: elementos não encontrados, tentando novamente...",
-        );
-        setTimeout(initSidebar, 500);
-        return;
-    }
+    if (!toggleSidebar || !sidebar) return;
 
-    console.log("Sidebar: elementos encontrados, configurando...");
-
-    const icons = {
-        open: `<svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16" />
-        </svg>`,
-        close: `<svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12" />
-        </svg>`,
-    };
-
-    // Garantir que comece com ícone de menu
-    toggleSidebar.innerHTML = icons.open;
-
-    // Remover eventos antigos (clonar e substituir)
-    const newToggle = toggleSidebar.cloneNode(true);
-    toggleSidebar.parentNode.replaceChild(newToggle, toggleSidebar);
-
-    newToggle.addEventListener("click", function (e) {
+    // Abrir
+    toggleSidebar.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
-
-        sidebar.classList.toggle("sidebar-expanded");
-        const isExpanded = sidebar.classList.contains("sidebar-expanded");
-        this.innerHTML = isExpanded ? icons.close : icons.open;
-
-        console.log("Sidebar toggled:", isExpanded);
+        sidebar.classList.add("sidebar-expanded");
     });
 
-    // Fechar ao clicar fora (mobile)
+    // Fechar pelo botão X
+    closeSidebar?.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        sidebar.classList.remove("sidebar-expanded");
+    });
+
+    // Fechar clicando fora (mobile)
     document.addEventListener("click", function (e) {
         if (window.innerWidth < 1024) {
-            const isClickInside =
-                sidebar.contains(e.target) || newToggle.contains(e.target);
-            const isExpanded = sidebar.classList.contains("sidebar-expanded");
-
-            if (!isClickInside && isExpanded) {
+            if (
+                !sidebar.contains(e.target) &&
+                !toggleSidebar.contains(e.target)
+            ) {
                 sidebar.classList.remove("sidebar-expanded");
-                newToggle.innerHTML = icons.open;
             }
         }
     });
 
-    // Fechar ao redimensionar para desktop
+    // Reset ao ir para desktop
     window.addEventListener("resize", function () {
         if (window.innerWidth >= 1024) {
             sidebar.classList.remove("sidebar-expanded");
-            newToggle.innerHTML = icons.open;
         }
     });
-
-    console.log("✅ Sidebar configurada com sucesso!");
 }
+
+document.addEventListener("DOMContentLoaded", initSidebar);
 
 // Inicializar
 if (document.readyState === "loading") {
@@ -174,6 +123,48 @@ if (document.readyState === "loading") {
     initSidebar();
 }
 window.addEventListener("load", initSidebar);
+
+/* =====================================================
+   NAVBAR DROPDOWNS
+===================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    const churchBtn = document.getElementById("churchDropdownButton");
+    const churchMenu = document.getElementById("churchDropdown");
+
+    const userBtn = document.getElementById("userDropdownButton");
+    const userMenu = document.getElementById("userDropdown");
+
+    function closeAll() {
+        churchMenu?.classList.add("hidden");
+        userMenu?.classList.add("hidden");
+    }
+
+    function toggle(menu) {
+        const isHidden = menu.classList.contains("hidden");
+        closeAll();
+        if (isHidden) menu.classList.remove("hidden");
+    }
+
+    churchBtn?.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggle(churchMenu);
+    });
+
+    userBtn?.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggle(userMenu);
+    });
+
+    document.addEventListener("click", closeAll);
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeAll();
+    });
+});
+/* NAV BAR CHURCH USER */
+
 /* =====================================================
    SWEETALERT – EXCLUSÃO
 ===================================================== */

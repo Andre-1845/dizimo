@@ -73,9 +73,9 @@
     }
 
     /* Navbar */
-    .navbar {
-        @apply bg-blue-900 border-b border-gray-200 px-4 py-2 sm:px-6 lg:px-8 relative z-[55];
-    }
+   .navbar {
+    @apply bg-blue-900 border-b border-gray-200 px-4 py-2 sm:px-6 lg:px-8 relative z-[40];
+}
 
     /* Botão de menu mobile */
     .menu-button {
@@ -84,12 +84,12 @@
 
     /* Container da Navbar */
     .navbar-container {
-        @apply flex justify-end items-center;
+        @apply flex items-center justify-between w-full;
     }
 
     /* Container do usuário */
     .user-container {
-        @apply ml-auto flex items-center space-x-4;
+        @apply flex items-center space-x-4;
     }
 
     /* Dropdown */
@@ -98,8 +98,8 @@
     }
 
     .dropdown-content {
-        @apply absolute right-0 z-50 mt-2 rounded-md shadow-lg bg-white w-48;
-    }
+    @apply absolute z-[200] bg-white rounded-md shadow-lg w-52;
+}
 
     .dropdown-item {
         @apply block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 focus:bg-gray-400 focus:outline-none;
@@ -109,6 +109,78 @@
     .dropdown-icon {
         @apply ml-2 h-4 w-4;
     }
+
+    /* ---------- */
+
+/* Melhorias para dropdowns mobile */
+@media (max-width: 640px) {
+    .user-container .relative {
+        position: static;
+    }
+
+    #dropdownContent,
+    #churchDropdown {
+        position: fixed !important;
+        top: 60px !important;
+        right: 10px !important;
+        left: auto !important;
+        width: 200px !important;
+        max-width: calc(100% - 20px) !important;
+        margin-top: 0 !important;
+        z-index: 100 !important;
+    }
+
+    #churchDropdown {
+        width: 240px !important;
+    }
+
+    /* Ajuste para telas muito pequenas */
+    @media (max-width: 380px) {
+        #dropdownContent,
+        #churchDropdown {
+            left: 10px !important;
+            right: 10px !important;
+            width: auto !important;
+        }
+    }
+}
+
+/* Melhorar área de clique do botão do usuário */
+.dropdown-button {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+    /* 44px é o tamanho mínimo recomendado para toque em mobile */
+}
+
+/* Ajuste para o ícone do usuário em mobile */
+.dropdown-button span.sm\:hidden svg {
+    @apply w-6 h-6;
+}
+
+/* Garantir que os dropdowns fiquem acima de tudo */
+#dropdownContent,
+#churchDropdown {
+    @apply z-[100] shadow-xl;
+}
+
+/* Estilo para o item ativo no dropdown da igreja */
+.church-option.active {
+    @apply bg-blue-50 text-blue-700 font-semibold;
+}
+
+/* Ajustar posição do dropdown do usuário */
+#dropdownContent {
+    @apply min-w-[180px];
+}
+
+/* Melhorar feedback visual dos botões */
+.menu-button,
+#churchDropdownButton,
+.dropdown-button {
+    @apply active:bg-blue-700 transition-colors;
+    -webkit-tap-highlight-color: transparent;
+}
+
+    /*-------------*/
     /****** Fim Navbar ******/
 
     /****** Início Sidebar ******/
@@ -294,7 +366,7 @@
             width: 280px;
             height: 100vh;
             background: #0f172a;
-            z-index: 1000;
+            z-index: 70;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             overflow-y: auto;
