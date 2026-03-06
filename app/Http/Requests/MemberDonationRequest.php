@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Member;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 
 class MemberDonationRequest extends FormRequest
 {
@@ -24,7 +26,7 @@ class MemberDonationRequest extends FormRequest
         return [
             'category_id'        => 'required|exists:categories,id',
             'payment_method_id' => 'required|exists:payment_methods,id',
-            'donation_date'     => 'required|date',
+            'donation_date'      => ['required', 'date', 'before_or_equal:today'],
             'amount'            => 'required|numeric|min:0.01',
             'notes'             => 'nullable|string',
             'receipt'           => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -42,5 +44,32 @@ class MemberDonationRequest extends FormRequest
             'receipt.mimes' => 'O comprovante deve ser PDF ou imagem.',
             'receipt.max' => 'O comprovante pode ter no máximo 2MB.',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+
+            $donationDate = $this->input('donation_date');
+
+            if (!$donationDate) {
+                return;
+            }
+
+            $member = auth()->user()?->member;
+
+            if (!$member) {
+                return;
+            }
+
+            $donationDate = Carbon::parse($donationDate);
+
+            if ($donationDate->lt($member->created_at->startOfDay())) {
+                $validator->errors()->add(
+                    'donation_date',
+                    'A data da colaboração não pode ser anterior ao cadastro do membro.'
+                );
+            }
+        });
     }
 }

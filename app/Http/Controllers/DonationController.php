@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationRequest;
@@ -13,9 +12,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Traits\Paginates;
 
 class DonationController extends Controller
 {
+    use Paginates;
+
     public function index(Request $request)
     {
 
@@ -92,7 +94,7 @@ class DonationController extends Controller
 
 
             ->orderByDesc('donation_date')
-            ->paginate(10)
+            ->paginate($this->perPage())
             ->withQueryString();
 
         $filters = [
@@ -313,7 +315,7 @@ class DonationController extends Controller
         $donations = Donation::where('is_confirmed', false)
             ->with(['member', 'category', 'paymentMethod'])
             ->orderBy('donation_date', 'asc')
-            ->paginate(15);
+            ->paginate($this->perPage());
 
         return view('donations.pending', compact('donations') + ['menu' => 'confirm']);
     }

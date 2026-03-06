@@ -108,7 +108,7 @@ class DonationPolicy
      */
     public function forceDelete(User $user, Donation $donation): bool
     {
-        return $user->hasRole('superadmin');
+        return $user->hasRole('superadmin', 'admin');
     }
 
     /**

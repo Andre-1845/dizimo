@@ -78,6 +78,11 @@ class Donation extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
+    public function scopeDizimo($query)
+    {
+        return $query->where('category_id', Category::dizimo()->id);
+    }
+
     public function getDisplayDonorAttribute(): string
     {
         if ($this->member) {

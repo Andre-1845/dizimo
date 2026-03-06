@@ -8,13 +8,16 @@ use App\Http\Requests\MemberDonationRequest;
 use App\Models\Category;
 use App\Models\Donation;
 use App\Models\PaymentMethod;
-use Illuminate\Http\Request; // Corrigir: usar Illuminate\Http\Request
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Traits\Paginates;
 
 class MemberDonationController extends Controller
 {
+    use Paginates;
+
     public function create()
     {
         $user = Auth::User();
@@ -102,7 +105,7 @@ class MemberDonationController extends Controller
     /**
      * Atualiza a doação
      */
-    public function update(Request $request, Donation $donation)
+    public function update(MemberDonationRequest $request, Donation $donation)
     {
         // Verifica se o membro é dono da doação
         if ($donation->member_id !== Auth::user()->member->id) {
@@ -114,14 +117,7 @@ class MemberDonationController extends Controller
             return back()->with('error', 'Colaborações confirmadas não podem ser editadas.');
         }
 
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'amount' => 'required|numeric|min:0.01',
-            'donation_date' => 'required|date',
-            'payment_method_id' => 'nullable|exists:payment_methods,id',
-            'receipt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'notes' => 'nullable|string|max:500',
-        ]);
+        $validated = $request->validated();
 
         // Atualiza o comprovante se foi enviado
         if ($request->hasFile('receipt')) {
