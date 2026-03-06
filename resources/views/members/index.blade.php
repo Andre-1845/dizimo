@@ -60,9 +60,10 @@
                             </td>
                             <td class="table-body text-right">{{ $member->monthly_tithe ?? '—' }}</td>
 
-                            <x-table-actions-icons :show="route('members.show', $member)" :edit="route('members.edit', $member)" :delete="route('members.destroy', $member)"
-                                can-show="members.view" can-edit="members.edit" can-delete="members.delete"
-                                confirm="Deseja excluir o membro * {{ $member->name }} * ?" />
+
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$member"
+                                :show="route('members.show', $member)" :edit="route('members.edit', $member)" :delete="route('members.destroy', $member)"
+                                confirm="Deseja excluir o membro * {{ $member->name }} * ?" :allow-delete="$member->id !== auth()->id()" />
                         </tr>
                     @empty
                         <tr>
@@ -75,7 +76,7 @@
             </table>
 
             <div class="mt-4">
-                {{ $members->links() }}
+                <x-table-pagination :paginator="$members" />
             </div>
         </div>
 

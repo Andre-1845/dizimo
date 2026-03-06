@@ -96,9 +96,8 @@
                                 @endif
                             </td> {{-- FIM Link do Recibo --}}
 
-                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :show="route('donations.show', $donation)"
-                                :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-show="donations.view" can-edit="donations.edit"
-                                can-delete="donations.delete" confirm="Deseja excluir esta receita/colaboração?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$donation"
+                                :show="route('donations.show', $donation)" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" />
                         </tr>
                     @empty
                         <tr>
@@ -111,7 +110,7 @@
             </table>
 
             <div class="mt-4">
-                {{ $donations->links() }}
+                <x-table-pagination :paginator="$donations" />
             </div>
         </div>
     </div> <!-- Content-Box FIM -->

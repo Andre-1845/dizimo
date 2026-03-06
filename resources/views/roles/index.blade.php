@@ -51,8 +51,9 @@
                             <td class="table-body table-cell-lg-hidden">{{ $role->created_at->format('d/m/Y') }}</td>
                             <td class="table-body table-cell-lg-hidden">{{ $role->updated_at->format('d/m/Y') }}</td>
 
-                            <x-table-actions-icons :show="route('roles.show', $role)" :edit="route('roles.edit', $role)" :delete="route('roles.destroy', $role)"
-                                confirm="Deseja excluir este papel?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$role"
+                                :show="route('roles.show', $role)" :edit="route('roles.edit', $role)" :delete="route('roles.destroy', $role)"
+                                confirm="Deseja excluir o papel * {{ $role->name }} * ?" />
 
                         </tr>
                     @empty

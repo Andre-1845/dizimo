@@ -58,11 +58,12 @@
                             <td class="table-body table-cell-lg-hidden">{{ $user->getRoleNames()->implode(', ') ?: '-' }}
                             </td>
 
-                            <x-table-actions-icons :show="route('users.show', $user)" :edit="route('users.edit', $user)" :delete="$user->id !== auth()->id() ? route('users.destroy', $user) : null"
-                                can-show="users.view" can-edit="users.edit" :can-delete="$user->id !== auth()->id() ? 'users.delete' : null"
-                                confirm="Deseja excluir o usuário * {{ $user->name }} * ?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$user"
+                                :show="route('users.show', $user)" :edit="route('users.edit', $user)" :delete="route('users.destroy', $user)"
+                                confirm="Deseja excluir o usuário * {{ $user->name }} * ?" :allow-delete="$user->id !== auth()->id()" />
 
                         </tr>
+
                     @empty
                         <span class="alert-warning">Não existem usuários cadastrados.</span>
                     @endforelse
@@ -71,5 +72,5 @@
         </div>
     </div> <!-- FIM Content-Box  -->
 
-    {{ $users->links() }}
+    <x-table-pagination :paginator="$users" />
 @endsection

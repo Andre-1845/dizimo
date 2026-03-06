@@ -93,9 +93,8 @@
                                     —
                                 @endif
                             </td> {{-- FIM Link do Recibo --}}
-                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :show="route('expenses.show', $expense)"
-                                :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)" can-show="expenses.view" can-edit="expenses.edit"
-                                can-delete="expenses.delete" confirm="Deseja excluir esta despesa?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$expense"
+                                :show="route('expenses.show', $expense)" :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)" />
 
                         </tr>
                     @empty
@@ -109,7 +108,7 @@
             </table>
 
             <div class="mt-4">
-                {{ $expenses->links() }}
+                <x-table-pagination :paginator="$expenses" />
             </div>
         </div>
 

@@ -6,31 +6,24 @@
 
     <div class="content-box"> <!-- Content-Box  -->
 
-        {{-- <div style="background: #e3f2fd; padding: 15px; margin: 15px 0; border-radius: 5px;">
-            <h4>🔍 Diagnóstico de Permissões:</h4>
-            <p>Usuário: {{ Auth::user()->name }}</p>
-            <p>Pode ver categorias? {{ Auth::user()->can('categories.view') ? '✅ SIM' : '❌ NÃO' }}</p>
-            <p>Pode editar categorias? {{ Auth::user()->can('categories.edit') ? '✅ SIM' : '❌ NÃO' }}</p>
-            <p>Pode excluir categorias? {{ Auth::user()->can('categories.delete') ? '✅ SIM' : '❌ NÃO' }}</p>
-            <p>É superadmin? {{ Auth::user()->hasRole('superadmin') ? '✅ SIM' : '❌ NÃO' }}</p>
-        </div> --}}
-
         <div class="content-box-header">
             <h3 class="content-box-title">Listar</h3>
 
             <!-- Botoes (com icones)  -->
             <div class="content-box-btn">
 
-                <!-- Botao NOVA DOACAO (com icone)  -->
+                <!-- Botao NOVA CATEGORIA (com icone)  -->
                 <div class="content-box-btn">
-                    <a href="{{ route('categories.create') }}" class="btn-success flex items-center space-x-1"
-                        title="Cadastrar">
-                        @include('components.icons.plus')
+                    @can('categories.create')
+                        <a href="{{ route('categories.create') }}" class="btn-success flex items-center space-x-1"
+                            title="Cadastrar">
+                            @include('components.icons.plus')
 
-                        <span>Nova Categoria</span>
-                    </a>
+                            <span>Nova Categoria</span>
+                        </a>
+                    @endcan
                 </div>
-                <!--FIM  Botao NOVA DOACAO (com icone)  -->
+                <!--FIM  Botao NOVA CATEGORIA (com icone)  -->
 
             </div>
             <!-- Botoes (com icones)  -->
@@ -54,7 +47,15 @@
                 <tbody>
                     @forelse ($categories as $category)
                         <tr class="table-row-body">
-                            <td class="table-body">{{ $category->name ?? '—' }}</td>
+                            <td class="table-body">
+                                {{ $category->name ?? '—' }}
+                                @if ($category->is_used)
+                                    <span
+                                        class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-200 text-blue-500">
+                                        Em uso
+                                    </span>
+                                @endif
+                            </td>
 
                             <td class="table-body text-center">
                                 <span
@@ -68,11 +69,10 @@
                                 {{ \Carbon\Carbon::parse($category->created_at)->format('d/m/Y') }}
                             </td>
 
-                            <x-table-actions-icons :show="route('categories.show', $category)" :edit="route('categories.edit', $category)" :delete="route('categories.destroy', $category)"
-                                confirm="Deseja excluir esta categoria?" canShow="categories.view" canEdit="categories.edit"
-                                canDelete="categories.delete" />
-                        </tr>
-                    @empty
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$category"
+                                :show="route('categories.show', $category)" :edit="route('categories.edit', $category)" :delete="route('categories.destroy', $category)"
+                                confirm="Deseja excluir o registro * {{ $category->name }} * ?" />
+                        @empty
                         <tr>
                             <td colspan="5" class="py-4 text-center text-gray-600">
                                 Nenhuma categoria registrada.

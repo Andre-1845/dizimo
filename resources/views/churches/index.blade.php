@@ -55,8 +55,9 @@
                                 {{ $church->members_total }}
                             </td>
 
-                            <x-table-actions-icons :show="route('churches.show', $church)" :edit="route('churches.edit', $church)" :delete="route('churches.destroy', $church)" :can-delete="'settings.access'"
-                                confirm="Deseja excluir a igreja * {{ $church->name }} * ?" />
+                            <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$church"
+                                :show="route('churches.show', $church)" :edit="route('churches.edit', $church)" :delete="route('churches.destroy', $church)"
+                                confirm="Deseja excluir o registro * {{ $church->name }} * ?" />
 
                         </tr>
                     @empty
@@ -70,7 +71,7 @@
             </table>
 
             <div class="mt-4">
-                {{ $churches->links() }}
+                <x-table-pagination :paginator="$churches" />
             </div>
 
         </div>
