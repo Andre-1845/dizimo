@@ -52,7 +52,7 @@
         </table>
 
         <div class="mt-4">
-            {{ $members->links() }}
+            <x-table-pagination :paginator="$members" />
         </div>
 
     </div>

@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Donation;
 use App\Models\Category;
 use App\Models\Church;
+use Carbon\Carbon;
 
 class DizimoDashboardController extends Controller
 {
@@ -14,20 +15,36 @@ class DizimoDashboardController extends Controller
     {
         $church = Church::find(session('view_church_id'));
 
-        /* =====================
-     |  CONTADORES
-     ===================== */
-
-        $membersCount = Member::count();
-        $membersActiveCount = Member::active()->count();
-
-        $membersInactiveCount = ($membersCount - $membersActiveCount);
 
         // ===============================
         // 1. Filtros
         // ===============================
         $year  = (int) $request->get('year', now()->year);
-        $month = (int) $request->get('month', now()->month);
+        $month = $request->get('month', now()->month);
+
+        if ($month) {
+            $referenceDate = Carbon::create($year, $month, 1)->endOfMonth();
+        } else {
+            $referenceDate = Carbon::create($year, 12, 31);
+        }
+
+        $eligibleMembers = Member::active()
+            ->existingUntil($referenceDate);
+
+
+        /* =====================
+     |  CONTADORES
+     ===================== */
+
+        $validMembers = Member::existingUntil($referenceDate);
+
+        $membersCount = (clone $validMembers)->count();
+
+        $membersActiveCount = (clone $validMembers)
+            ->active()
+            ->count();
+
+        $membersInactiveCount = ($membersCount - $membersActiveCount);
 
         // ===============================
         // 2. Categoria DÍZIMO
@@ -37,7 +54,7 @@ class DizimoDashboardController extends Controller
         // ===============================
         // 3. Total PREVISTO (membros ativos)
         // ===============================
-        $totalExpected = Member::where('active', true)
+        $totalExpected = (clone $eligibleMembers)
             ->sum('monthly_tithe');
 
         // ===============================
@@ -91,7 +108,7 @@ class DizimoDashboardController extends Controller
             ->count();
 
         // Membros pendentes
-        $membersPendingCount = Member::where('active', true)
+        $membersPendingCount = (clone $eligibleMembers)
             ->whereDoesntHave('donations', function ($q) use ($year, $month, $dizimoCategory) {
                 $q->where('category_id', $dizimoCategory->id)
                     ->whereYear('donation_date', $year)
@@ -99,7 +116,7 @@ class DizimoDashboardController extends Controller
             })
             ->count();
 
-        $membersPendingTotal = Member::where('active', true)
+        $membersPendingTotal = (clone $eligibleMembers)
             ->whereDoesntHave('donations', function ($q) use ($year, $month, $dizimoCategory) {
                 $q->where('category_id', $dizimoCategory->id)
                     ->whereYear('donation_date', $year)

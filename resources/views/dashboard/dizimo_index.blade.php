@@ -78,7 +78,7 @@
             <p class="text-lg font-semibold mt-1">
                 R$ {{ money($membersPaidTotal) }}
             </p>
-            <p class="text-gray-500 text-sm">Doações não confirmadas: {{ $donationsNotConfirmed }}</p>
+            <p class="text-gray-500 text-sm">Colaborações não confirmadas: {{ $donationsNotConfirmed }}</p>
 
             <a href="{{ route('reports.dizimos.paid', request()->query()) }}"
                 class="btn-success mt-4 inline-flex items-center justify-center">
@@ -88,7 +88,7 @@
 
         {{-- PENDENTES --}}
         <div class="bg-red-100 rounded border shadow p-5">
-            <p class="text-gray-500 text-sm">Doações Pendentes</p>
+            <p class="text-gray-500 text-sm">Colaborações Pendentes</p>
             <p class="text-3xl font-bold text-red-600">{{ $membersPendingCount }}</p>
             <p class="text-lg font-semibold mt-1">
                 R$ {{ money($membersPendingTotal) }}

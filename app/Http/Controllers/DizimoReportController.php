@@ -9,10 +9,14 @@ use App\Models\Category;
 use App\Models\Church;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use App\Models\Traits\Paginates;
 
 
 class DizimoReportController extends Controller
 {
+    use Paginates;
+
     private function currentChurch()
     {
         return Church::find(session('view_church_id'));
@@ -35,55 +39,159 @@ class DizimoReportController extends Controller
     // =========================================
     // 1. MEMBROS QUE PAGARAM
     // =========================================
+    // public function paid(Request $request)
+    // {
+    //     $filters = $this->filtros($request);
+    //     $category = $this->dizimoCategory();
+
+    //     $members = Member::whereHas('donations', function ($q) use ($filters, $category) {
+    //         $q->where('category_id', $category->id)
+    //             ->whereYear('donation_date', $filters['year'])
+    //             ->whereMonth('donation_date', $filters['month']);
+    //     })
+    //         ->with(['donations' => function ($q) use ($filters, $category) {
+    //             $q->where('category_id', $category->id)
+    //                 ->whereYear('donation_date', $filters['year'])
+    //                 ->whereMonth('donation_date', $filters['month'])
+    //                 ->orderBy('donation_date', 'desc');
+    //         }])
+    //         ->orderBy('name')
+    //         ->paginate($filters['perPage'])
+    //         ->withQueryString();
+
+    //     $membersAll = Member::whereHas('donations', function ($q) use ($filters, $category) {
+    //         $q->where('category_id', $category->id)
+    //             ->whereYear('donation_date', $filters['year'])
+    //             ->whereMonth('donation_date', $filters['month']);
+    //     })
+    //         ->with(['donations' => function ($q) use ($filters, $category) {
+    //             $q->where('category_id', $category->id)
+    //                 ->whereYear('donation_date', $filters['year'])
+    //                 ->whereMonth('donation_date', $filters['month']);
+    //         }])
+    //         ->get();
+
+    //     $totalDoado = $membersAll
+    //         ->sum(fn($member) => $member->donations->sum('amount'));
+
+    //     $totalPrevisto = $membersAll
+    //         ->sum('monthly_tithe');
+
+
+
+    //     return view('dashboard.reports.dizimo_paid', [
+    //         'menu' => 'dashboard-dizimo',
+    //         'members' => $members,
+    //         'filters' => $filters,
+    //         'totalDoado' =>  $totalDoado,
+    //         'totalPrevisto' => $totalPrevisto,
+    //         'church' => $this->currentChurch(),
+    //     ]);
+    // }
+
+    // public function paid(Request $request)
+    // {
+    //     $filters = $this->filtros($request);
+    //     $category = $this->dizimoCategory();
+    //     $church = $this->currentChurch();
+
+    //     $donations = Donation::with('member')
+    //         ->where('category_id', $category->id)
+    //         ->whereYear('donation_date', $filters['year'])
+    //         ->whereMonth('donation_date', $filters['month'])
+    //         ->orderBy('donation_date', 'desc')
+    //         ->paginate($filters['perPage'])
+    //         ->withQueryString();
+
+    //     /*
+    // Agrupar doações por membro (ou donor_name)
+    // */
+    //     $members = $donations->getCollection()
+    //         ->groupBy(function ($d) {
+    //             return $d->member_id ?? $d->donor_name;
+    //         })
+    //         ->map(function ($donations) {
+
+    //             $first = $donations->first();
+
+    //             $total = $donations->sum('amount');
+
+    //             return (object)[
+    //                 'name' => $first->member->name ?? $first->donor_name,
+    //                 'member' => $first->member,
+    //                 'donations' => $donations ?? collect(),
+    //                 'total_amount' => $total,
+    //                 'monthly_tithe' => $first->member->monthly_tithe ?? 0
+    //             ];
+    //         })
+    //         ->values();
+
     public function paid(Request $request)
     {
         $filters = $this->filtros($request);
         $category = $this->dizimoCategory();
+        $church = $this->currentChurch();
+        $category = Category::dizimo();
 
-        $members = Member::whereHas('donations', function ($q) use ($filters, $category) {
-            $q->where('category_id', $category->id)
-                ->whereYear('donation_date', $filters['year'])
-                ->whereMonth('donation_date', $filters['month']);
-        })
-            ->with(['donations' => function ($q) use ($filters, $category) {
-                $q->where('category_id', $category->id)
-                    ->whereYear('donation_date', $filters['year'])
-                    ->whereMonth('donation_date', $filters['month'])
-                    ->orderBy('donation_date', 'desc');
-            }])
-            ->orderBy('name')
-            ->paginate($filters['perPage'])
-            ->withQueryString();
-
-        $membersAll = Member::whereHas('donations', function ($q) use ($filters, $category) {
-            $q->where('category_id', $category->id)
-                ->whereYear('donation_date', $filters['year'])
-                ->whereMonth('donation_date', $filters['month']);
-        })
-            ->with(['donations' => function ($q) use ($filters, $category) {
-                $q->where('category_id', $category->id)
-                    ->whereYear('donation_date', $filters['year'])
-                    ->whereMonth('donation_date', $filters['month']);
-            }])
+        $donations = Donation::with('member')
+            ->where('category_id', $category->id)
+            ->whereYear('donation_date', $filters['year'])
+            ->whereMonth('donation_date', $filters['month'])
+            ->orderBy('donation_date', 'desc')
             ->get();
 
-        $totalDoado = $membersAll
-            ->sum(fn($member) => $member->donations->sum('amount'));
+        $members = $donations
+            ->groupBy(function ($d) {
+                return $d->member_id ?? $d->donor_name;
+            })
+            ->map(function ($donations) {
 
-        $totalPrevisto = $membersAll
-            ->sum('monthly_tithe');
+                $first = $donations->first();
 
+                return (object)[
+                    'name' => $first->member->name ?? $first->donor_name,
+                    'member' => $first->member,
+                    'donations' => $donations,
+                    'monthly_tithe' => $first->member->monthly_tithe ?? 0
+                ];
+            })
+            ->values();
 
+        /*
+    paginação manual
+    */
+        $perPage = $filters['perPage'];
+        $page = request()->get('page', 1);
+
+        $members = new \Illuminate\Pagination\LengthAwarePaginator(
+            $members->forPage($page, $perPage),
+            $members->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+        $members->withQueryString();
+
+        /*
+    Totais
+    */
+        $totalDoado = $donations->sum('amount');
+
+        $totalPrevisto = Member::eligibleForTithe(
+            Carbon::create($filters['year'], $filters['month'], 1)->endOfMonth()
+        )->sum('monthly_tithe');
 
         return view('dashboard.reports.dizimo_paid', [
             'menu' => 'dashboard-dizimo',
             'members' => $members,
             'filters' => $filters,
-            'totalDoado' =>  $totalDoado,
+            'totalDoado' => $totalDoado,
             'totalPrevisto' => $totalPrevisto,
-            'church' => $this->currentChurch(),
+            'church' => $church,
         ]);
     }
+
+
 
     public function exportPaidCsv(Request $request): StreamedResponse
     {
@@ -118,11 +226,6 @@ class DizimoReportController extends Controller
             fputcsv($handle, ['Membro', 'Datas das Doações', 'Valor'], ';');
 
             foreach ($members as $member) {
-                // fputcsv($handle, [
-                //     $member->name,
-                //     number_format($member->donations->sum('amount'), 2, '.', '')
-                // ]);
-
 
                 $dates = $member->donations
                     ->pluck('donation_date')
@@ -187,7 +290,10 @@ class DizimoReportController extends Controller
         $filters = $this->filtros($request);
         $category = $this->dizimoCategory();
 
+        $referenceDate = Carbon::create($filters['year'], $filters['month'], 1)->endOfMonth();
+
         $members = Member::where('active', true)
+            ->existingUntil($referenceDate)
             ->whereDoesntHave('donations', function ($q) use ($filters, $category) {
                 $q->where('category_id', $category->id)
                     ->whereYear('donation_date', $filters['year'])
@@ -212,7 +318,10 @@ class DizimoReportController extends Controller
 
         $category = Category::where('name', 'Dízimo')->firstOrFail();
 
+        $referenceDate = Carbon::create($year, $month, 1)->endOfMonth();
+
         $members = Member::where('active', true)
+            ->existingUntil($referenceDate)
             ->whereDoesntHave('donations', function ($q) use ($category, $year, $month) {
                 $q->where('category_id', $category->id)
                     ->whereYear('donation_date', $year)
@@ -251,7 +360,10 @@ class DizimoReportController extends Controller
         $year  = (int) $request->get('year', now()->year);
         $month = (int) $request->get('month', now()->month);
 
-        $members = Member::where('active', true)
+        $referenceDate = Carbon::create($year, $month, 1)->endOfMonth();
+
+        $members = Member::active()
+            ->existingUntil($referenceDate)
             ->whereDoesntHave('donations', function ($q) use ($year, $month) {
                 $q->whereYear('donation_date', $year)
                     ->whereMonth('donation_date', $month);

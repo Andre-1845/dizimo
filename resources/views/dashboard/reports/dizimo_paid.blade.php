@@ -39,33 +39,49 @@
             <tbody>
                 @forelse ($members as $member)
                     <tr class="border-b last:border-0">
-                        <td class="text-center"> {{ $members->firstItem() + $loop->index }}</td>
-                        <td class="py-2">{{ $member->name }}
-                            @if (!$member->active)
-                                <span class="text-xs text-red-600"> (Inativo)</span>
+                        <td class="text-center"> {{ $loop->iteration }}</td>
+                        <td class="py-2">
+
+                            {{ $member->name }}
+
+                            @if ($member->member && !$member->member->active)
+                                <span class="text-xs text-red-600">(Inativo)</span>
+                            @endif
+
+                            @if ($member->member && $member->member->church_id != $church->id)
+                                <span class="text-xs text-orange-600">(transferido)</span>
+                            @endif
+
+                            @if (!$member->member)
+                                <span class="text-xs text-gray-500">(histórico)</span>
                             @endif
 
                         </td>
                         <td class="py-2 text-center">
-                            @foreach ($member->donations as $donation)
+                            @foreach ($member->donations ?? [] as $donation)
                                 <div>
                                     {{ $donation->donation_date->format('d/m/Y') }}
                                 </div>
                             @endforeach
                         </td>
-                        </td>
+
+                        @php
+                            $confirmed = collect($member->donations)->every(fn($d) => $d->is_confirmed);
+                        @endphp
+
                         <td @class([
-                            'text-right font-semibold',
-                            'text-green-600' => $member->has_all_donations_confirmed,
-                            'text-orange-500' => !$member->has_all_donations_confirmed,
-                        ])
-                            title="{{ $member->has_all_donations_confirmed ? 'Confirmada' : 'Aguardando validação' }}">
-                            R$ {{ money($member->donations->sum('amount')) }}
+                            'py-2 text-right font-semibold',
+                            'text-green-600' => $confirmed,
+                            'text-orange-500' => !$confirmed,
+                        ]) title="{{ $confirmed ? 'Confirmada' : 'Aguardando validação' }}">
+
+                            {{-- R$ {{ money($member->donations->sum('amount')) }} --}}
+                            R$ {{ money(collect($member->donations)->sum('amount')) }}
+
                         </td>
 
                         <td class="py-2 text-right">
-                            R$
-                            {{ money($member->monthly_tithe) }}
+                            R$ {{ money($member->monthly_tithe) }}
                         </td>
 
                     </tr>
@@ -96,7 +112,7 @@
         </table>
 
         <div class="mt-4">
-            {{ $members->links() }}
+            <x-table-pagination :paginator="$members" />
         </div>
 
     </div>

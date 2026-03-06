@@ -58,7 +58,7 @@
         </table>
 
         <div class="mt-4">
-            {{ $donations->links() }}
+            <x-table-pagination :paginator="$donations" />
         </div>
 
     </div>
