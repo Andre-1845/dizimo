@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Donation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Traits\Paginates;
 
 class MemberDashboardController extends Controller
 {
+    use Paginates;
+
     public function index(Request $request)
     {
         $user   = Auth::user();
@@ -36,7 +39,7 @@ class MemberDashboardController extends Controller
 
         $donations = $query
             ->orderByDesc('donation_date')
-            ->paginate(10)
+            ->paginate($this->perPage())
             ->withQueryString();
 
         // Total doado no período

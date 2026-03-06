@@ -9,9 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\MemberUserService;
+use Carbon\Carbon;
+use App\Models\Traits\Paginates;
 
 class MemberController extends Controller
 {
+    use Paginates;
     /**
      * Display a listing of the resource.
      */
@@ -59,7 +62,7 @@ class MemberController extends Controller
             )
 
             ->orderBy('name')
-            ->paginate(10)
+            ->paginate($this->perPage())
             ->withQueryString();
 
         /**
@@ -143,8 +146,11 @@ class MemberController extends Controller
             'church_id'     => 'required|exists:churches,id',
         ])->validate();
 
-
-        Member::create($validated);
+        Member::create([
+            ...$validated,
+            'inactivated_at' => $validated['active'] ? null : now(),
+        ]);
+        // Member::create($validated);
 
 
         return redirect()
@@ -212,13 +218,18 @@ class MemberController extends Controller
         DB::transaction(function () use ($member, $validated, $memberUserService) {
 
             // Atualiza MEMBER
+
+            $isActive = $validated['active'] ?? false;
+
             $member->update([
                 'name'          => $validated['name'],
                 'phone'         => $validated['phone'] ?? null,
                 'monthly_tithe' => $validated['monthly_tithe'],
-                'active'        => $validated['active'] ?? false,
+                'active'        => $isActive,
                 'church_id'     => $validated['church_id'],
+                'inactivated_at' => $isActive ? null : now(),
             ]);
+
 
             // 🔑 Cria USER se necessário + envia e-mail
             $memberUserService->createUserIfNeeded(
@@ -250,5 +261,18 @@ class MemberController extends Controller
         return redirect()
             ->route('members.index')
             ->with('success', 'Membro removido com sucesso.');
+    }
+
+    public function pendingTithes(Member $member)
+    {
+        $this->authorize('view', $member);
+
+        $months = $member->pendingTithes();
+
+        return view('members.pending_tithes', [
+            'member' => $member,
+            'months' => $months,
+            'menu' => 'members',
+        ]);
     }
 }

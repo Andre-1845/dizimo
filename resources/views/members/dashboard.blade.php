@@ -149,9 +149,9 @@
                                 @endif
                             </div>
                         </td>
-                        <x-table-actions-icons :show="route('member.donations.show', $donation)" :edit="!$donation->is_confirmed ? route('member.donations.edit', $donation) : null" :delete="route('member.donations.destroy', $donation)"
-                            can-show="donations.view" can-edit="donations.edit" can-delete="member.donations.delete"
-                            confirm="Deseja excluir esta colaboração?" />
+
+                        <x-table-actions-icons class="table-body table-cell-lg-hidden" :model="$donation" :show="route('member.donations.show', $donation)"
+                            :edit="!$donation->is_confirmed ? route('member.donations.edit', $donation) : null" :delete="!$donation->is_confirmed ? route('member.donations.destroy', $donation) : null" confirm="Deseja excluir esta colaboração?" />
                     </tr>
                 @empty
                     <tr>
@@ -164,7 +164,7 @@
         </table>
 
         <div class="mt-4">
-            {{ $donations->links() }}
+            <x-table-pagination :paginator="$donations" />
         </div>
     </div>
 
