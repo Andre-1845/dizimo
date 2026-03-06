@@ -344,6 +344,11 @@ Route::middleware(['auth', 'verified', 'user.status'])->group(function () {
         Route::resource('members', MemberController::class);
     });
 
+    Route::get(
+        '/members/{member}/pending-tithes',
+        [MemberController::class, 'pendingTithes']
+    )->name('members.pending.tithes');
+
     /*
     | Cadastros - Categorias
     */

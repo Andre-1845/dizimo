@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Church;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Traits\Paginates;
 
 class ChurchController extends Controller
 {
+    use Paginates;
+
     public function index()
     {
         $this->authorize('viewAny', Church::class);
@@ -16,7 +19,9 @@ class ChurchController extends Controller
             'members as members_total' => function ($query) {
                 $query->withoutGlobalScope('church');
             }
-        ])->orderBy('name')->paginate(10);
+        ])
+            ->orderBy('name')
+            ->paginate($this->perPage());
 
         return view('churches.index', compact('churches') + [
             'menu' => 'churches'

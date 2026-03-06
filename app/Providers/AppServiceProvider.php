@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Church;
+use App\Models\Donation;
+use App\Observers\DonationObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+
+        Donation::observe(DonationObserver::class);
 
         config([
             'app.name' => SiteSetting::get(

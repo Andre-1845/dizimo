@@ -12,9 +12,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Traits\Paginates;
 
 class ExpenseController extends Controller
 {
+    use Paginates;
 
     public function index(Request $request)
     {
@@ -64,7 +66,7 @@ class ExpenseController extends Controller
             )
 
             ->orderByDesc('expense_date')
-            ->paginate(10)
+            ->paginate($this->perPage())
             ->withQueryString();
 
         $filters = [

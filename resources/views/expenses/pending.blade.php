@@ -81,8 +81,7 @@
     </div>
 
     <div class="mt-4">
-        {{ $expenses->links() }}
-
+        <x-table-pagination :paginator="$expenses" />
     </div>
 
     </div> <!-- FIM Content-Box  -->

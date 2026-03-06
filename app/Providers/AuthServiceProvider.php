@@ -7,7 +7,7 @@ namespace App\Providers;
 use App\Models\Donation;
 use App\Models\Expense;
 use App\Models\Member;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Models\SiteActivity;
 use App\Models\SiteEvent;
 use App\Models\SiteImage;

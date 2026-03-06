@@ -52,6 +52,18 @@
                     <input type="email" name="email" id="email" value="{{ old('email') }}" class="form-input"
                         placeholder="E-mail">
                 </div>
+
+                <div>
+                    <label class="form-label">Igreja</label>
+                    <select name="church_id" class="form-input">
+                        @foreach ($churches as $church)
+                            <option value="{{ $church->id }}">
+                                {{ $church->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
                 @can('manage-roles')
                     <div class="mb-4">
                         <label for="papeis" class="form-label">Papel: </label>

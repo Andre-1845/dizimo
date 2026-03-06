@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Church;
 use App\Models\Member;
 use App\Models\Status;
 use App\Models\User;
@@ -16,9 +17,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
+use App\Models\Traits\Paginates;
 
 class UserController extends Controller
 {
+    use Paginates;
 
     public function __construct()
     {
@@ -50,7 +53,7 @@ class UserController extends Controller
                 fn($q) => $q->role($request->role)
             )
             ->orderBy('name')
-            ->paginate(10)
+            ->paginate($this->perPage())
             ->withQueryString();
 
         return view('users.index', [
@@ -64,8 +67,13 @@ class UserController extends Controller
     {
         // Recuperar os papeis do BD
         $roles = Role::pluck('name')->all();
+        $churches = Church::all();
         // Carregar a VIEW
-        return view('users.create', ['roles' => $roles, 'menu' => 'users']);
+        return view('users.create', [
+            'roles' => $roles,
+            'menu' => 'users',
+            'churches' => $churches,
+        ]);
     }
 
     public function store(UserRequest $request)
@@ -90,6 +98,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'name'    => $user->name,
                 'active'  => true,
+                'church_id' => $request->church_id,
             ]);
 
             $user->sendEmailVerificationNotification();

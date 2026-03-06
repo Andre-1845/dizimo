@@ -57,4 +57,60 @@ class RolePolicy
         // ✅ Verifica permissão específica
         return $user->can('permissions.manage');
     }
+
+    /**
+     * Listar papéis
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->can('roles.view');
+    }
+
+    /**
+     * Visualizar papel
+     */
+    public function view(User $user, Role $role): bool
+    {
+        if ($user->hasRole('superadmin')) {
+            return true;
+        }
+
+        if ($role->name === 'superadmin') {
+            return false;
+        }
+
+        return $user->can('roles.view');
+    }
+
+    /**
+     * Editar papel
+     */
+    public function update(User $user, Role $role): bool
+    {
+        if ($user->hasRole('superadmin')) {
+            return true;
+        }
+
+        if ($role->name === 'superadmin') {
+            return false;
+        }
+
+        return $user->can('roles.edit');
+    }
+
+    /**
+     * Excluir papel
+     */
+    public function delete(User $user, Role $role): bool
+    {
+        if ($user->hasRole('superadmin')) {
+            return true;
+        }
+
+        if ($role->name === 'superadmin') {
+            return false;
+        }
+
+        return $user->can('roles.delete');
+    }
 }

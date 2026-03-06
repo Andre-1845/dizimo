@@ -14,6 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::orderBy('type', 'ASC')
+            ->withCount(['donations', 'expenses'])
             ->orderBy('type', 'DESC')
             ->orderBy('name', 'ASC')
             ->paginate(20);

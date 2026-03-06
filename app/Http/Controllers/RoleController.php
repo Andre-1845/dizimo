@@ -14,6 +14,8 @@ class RoleController extends Controller
     //
     public function index()
     {
+        $this->authorize('viewAny', Role::class);
+
         $roles = Role::where('name', '!=', 'superadmin')
             ->orderBy('name', 'ASC')
             ->paginate(10);
@@ -23,11 +25,14 @@ class RoleController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Role::class);
+
         return view('roles.create', ['menu' => 'roles']);
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Role::class);
         try {
 
             $role = Role::create([
@@ -57,17 +62,21 @@ class RoleController extends Controller
 
     public function show(Role $role)
     {
+        $this->authorize('view', $role);
+
         return view('roles.show', ['menu' => 'roles', 'role' => $role]);
     }
 
     public function edit(Role $role)
     {
+        $this->authorize('update', $role);
 
         return view('roles.edit', ['menu' => 'roles', 'role' => $role]);
     }
 
     public function update(Request $request, Role $role)
     {
+        $this->authorize('update', $role);
         //
         $role->update([
             'name' => $request->name,
@@ -82,6 +91,11 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
+        $this->authorize('delete', $role);
+
+        if ($role->users()->exists()) {
+            return back()->with('error', 'Este papel possui usuários vinculados.');
+        }
         //
         $role->delete();
         return redirect()->route('roles.index', ['menu' => 'roles'])->with('success', 'Papael apagado!');

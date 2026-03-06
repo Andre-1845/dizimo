@@ -188,7 +188,7 @@
 
 
             @can('setting.access')
-                <a @class(['sidebar-link', 'active' => $menu === 'roles']) href="{{ route('churches.index') }}">
+                <a @class(['sidebar-link', 'active' => $menu === 'churches']) href="{{ route('churches.index') }}">
                     <span class="sidebar-icon">@include('components.icons.church')</span>
                     <span class="sidebar-text">Igrejas</span>
                 </a>
