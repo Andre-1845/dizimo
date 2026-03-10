@@ -15,11 +15,21 @@
     <div class="content-box"> <!-- Content-Box  -->
         <div class="content-box-header">
             <h3 class="content-box-title">Detalhes da Receita</h3>
+            <div class="content-box-btn">
+                <!-- Botoes (com icones)  -->
 
-            <!-- Botoes (com icones)  -->
-            <x-action-buttons :list="route('donations.index')" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-list="donations-view"
-                can-edit="donations.edit" can-delete="donations.delete" delete-confirm="Deseja excluir esta doação ?" />
-            <!-- Botoes (com icones)  -->
+                <div class="mx-3">
+                    <a href="{{ route('donations.pending') }}" class="btn-success align-icon-btn" title="Confirmar">
+
+                        @include('components.icons.plus')
+                        <span>Confirmar</span>
+
+                    </a>
+                </div>
+                <x-action-buttons :list="route('donations.index')" :edit="route('donations.edit', $donation)" :delete="route('donations.destroy', $donation)" can-list="donations-view"
+                    can-edit="donations.edit" can-delete="donations.delete" delete-confirm="Deseja excluir esta doação ?" />
+                <!-- Botoes (com icones)  -->
+            </div>
 
         </div>
 

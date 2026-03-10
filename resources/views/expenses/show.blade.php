@@ -20,11 +20,22 @@
             <!-- Botoes (com icones)  -->
 
             <div class="content-box-btn">
+
+                <div class="mx-3">
+                    <a href="{{ route('expenses.pending') }}" class="btn-success align-icon-btn" title="Confirmar">
+
+                        @include('components.icons.plus')
+                        <span>Confirmar</span>
+
+                    </a>
+                </div>
+
                 <x-action-buttons :list="route('expenses.index')" :edit="route('expenses.edit', $expense)" :delete="route('expenses.destroy', $expense)" can-list="expenses.view"
                     can-edit="expenses.edit" can-delete="expenses.delete"
                     delete-confirm="Tem certeza que deseja excluir esta despesa?" />
+
+                <!-- Botoes (com icones)  -->
             </div>
-            <!-- Botoes (com icones)  -->
         </div>
 
 
@@ -91,7 +102,8 @@
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Criado em:</span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y H:i:s') }}</span>
+                <span
+                    class="detail-content">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y H:i:s') }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Modificado em: </span>
