@@ -19,6 +19,12 @@
         <!-- Botoes (com icones)  -->
         <div class="content-box-btn">
 
+            <a href="{{ route('members.pending.tithes', auth()->user()->member->id) }}"
+                class="btn-warning flex items-center space-x-1">
+                @include('components.icons.exclamation')
+                <span>Verificar Pendências</span>
+            </a>
+
             <!-- Botao NOVA DOACAO (com icone)  -->
             @can('donations.create')
                 <div class="content-box-btn">
