@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Traits\Paginates;
+use App\Models\MemberTitheValue;
 
 class DonationController extends Controller
 {
@@ -200,6 +201,17 @@ class DonationController extends Controller
                 ->store('receipts', 'public');
         }
 
+        $expectedTithe = null;
+
+        if ($member) {
+            $tithe = MemberTitheValue::where('member_id', $member->id)
+                ->where('start_date', '<=', $data['donation_date'])
+                ->orderBy('start_date', 'desc')
+                ->first();
+
+            $expectedTithe = $tithe?->value;
+        }
+
         Donation::create([
             'member_id'         => $member?->id,
             'user_id'           => Auth::id(),
@@ -213,6 +225,7 @@ class DonationController extends Controller
             'donor_name'        => $member?->name ?? 'Administração',
 
             'amount'            => $data['amount'],
+            'expected_tithe'    => $expectedTithe,
             'donation_date'     => $data['donation_date'],
             'notes'             => $data['notes'] ?? null,
             'receipt_path'      => $receiptPath,
@@ -262,6 +275,13 @@ class DonationController extends Controller
         $this->authorize('update', $donation);
 
         $data = $request->validated();
+
+        $tithe = MemberTitheValue::where('member_id', $donation->member_id)
+            ->where('start_date', '<=', $data['donation_date'])
+            ->orderBy('start_date', 'desc')
+            ->first();
+
+        $data['expected_tithe'] = $tithe?->value;
 
         // Resolve o membro (se houver)
         $member = null;

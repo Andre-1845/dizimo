@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Traits\Paginates;
+use App\Models\MemberTitheValue;
+use App\Services\TitheService;
 
 class MemberDonationController extends Controller
 {
@@ -48,11 +50,22 @@ class MemberDonationController extends Controller
                 ->store('receipts/donations', 'public');
         }
 
+        // $tithe = MemberTitheValue::where('member_id', $member->id)
+        //     ->where('start_date', '<=', $data['donation_date'])
+        //     ->orderBy('start_date', 'desc')
+        //     ->first();
+
+        // $expectedTithe = $tithe?->value;
+
+        $expectedTithe = app(TitheService::class)
+            ->getTitheForDate($member->id, $data['donation_date']);
+
         Donation::create([
             ...$data,
             'member_id' => $user->member->id,
             'user_id'   => $user->id,
             'church_id' => $member->church_id,
+            'expected_tithe' => $expectedTithe,
         ]);
 
         Log::info('Doação cadastrada', ['user_id' => $user->id]);
@@ -118,6 +131,17 @@ class MemberDonationController extends Controller
         }
 
         $validated = $request->validated();
+
+        // $tithe = MemberTitheValue::where('member_id', $donation->member_id)
+        //     ->where('start_date', '<=', $validated['donation_date'])
+        //     ->orderBy('start_date', 'desc')
+        //     ->first();
+
+        // $validated['expected_tithe'] = $tithe?->value;
+
+        $validated['expected_tithe'] = app(TitheService::class)
+            ->getTitheForDate($donation->member_id, $validated['donation_date']);
+
 
         // Atualiza o comprovante se foi enviado
         if ($request->hasFile('receipt')) {

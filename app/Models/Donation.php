@@ -18,6 +18,7 @@ class Donation extends Model
         'payment_method_id',
         'donor_name',
         'amount',
+        'expected_tithe',
         'donation_date',
         'notes',
         'receipt_path',
