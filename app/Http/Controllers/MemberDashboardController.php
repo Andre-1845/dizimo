@@ -6,6 +6,7 @@ use App\Models\Donation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Traits\Paginates;
+use App\Services\TitheService;
 
 class MemberDashboardController extends Controller
 {
@@ -56,7 +57,7 @@ class MemberDashboardController extends Controller
         ]);
     }
 
-    public function updateTithe(Request $request)
+    public function updateTithe(Request $request, TitheService $titheService)
     {
         $request->validate([
             'monthly_tithe' => 'nullable|numeric|min:0',
@@ -68,9 +69,10 @@ class MemberDashboardController extends Controller
             abort(403);
         }
 
-        $member->update([
-            'monthly_tithe' => $request->monthly_tithe,
-        ]);
+        $titheService->updateTithe(
+            $member,
+            $request->monthly_tithe
+        );
 
         return redirect()
             ->route('dashboard.member')

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\MemberUserService;
 use Carbon\Carbon;
 use App\Models\Traits\Paginates;
+use App\Services\TitheService;
 
 class MemberController extends Controller
 {
@@ -146,11 +147,14 @@ class MemberController extends Controller
             'church_id'     => 'required|exists:churches,id',
         ])->validate();
 
-        Member::create([
+        $member = Member::create([
             ...$validated,
             'inactivated_at' => $validated['active'] ? null : now(),
         ]);
-        // Member::create($validated);
+
+        //  REGISTRA O PRIMEIRO HISTÓRICO DE DÍZIMO
+        app(TitheService::class)
+            ->updateTithe($member, $validated['monthly_tithe']);
 
 
         return redirect()
@@ -198,7 +202,7 @@ class MemberController extends Controller
      */
 
 
-    public function update(Request $request, Member $member, MemberUserService $memberUserService)
+    public function update(Request $request, Member $member, MemberUserService $memberUserService, TitheService $titheService)
     {
         $this->authorize('update', $member);
 
@@ -215,20 +219,25 @@ class MemberController extends Controller
             'church_id'     => 'required|exists:churches,id',
         ])->validate();
 
-        DB::transaction(function () use ($member, $validated, $memberUserService) {
+        DB::transaction(function () use ($member, $validated, $memberUserService, $titheService) {
 
             // Atualiza MEMBER
 
             $isActive = $validated['active'] ?? false;
 
+            $titheChanged = $member->monthly_tithe != $validated['monthly_tithe'];
+
             $member->update([
                 'name'          => $validated['name'],
                 'phone'         => $validated['phone'] ?? null,
-                'monthly_tithe' => $validated['monthly_tithe'],
                 'active'        => $isActive,
                 'church_id'     => $validated['church_id'],
                 'inactivated_at' => $isActive ? null : now(),
             ]);
+
+            if ($titheChanged) {
+                $titheService->updateTithe($member, $validated['monthly_tithe']);
+            }
 
 
             // 🔑 Cria USER se necessário + envia e-mail
