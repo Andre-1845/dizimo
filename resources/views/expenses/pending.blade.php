@@ -71,6 +71,7 @@
                 ],
             
                 'confirmRoute' => 'expenses.confirm',
+                'showRoute' => 'expenses.show',
                 'permission' => 'expenses.approve',
                 'confirmMessage' => 'Confirmar esta despesa?',
                 'emptyMessage' => 'Nenhuma despesa pendente.',

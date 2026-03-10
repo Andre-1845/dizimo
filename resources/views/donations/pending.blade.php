@@ -71,6 +71,7 @@
                 ],
             
                 'confirmRoute' => 'donations.confirm',
+                'showRoute' => 'donations.show',
                 'permission' => 'donations.confirm',
                 'confirmMessage' => 'Confirmar esta receita?',
                 'emptyMessage' => 'Nenhuma receita pendente.',

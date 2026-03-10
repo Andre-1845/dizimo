@@ -19,7 +19,7 @@
                     </td>
                 @endforeach
 
-                <td class="table-body text-center">
+                {{-- <td class="table-body text-center">
                     @can($permission)
                         <form method="POST" action="{{ route($confirmRoute, $item) }}"
                             onsubmit="return confirm('{{ $confirmMessage ?? 'Confirmar este registro?' }}')">
@@ -33,6 +33,33 @@
                     @else
                         —
                     @endcan
+                </td> --}}
+
+                <td class="table-body text-center space-x-1 whitespace-nowrap">
+
+                    {{-- Botão visualizar --}}
+                    @isset($showRoute)
+                        <a href="{{ route($showRoute, $item) }}"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                            Ver
+                        </a>
+                    @endisset
+
+                    {{-- Botão confirmar --}}
+                    @can($permission)
+                        <form method="POST" action="{{ route($confirmRoute, $item) }}" class="inline"
+                            onsubmit="return confirm('{{ $confirmMessage ?? 'Confirmar este registro?' }}')">
+                            @csrf
+                            @method('PATCH')
+
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                Confirmar
+                            </button>
+                        </form>
+                    @else
+                        —
+                    @endcan
+
                 </td>
             </tr>
         @empty
