@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\StringHelper;
 use App\Models\Traits\BelongsToChurch;
+use App\Services\TitheService;
 use Carbon\Carbon;
 
 class Member extends Model
@@ -98,6 +99,114 @@ class Member extends Model
             });
     }
 
+    // public function pendingTithes()
+    // {
+    //     $start = $this->created_at->copy()->startOfMonth();
+
+    //     $end = $this->inactivated_at
+    //         ? Carbon::parse($this->inactivated_at)->startOfMonth()
+    //         : now()->startOfMonth();
+
+    //     $expectedMonths = [];
+
+    //     $current = $start->copy();
+
+    //     while ($current <= $end) {
+    //         $expectedMonths[] = $current->format('Y-m');
+    //         $current->addMonth();
+    //     }
+
+    //     $dizimoCategory = Category::dizimo();
+
+    //     $paidMonths = $this->donations()
+    //         ->where('is_confirmed', true)
+    //         ->where('category_id', $dizimoCategory->id)
+    //         ->selectRaw("DATE_FORMAT(donation_date,'%Y-%m') as ym")
+    //         ->pluck('ym')
+    //         ->toArray();
+
+    //     $missing = array_diff($expectedMonths, $paidMonths);
+
+    //     return collect($missing)->map(function ($ym) {
+
+    //         [$year, $month] = explode('-', $ym);
+
+    //         $expected = app(TitheService::class)
+    //             ->getTitheForDate($this->id, "$year-$month-01");
+
+    //         return [
+    //             'year' => (int) $year,
+    //             'month' => (int) $month,
+    //             'month_name' => Carbon::create($year, $month, 1)->translatedFormat('F'),
+    //             'expected' => $expected,
+    //         ];
+    //     })->values();
+    // }
+
+    // public function pendingTithes()
+    // {
+    //     $start = $this->created_at->copy()->startOfMonth();
+
+    //     $end = $this->inactivated_at
+    //         ? Carbon::parse($this->inactivated_at)->startOfMonth()
+    //         : now()->startOfMonth();
+
+    //     $expectedMonths = [];
+
+    //     $current = $start->copy();
+
+    //     while ($current <= $end) {
+    //         $expectedMonths[] = $current->format('Y-m');
+    //         $current->addMonth();
+    //     }
+
+    //     $dizimoCategory = Category::dizimo();
+
+    //     $paidMonths = $this->donations()
+    //         ->where('is_confirmed', true)
+    //         ->where('category_id', $dizimoCategory->id)
+    //         ->selectRaw("DATE_FORMAT(donation_date,'%Y-%m') as ym, SUM(amount) as total")
+    //         ->groupBy('ym')
+    //         ->pluck('total', 'ym')
+    //         ->toArray();
+
+    //     $missing = array_diff($expectedMonths, $paidMonths);
+
+    //     // 🔑 Busca histórico de dízimos apenas uma vez
+    //     $tithes = $this->titheValues()
+    //         ->orderBy('start_date')
+    //         ->get()
+    //         ->keyBy(function ($t) {
+    //             return Carbon::parse($t->start_date)->format('Y-m');
+    //         });
+
+    //     return collect($expectedMonths)->map(function ($ym) use ($paidMonths, $tithes) {
+
+    //         [$year, $month] = explode('-', $ym);
+
+    //         $date = Carbon::create($year, $month, 1);
+
+    //         $expected = $tithes
+    //             ->filter(fn($t) => Carbon::parse($t->start_date) <= $date)
+    //             ->last()?->value ?? 0;
+
+    //         $paid = $paidMonths[$ym] ?? 0;
+
+    //         if ($paid >= $expected) {
+    //             return null; // mês quitado
+    //         }
+
+    //         return [
+    //             'year' => (int) $year,
+    //             'month' => (int) $month,
+    //             'month_name' => $date->translatedFormat('F'),
+    //             'expected' => $expected,
+    //             'paid' => $paid,
+    //             'missing' => $expected - $paid
+    //         ];
+    //     })->filter()->values();
+    // }
+
     public function pendingTithes()
     {
         $start = $this->created_at->copy()->startOfMonth();
@@ -117,30 +226,57 @@ class Member extends Model
 
         $dizimoCategory = Category::dizimo();
 
+        // total pago por mês
         $paidMonths = $this->donations()
             ->where('is_confirmed', true)
             ->where('category_id', $dizimoCategory->id)
-            ->selectRaw("DATE_FORMAT(donation_date,'%Y-%m') as ym")
-            ->pluck('ym')
+            ->selectRaw("DATE_FORMAT(donation_date,'%Y-%m') as ym, SUM(amount) as total")
+            ->groupBy('ym')
+            ->pluck('total', 'ym')
             ->toArray();
 
-        $missing = array_diff($expectedMonths, $paidMonths);
+        // histórico de dízimos
+        $tithes = $this->titheValues()
+            ->orderBy('start_date')
+            ->get();
 
-        return collect($missing)->map(function ($ym) {
+        return collect($expectedMonths)->map(function ($ym) use ($paidMonths, $tithes) {
 
             [$year, $month] = explode('-', $ym);
+
+            $date = Carbon::create($year, $month, 1);
+
+            $expected = $tithes
+                ->filter(fn($t) => Carbon::parse($t->start_date) <= $date)
+                ->last()?->value ?? 0;
+
+            $paid = $paidMonths[$ym] ?? 0;
+
+            $missing = max($expected - $paid, 0);
+
+            if ($missing == 0) {
+                return null;
+            }
 
             return [
                 'year' => (int) $year,
                 'month' => (int) $month,
-                'month_name' => Carbon::create($year, $month, 1)->translatedFormat('F'),
-                'expected' => $this->monthly_tithe
+                'month_name' => $date->translatedFormat('F'),
+                'expected' => $expected,
+                'paid' => $paid,
+                'missing' => $missing
             ];
-        })->values();
+        })->filter()->values();
     }
+
 
     public function pendingTithesCount()
     {
         return $this->pendingTithes()->count();
+    }
+
+    public function titheValues()
+    {
+        return $this->hasMany(MemberTitheValue::class);
     }
 }
